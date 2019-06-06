@@ -6,13 +6,13 @@ Description: Infrastructure to store and manage all aspects related to
 Authors@R: c(person(given = "Laurent", family = "Gatto",
 		    comment = c(ORCID = "0000-0002-1520-2268"),
 		    email = "laurent.gatto@uclouvain.be",
-		    role = c("aut","cre")),
+		    role = c("aut", "cre")),
 	     person(given = "Johannes", family = "Rainer",
 		    email = "Johannes.Rainer@eurac.edu",
-		    role = c("aut", "cre")),
+		    role = "aut"),
 	     person(given = "Sebastian", family = "Gibb",
 		    email = "mail@sebastiangibb.de",
-		    role = c("aut", "cre")))
+		    role = "aut"))
 Depends:
     R (>= 3.5.0),
     Spectra,
