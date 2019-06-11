@@ -28,8 +28,8 @@ Suggests:
     BiocStyle (>= 2.5.19),
     rmarkdown
 Remotes: 
-   RforMassSpectrometry/Spectra   
-   RforMassSpectrometry/Features    
+   RforMassSpectrometry/Spectra,
+   RforMassSpectrometry/Features
 License: Artistic-2.0
 LazyData: yes
 VignetteBuilder: knitr
