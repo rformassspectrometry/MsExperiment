@@ -17,7 +17,6 @@ Depends:
     R (>= 3.5.0),
     Spectra,
     Features,
-    BiocParallel,
     ProtGenerics (>= 1.9.1)
 Imports:
     methods
