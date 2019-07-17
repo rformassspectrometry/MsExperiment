@@ -16,6 +16,7 @@
 #' @md
 #'
 #' @import Spectra
+#' @import methods
 #' @import Features
 #' @import ProtGenerics
 NULL

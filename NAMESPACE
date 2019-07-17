@@ -3,3 +3,4 @@
 import(Features)
 import(ProtGenerics)
 import(Spectra)
+import(methods)
