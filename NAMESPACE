@@ -1,1 +1,5 @@
-exportPattern("^[^\\.]")
+## exportPattern("^[^\\.]")
+import(methods)
+import(Spectra)
+import(Features)
+import(ProtGenerics)

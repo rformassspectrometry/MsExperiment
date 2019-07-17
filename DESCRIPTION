@@ -17,7 +17,6 @@ Depends:
     R (>= 3.5.0),
     Spectra,
     Features,
-    BiocParallel,
     ProtGenerics (>= 1.9.1)
 Imports:
     methods
@@ -27,6 +26,9 @@ Suggests:
     roxygen2,
     BiocStyle (>= 2.5.19),
     rmarkdown
+Remotes: 
+   RforMassSpectrometry/Spectra,
+   RforMassSpectrometry/Features
 License: Artistic-2.0
 LazyData: yes
 VignetteBuilder: knitr

@@ -23,6 +23,7 @@ NULL
 setClass("MsExperiment",
          slots = c(Spectra = "Spectra",
                    Features = "Features",
+                   ## Chromatograms = "Chromatograms",
                    colData = "DataFrame",
                    metadata = "list"))
 
