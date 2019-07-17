@@ -13,3 +13,7 @@ proteomics or metabolomics mass spectrometry experiment. This includes
 The respective data handling functionality is handled by dedicated
 packages such as `Spectra` for spectra data, `Features` for
 quantitative features, `Biostrings` for fasta files, ...
+
+
+This package is part of the RforMassSpectrometry initiative:
+https://www.rformassspectrometry.org/
