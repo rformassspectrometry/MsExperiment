@@ -4,7 +4,7 @@ The `MsExperiment` package provides the `MsExperiment` class that can
 be used to store and manage all aspects related to a complete
 proteomics or metabolomics mass spectrometry experiment. This includes
 
-- experimental desing
+- experimental design
 - raw data: spectra
 - raw data: chromatograms
 - proteomics identification results and protein database
