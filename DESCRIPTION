@@ -1,6 +1,6 @@
 Package: MsExperiment
 Title: Infrastructure for Mass Spectrometry Experiments
-Version: 0.0.1
+Version: 0.0.2
 Description: Infrastructure to store and manage all aspects related to
    a complete proteomics or metabolomics mass spectrometry experiment.
 Authors@R: c(person(given = "Laurent", family = "Gatto",
@@ -16,6 +16,7 @@ Authors@R: c(person(given = "Laurent", family = "Gatto",
 Depends:
     R (>= 3.5.0),
     Spectra,
+    Chromatograms,
     Features,
     ProtGenerics (>= 1.9.1)
 Imports:
@@ -26,8 +27,9 @@ Suggests:
     roxygen2,
     BiocStyle (>= 2.5.19),
     rmarkdown
-Remotes: 
+Remotes:
    RforMassSpectrometry/Spectra,
+   RforMassSpectrometry/Chromatograms,
    RforMassSpectrometry/Features
 License: Artistic-2.0
 LazyData: yes
