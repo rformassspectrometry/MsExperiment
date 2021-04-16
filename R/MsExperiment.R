@@ -43,6 +43,14 @@ setClassUnion("SpectraOrNull", c("NULL", "Spectra"))
 #' @import ProtGenerics
 #'
 #' @examples
+#'
+#' ## An empty MsExperiment object
+#' msexp <- MsExperiment()
+#' msexp
+#'
+#' example(MsExperimentFiles)
+#' experimentFiles(msexp) <- fls
+#' msexp
 NULL
 
 #' @name MsExperiment-class
@@ -92,12 +100,21 @@ setMethod("show", "MsExperiment",
 ## ------------------------------##
 
 #' @export
+#'
+#' @param object An instance of class `MsExperiment`
+#'
+#' @rdname MsExperiment
 experimentFiles  <- function(object) {
     stopifnot(inherits(object, "MsExperiment"))
     object@experimentFiles
 }
 
 #' @export
+#'
+#' @param value An object of the appropriate class for the slot to be
+#'     populated.
+#'
+#' @rdname MsExperiment
 "experimentFiles<-" <- function(object, value) {
     stopifnot(inherits(value, "MsExperimentFiles"))
     stopifnot(inherits(object, "MsExperiment"))
@@ -107,10 +124,16 @@ experimentFiles  <- function(object) {
 
 
 #' @export
+#'
+#' @importFrom ProtGenerics spectra
+#'
+#' @rdname MsExperiment
 setMethod("spectra", "MsExperiment", function(object) object@spectra)
 
 
 #' @export
+#'
+#' @rdname MsExperiment
 "spectra<-" <- function(object, value) {
     stopifnot(inherits(value, "Spectra"))
     stopifnot(inherits(object, "MsExperiment"))

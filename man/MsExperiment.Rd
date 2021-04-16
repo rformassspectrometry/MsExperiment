@@ -4,12 +4,29 @@
 \alias{MsExperiment}
 \alias{MsExperiment-class}
 \alias{show,MsExperiment-method}
+\alias{experimentFiles}
+\alias{experimentFiles<-}
+\alias{spectra,MsExperiment-method}
+\alias{spectra<-}
 \title{Managing Mass Spectrometry Experiments}
 \usage{
+MsExperiment()
+
 \S4method{show}{MsExperiment}(object)
+
+experimentFiles(object)
+
+experimentFiles(object) <- value
+
+\S4method{spectra}{MsExperiment}(object)
+
+spectra(object) <- value
 }
 \arguments{
-\item{object}{An instance of class `MsExperiment`.}
+\item{object}{An instance of class `MsExperiment`}
+
+\item{value}{An object of the appropriate class for the slot to be
+populated.}
 }
 \description{
 The `MsExperiment` class allows the storage, management and processing of all
@@ -37,4 +54,14 @@ https://www.rformassspectrometry.org/
   spectra data.
 
 - Quantification data is stored as `QFeatures()` objects.
+}
+\examples{
+
+## An empty MsExperiment object
+msexp <- MsExperiment()
+msexp
+
+example(MsExperimentFiles)
+experimentFiles(msexp) <- fls
+msexp
 }
