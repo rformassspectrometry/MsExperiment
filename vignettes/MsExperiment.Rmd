@@ -8,7 +8,7 @@ vignette: >
     %\VignetteEngine{knitr::rmarkdown}
     %\VignetteEncoding{UTF-8}
     %\VignettePackage{MsExperiment}
-    %\VignetteDepends{BiocStyle,rpx}
+    %\VignetteDepends{BiocStyle,rpx,Spectra}
 ---
 
 ```{r style, echo = FALSE, results = 'asis', message=FALSE}
@@ -22,6 +22,7 @@ BiocStyle::markdown()
 
 ```{r, echo = FALSE, message = FALSE}
 library(MsExperiment)
+library(Spectra)
 library(BiocStyle)
 ```
 
@@ -67,23 +68,60 @@ time you want to get the same files, they will be loaded automatically
 from cache.
 
 ```{r}
-(i <- grep(".+0[12].+[mzML|mzid]", pxfiles(px), value = TRUE))
+(i <- grep(".+0[12].+mzML$", pxfiles(px), value = TRUE))
 fls <- pxget(px, i)
 fls
+```
+
+# MS Experiment object
+
+Let's start by creating an empty `MsExperiment` object that we will
+late populate with different pieces of data.
+
+```{r}
+msexp <- MsExperiment()
+msexp
 ```
 
 # Experiment files
 
 Let's now start with our MS experiment management by saving the
-relevant files in a dedicated `MsExperimentFiles` object. Later, when
-loading the data, we will refer the the files in this
-`MsExperimentFiles` object.
+relevant files in a dedicated `MsExperimentFiles` object. In addition
+to the mzML files, let's also assume we have the human proteomics
+fasta files ready. Later, when loading the data, we will refer the the
+files in this `MsExperimentFiles` object.
 
 ```{r}
-msfls <- MsExperimentFiles(mxmls = grep("mzML", fls, value = TRUE),
-                           mzids = grep("mzID", fls, value = TRUE))
+msfls <- MsExperimentFiles(mzmls = fls,
+                           fasta = "homo_sapiens.fasta")
 msfls
 ```
+
+Let's add these files to the main experiment management object:
+
+```{r}
+experimentFiles(msexp) <- msfls
+msexp
+```
+
+# Raw data
+
+We can now create a `Spectra` object containing the raw data stored in
+the mzML files. If you are not familiar with the `Spectra` object,
+please refer to the package vignettes.
+
+```{r}
+sp <- Spectra(experimentFiles(msexp)[["mzmls"]])
+sp
+```
+
+We can now add these the the main experiment management object:
+
+```{r}
+spectra(msexp) <- sp
+msexp
+```
+
 
 # Session information
 

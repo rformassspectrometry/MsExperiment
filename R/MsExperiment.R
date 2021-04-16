@@ -1,3 +1,6 @@
+setClassUnion("MsExperimentFilesOrNull", c("NULL", "MsExperimentFiles"))
+setClassUnion("SpectraOrNull", c("NULL", "Spectra"))
+
 #' @title Managing Mass Spectrometry Experiments
 #'
 #' @aliases MsExperiment-class MsExperiment
@@ -35,7 +38,11 @@
 #'
 #' @import methods
 #'
+#' @import Spectra
+#'
 #' @import ProtGenerics
+#'
+#' @examples
 NULL
 
 #' @name MsExperiment-class
@@ -47,13 +54,19 @@ NULL
 #' @noRd
 setClass("MsExperiment",
          slots = c(
-             ExperimentFiles = "MsExperimentFiles",
-             ## Spectra = "Spectra",
-             ## QFeatures = "QFeatures",
-             ## Chromatograms = "Chromatograms",
+             experimentFiles = "MsExperimentFilesOrNull",
+             spectra = "SpectraOrNull",
+             ## qfeatures = "QFeatures",
+             ## chromatograms = "Chromatograms",
              colData = "DataFrame",
              metadata = "list"))
 
+
+#' @rdname MsExperiment
+#'
+#' @export
+MsExperiment <- function()
+    new("MsExperiment")
 
 #' @rdname MsExperiment
 #'
@@ -61,4 +74,46 @@ setClass("MsExperiment",
 #'
 #' @exportMethod show
 setMethod("show", "MsExperiment",
-          function(object) cat("Object of class", class(object), "\n"))
+          function(object) {
+              cat("Object of class", class(object), "\n")
+              if (!is.null(experimentFiles(object)))
+                  cat(" Files:", paste(names(experimentFiles(object)),
+                                       collapse = ", "), "\n")
+              if (!is.null(object@spectra)) {
+                  mstab <- table(msLevel(object@spectra))
+                  cat(" Spectra:", paste0(names(mstab), " (", mstab, ")"),
+                      "\n")
+              }
+          })
+
+
+## ------------------------------##
+##     Getters and setters       ##
+## ------------------------------##
+
+#' @export
+experimentFiles  <- function(object) {
+    stopifnot(inherits(object, "MsExperiment"))
+    object@experimentFiles
+}
+
+#' @export
+"experimentFiles<-" <- function(object, value) {
+    stopifnot(inherits(value, "MsExperimentFiles"))
+    stopifnot(inherits(object, "MsExperiment"))
+    object@experimentFiles <- value
+    object
+}
+
+
+#' @export
+setMethod("spectra", "MsExperiment", function(object) object@spectra)
+
+
+#' @export
+"spectra<-" <- function(object, value) {
+    stopifnot(inherits(value, "Spectra"))
+    stopifnot(inherits(object, "MsExperiment"))
+    object@spectra <- value
+    object
+}
