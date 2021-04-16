@@ -16,7 +16,7 @@
 #'
 #' - Data files stored in a [MsExperimentFiles()] object.
 #'
-#' - Metadata:
+#' - Metadata: ...
 #'
 #' - Mass spectrometry data, i.e. spectra and their metadata are
 #'   stored as `Spectra()` objects.
@@ -30,22 +30,22 @@
 #' - Quantification data is stored as `QFeatures()` objects.
 #'
 #' @docType package
+#'
 #' @name MsExperiment
 #'
-#' @md
+#' @import methodsxo
 #'
-#' @import Spectra
-#' @import methods
-#' @import QFeatures
 #' @import ProtGenerics
 NULL
 
 setClass("MsExperiment",
-         slots = c(Spectra = "Spectra",
-                   QFeatures = "QFeatures",
-                   ## Chromatograms = "Chromatograms",
-                   colData = "DataFrame",
-                   metadata = "list"))
+         slots = c(
+             ExperimentFiles = "MsExperimentFiles",
+             ## Spectra = "Spectra",
+             ## QFeatures = "QFeatures",
+             ## Chromatograms = "Chromatograms",
+             colData = "DataFrame",
+             metadata = "list"))
 
 
 #' @rdname MsExperiment
