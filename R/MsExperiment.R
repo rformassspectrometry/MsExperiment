@@ -1,5 +1,7 @@
 #' @title Managing Mass Spectrometry Experiments
 #'
+#' @aliases MsExperiment-class MsExperiment
+#'
 #' @description
 #'
 #' The `MsExperiment` class allows the storage, management and processing of all
@@ -29,15 +31,20 @@
 #'
 #' - Quantification data is stored as `QFeatures()` objects.
 #'
-#' @docType package
-#'
 #' @name MsExperiment
 #'
-#' @import methodsxo
+#' @import methods
 #'
 #' @import ProtGenerics
 NULL
 
+#' @name MsExperiment-class
+#'
+#' @docType class
+#'
+#' @exportClass MsExperiment
+#'
+#' @noRd
 setClass("MsExperiment",
          slots = c(
              ExperimentFiles = "MsExperimentFiles",

@@ -1,0 +1,92 @@
+---
+title: "Managing mass spectrometry experiments"
+output:
+    BiocStyle::html_document:
+        toc_float: true
+vignette: >
+    %\VignetteIndexEntry{Managing mass spectrometry experiments}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
+    %\VignettePackage{MsExperiment}
+    %\VignetteDepends{BiocStyle,rpx}
+---
+
+```{r style, echo = FALSE, results = 'asis', message=FALSE}
+BiocStyle::markdown()
+```
+
+**Package**: `r Biocpkg("MsExperiment")`<br />
+**Authors**: `r packageDescription("MsExperiment")[["Author"]] `<br />
+**Last modified:** `r file.info("MsExperiment.Rmd")$mtime`<br />
+**Compiled**: `r date()`
+
+```{r, echo = FALSE, message = FALSE}
+library(MsExperiment)
+library(BiocStyle)
+```
+
+# Introduction
+
+The goal of the `MsExperiment` package is the store and handle all
+data related to a mass spectrometry experiment. In this vignette, we
+will describe how to create a `MsExperiment` and populate it with
+various types of data.
+
+```{r}
+library("MsExperiment")
+```
+
+# Getting data
+
+We will use a small subset of the
+[PXD022816](https://www.ebi.ac.uk/pride/archive/projects/PXD022816)
+project [@Morgenstern:2020]. The acquisitions correspond to the Pierce
+Thermo HeLa digestion standard, diluted to 50ng/uL with 97:3 + 0.1%
+formic acid, and acquired on a QExactive instrument.
+
+Below, we use the `r Biocpkg("rpx")` package to access the project
+from the PRIDE repository, and download files of interest. Note that
+these will automatically be cached in the `rpx` packages' cache
+directory.
+
+```{r}
+library("rpx")
+px <- PXDataset("PXD022816")
+px
+pxfiles(px)
+```
+
+The project provides the vendor raw files, the converted mzML files as
+well as the identification mzid files. Let's download fractions 1 and
+2 of the mzML and mzid files.
+
+If you run these commands interactively and it's the first time you
+use `pxget()`, you will be asked to create the `rpx` cache directory -
+you can safelfy answer *yes*. The files will then be downloaded. Next
+time you want to get the same files, they will be loaded automatically
+from cache.
+
+```{r}
+(i <- grep(".+0[12].+[mzML|mzid]", pxfiles(px), value = TRUE))
+fls <- pxget(px, i)
+fls
+```
+
+# Experiment files
+
+Let's now start with our MS experiment management by saving the
+relevant files in a dedicated `MsExperimentFiles` object. Later, when
+loading the data, we will refer the the files in this
+`MsExperimentFiles` object.
+
+```{r}
+msfls <- MsExperimentFiles(mxmls = grep("mzML", fls, value = TRUE),
+                           mzids = grep("mzID", fls, value = TRUE))
+msfls
+```
+
+# Session information
+
+```{r si}
+sessionInfo()
+```
