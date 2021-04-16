@@ -27,7 +27,8 @@ Suggests:
     roxygen2,
     BiocStyle (>= 2.5.19),
     rmarkdown,
-    rpx
+    rpx,
+    mzR
 License: Artistic-2.0
 LazyData: yes
 VignetteBuilder: knitr
