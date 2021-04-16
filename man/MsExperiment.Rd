@@ -3,17 +3,35 @@
 \docType{package}
 \name{MsExperiment}
 \alias{MsExperiment}
-\alias{MsExperiment-package}
+\alias{show,MsExperiment-method}
 \title{Managing Mass Spectrometry Experiments}
+\usage{
+\S4method{show}{MsExperiment}(object)
+}
+\arguments{
+\item{object}{An instance of class `MsExperiment`.}
+}
 \description{
 The \code{MsExperiment} class allows the storage, management and processing of all
 aspects related to a complete proteomics or metabolomics mass spectrometry
 experiment. This includes experimantal design, raw mass spectromtry data as
 spectra and chromatograms, quantitative features, and identification data.
-}
-\details{
+
 For details, see https://rformassspectrometry.github.io/MsExperiment
 
 This package is part of the RforMassSpectrometry initiative:
 https://www.rformassspectrometry.org/
+}
+\details{
+\itemize{
+\item Data files stored in a \code{\link[=MsExperimentFiles]{MsExperimentFiles()}} object.
+\item Metadata:
+\item Mass spectrometry data, i.e. spectra and their metadata are
+stored as \code{Spectra()} objects.
+\item Chromatographic data is stored as \code{Chromatograms()} objects.
+\item Proteomics identification data, i.e peptide-spectrum matches is
+defined as \code{PSM()} objects. They are generally joined with the
+spectra data.
+\item Quantification data is stored as \code{QFeatures()} objects.
+}
 }
