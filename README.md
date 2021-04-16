@@ -11,7 +11,7 @@ proteomics or metabolomics mass spectrometry experiment. This includes
 - quantitative features
 
 The respective data handling functionality is handled by dedicated
-packages such as `Spectra` for spectra data, `Features` for
+packages such as `Spectra` for spectra data, `QFeatures` for
 quantitative features, `Biostrings` for fasta files, ...
 
 

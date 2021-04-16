@@ -4,20 +4,19 @@ Version: 0.0.2
 Description: Infrastructure to store and manage all aspects related to
    a complete proteomics or metabolomics mass spectrometry experiment.
 Authors@R: c(person(given = "Laurent", family = "Gatto",
-		    comment = c(ORCID = "0000-0002-1520-2268"),
-		    email = "laurent.gatto@uclouvain.be",
-		    role = c("aut", "cre")),
-	     person(given = "Johannes", family = "Rainer",
-		    email = "Johannes.Rainer@eurac.edu",
-		    role = "aut"),
-	     person(given = "Sebastian", family = "Gibb",
-		    email = "mail@sebastiangibb.de",
-		    role = "aut"))
+                    comment = c(ORCID = "0000-0002-1520-2268"),
+                    email = "laurent.gatto@uclouvain.be",
+                    role = c("aut", "cre")),
+             person(given = "Johannes", family = "Rainer",
+                    email = "Johannes.Rainer@eurac.edu",
+                    role = "aut"),
+             person(given = "Sebastian", family = "Gibb",
+                    email = "mail@sebastiangibb.de",
+                    role = "aut"))
 Depends:
     R (>= 3.5.0),
     Spectra,
-    Chromatograms,
-    Features,
+    QFeatures,
     ProtGenerics (>= 1.9.1)
 Imports:
     methods
@@ -30,13 +29,13 @@ Suggests:
 Remotes:
    RforMassSpectrometry/Spectra,
    RforMassSpectrometry/Chromatograms,
-   RforMassSpectrometry/Features
+   RforMassSpectrometry/QFeatures
 License: Artistic-2.0
 LazyData: yes
 VignetteBuilder: knitr
 BugReports: https://github.com/RforMassSpectrometry/MsExperiment/issues
 URL: https://github.com/RforMassSpectrometry/MsExperiment
 biocViews: Infrastructure, Proteomics, MassSpectrometry, Metabolomics
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.1
 Collate:
     'MsExperiment.R'
