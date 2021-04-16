@@ -17,8 +17,6 @@ Depends:
     R (>= 3.5.0),
     Spectra,
     QFeatures,
-    ## Chromatograms,
-    Features,
     ProtGenerics (>= 1.9.1)
 Imports:
     methods
