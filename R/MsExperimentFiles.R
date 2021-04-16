@@ -83,3 +83,15 @@ setValidity("MsExperimentFiles",
                 if (is.null(msg)) TRUE
                 else msg
             })
+
+
+#' @rdname MsExperimentFiles
+#'
+#' @param object An instance of class `MsExperimentFiles`.
+#'
+#' @exportMethod show
+setMethod("show", "MsExperimentFiles",
+          function(object) {
+              cat("MsExperimentFiles of length ", length(object), "\n")
+              IRanges:::.showAtomicList(lapply(object, basename), 10)
+          })

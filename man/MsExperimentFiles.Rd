@@ -3,9 +3,12 @@
 \name{MsExperimentFiles}
 \alias{MsExperimentFiles}
 \alias{MsExperimentFiles-class}
+\alias{show,MsExperimentFiles-method}
 \title{A class to store experiment files}
 \usage{
 MsExperimentFiles(..., metadata = list())
+
+\S4method{show}{MsExperimentFiles}(object)
 }
 \arguments{
 \item{...}{Either a named list or a set of named vectors. All
@@ -13,6 +16,8 @@ elements are coerced to characters.}
 
 \item{metadata}{`list()` holding arbitrary R objects as
 annotations.}
+
+\item{object}{An instance of class `MsExperimentFiles`.}
 }
 \description{
 The `MsExperimentFiles` class stores files that are part of a mass
