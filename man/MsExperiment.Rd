@@ -3,7 +3,14 @@
 \docType{package}
 \name{MsExperiment}
 \alias{MsExperiment}
+\alias{show,MsExperiment-method}
 \title{Managing Mass Spectrometry Experiments}
+\usage{
+\S4method{show}{MsExperiment}(object)
+}
+\arguments{
+\item{object}{An instance of class `MsExperiment`.}
+}
 \description{
 The \code{MsExperiment} class allows the storage, management and processing of all
 aspects related to a complete proteomics or metabolomics mass spectrometry

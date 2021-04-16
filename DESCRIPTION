@@ -37,5 +37,3 @@ BugReports: https://github.com/RforMassSpectrometry/MsExperiment/issues
 URL: https://github.com/RforMassSpectrometry/MsExperiment
 biocViews: Infrastructure, Proteomics, MassSpectrometry, Metabolomics
 RoxygenNote: 7.1.1
-Collate:
-    'MsExperiment.R'

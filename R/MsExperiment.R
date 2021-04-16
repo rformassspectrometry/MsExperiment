@@ -47,5 +47,11 @@ setClass("MsExperiment",
                    colData = "DataFrame",
                    metadata = "list"))
 
+
+#' @rdname MsExperiment
+#'
+#' @param object An instance of class `MsExperiment`.
+#'
+#' @exportMethod show
 setMethod("show", "MsExperiment",
           function(object) cat("Object of class", class(object), "\n"))

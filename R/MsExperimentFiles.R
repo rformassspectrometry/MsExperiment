@@ -1,6 +1,6 @@
 #' @title Experiment files
 #'
-#' @aliases MsExperimentFiles-class MsExperimentFiles
+#' @aliases MsExperimentFiles-class show,MsExperimentFiles MsExperimentFiles
 #'
 #' @name MsExperimentFiles
 #'
@@ -16,7 +16,8 @@
 #'
 #' @examples
 #' fls <- MsExperimentFiles(list(mzmls = c("/path/to/f1.mzML", "/path/to/f2.mzML"),
-#'                               mzids = "/another/path/to/id1.mzid"))
+#'                               mzids = "/another/path/to/id1.mzid",
+#'                               fasta = "file.fas"))
 #' fls
 #'
 #' ## A new MsExperimentFiles containing mzML files
@@ -54,7 +55,7 @@ MsExperimentFiles <- function(x) {
 
 .valid_names_non_empty <- function(object) {
     if (any(names(object@files) == ""))
-        retunr("Names musn't be empty")
+        return("Names musn't be empty")
     NULL
 }
 
@@ -71,21 +72,11 @@ setValidity("MsExperimentFiles",
             })
 
 
-#' @rdname MsExperimentFiles
-#'
-#' @export
-setMethod("[", "MsExperimentFiles",
-          function(x, i) MsExperimentFiles(x@files[i]))
-
-#' @rdname MsExperimentFiles
-#'
-#' @export
-setMethod("[[", "MsExperimentFiles",
-          function(x, i) x@files[[i]])
-
 #' @importMethodsFrom methods show
 #'
 #' @rdname MsExperimentFiles
+#'
+#' @param object An instance of class `MsExperimentFiles`.
 #'
 #' @exportMethod show
 setMethod("show", "MsExperimentFiles",
@@ -109,3 +100,20 @@ setMethod("show", "MsExperimentFiles",
                   }
               }
           })
+
+
+
+#' @param i index specifying filename elements to extract. Indices are
+#'     numeric or character vectors or empty (missing) or `NULL`, as
+#'     in lists. See `?[` for details.
+#'
+#' @rdname MsExperimentFiles
+setMethod("[", "MsExperimentFiles",
+          function(x, i) x@files[i])
+
+
+#' @param x An instance of class `MsExperimentFiles`.
+#'
+#' @rdname MsExperimentFiles
+setMethod("[[", "MsExperimentFiles",
+          function(x, i) x@files[[i]])

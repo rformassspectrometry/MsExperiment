@@ -4,21 +4,28 @@
 \name{MsExperimentFiles}
 \alias{MsExperimentFiles}
 \alias{MsExperimentFiles-class}
+\alias{show,MsExperimentFiles}
+\alias{show,MsExperimentFiles-method}
 \alias{[,MsExperimentFiles,ANY,ANY,ANY-method}
 \alias{[[,MsExperimentFiles,ANY,ANY-method}
-\alias{show,MsExperimentFiles-method}
 \title{Experiment files}
 \usage{
 MsExperimentFiles(x)
 
+\S4method{show}{MsExperimentFiles}(object)
+
 \S4method{[}{MsExperimentFiles,ANY,ANY,ANY}(x, i)
 
 \S4method{[[}{MsExperimentFiles,ANY,ANY}(x, i)
-
-\S4method{show}{MsExperimentFiles}(object)
 }
 \arguments{
-\item{x}{A named `list()` of characters containing file names.}
+\item{x}{An instance of class `MsExperimentFiles`.}
+
+\item{object}{An instance of class `MsExperimentFiles`.}
+
+\item{i}{index specifying filename elements to extract. Indices are
+numeric or character vectors or empty (missing) or `NULL`, as
+in lists. See `?[` for details.}
 }
 \description{
 The `MsExperimentFiles` class stores files that are part of a mass
@@ -28,7 +35,8 @@ characters as input.
 }
 \examples{
 fls <- MsExperimentFiles(list(mzmls = c("/path/to/f1.mzML", "/path/to/f2.mzML"),
-                              mzids = "/another/path/to/id1.mzid"))
+                              mzids = "/another/path/to/id1.mzid",
+                              fasta = "file.fas"))
 fls
 
 ## A new MsExperimentFiles containing mzML files
