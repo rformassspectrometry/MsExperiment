@@ -26,7 +26,7 @@ setClassUnion("SpectraOrNull", c("NULL", "Spectra"))
 #' - Mass spectrometry data, i.e. spectra and their metadata are
 #'   stored as `Spectra()` objects.
 #'
-#' - Chromatographic data is stored as `Chromatograms()` objects.
+#' - Chromatographic data will be stored as `Chromatograms()` objects.
 #'
 #' - Proteomics identification data, i.e peptide-spectrum matches is
 #'   defined as `PSM()` objects. They are generally joined with the
@@ -39,6 +39,8 @@ setClassUnion("SpectraOrNull", c("NULL", "Spectra"))
 #' @import methods
 #'
 #' @import Spectra
+#'
+#' @import QFeatures
 #'
 #' @import ProtGenerics
 #'
@@ -64,7 +66,7 @@ setClass("MsExperiment",
          slots = c(
              experimentFiles = "MsExperimentFilesOrNull",
              spectra = "SpectraOrNull",
-             ## qfeatures = "QFeatures",
+             qfeatures = "QFeatures",
              ## chromatograms = "Chromatograms",
              colData = "DataFrame",
              metadata = "list"))

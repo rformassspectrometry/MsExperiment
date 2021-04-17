@@ -47,7 +47,7 @@ https://www.rformassspectrometry.org/
 - Mass spectrometry data, i.e. spectra and their metadata are
   stored as `Spectra()` objects.
 
-- Chromatographic data is stored as `Chromatograms()` objects.
+- Chromatographic data will be stored as `Chromatograms()` objects.
 
 - Proteomics identification data, i.e peptide-spectrum matches is
   defined as `PSM()` objects. They are generally joined with the

@@ -122,7 +122,7 @@ spectra(msexp) <- sp
 msexp
 ```
 
-## Third party applications
+# Third party applications
 
 Let's now assume we want to search the spectra in our mzML files
 against the `homo_sapiens.fasta` file. To do so, we will use a search
