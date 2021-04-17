@@ -1,5 +1,9 @@
 # Managing full mass spectrometry experiments
 
+<img
+src="https://github.com/rformassspectrometry/stickers/raw/master/MsExperiment/MsExperiment.png"
+height="150">
+
 The `MsExperiment` package provides the `MsExperiment` class that can
 be used to store and manage all aspects related to a complete
 proteomics or metabolomics mass spectrometry experiment. This includes
