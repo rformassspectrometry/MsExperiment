@@ -30,8 +30,8 @@ library(BiocStyle)
 
 The goal of the `MsExperiment` package is the store and handle all
 data related to a mass spectrometry experiment. In this vignette, we
-will describe how to create a `MsExperiment` and populate it with
-various types of data.
+will describe how to create a `MsExperiment` object and populate it
+with various types of data.
 
 ```{r}
 library("MsExperiment")
