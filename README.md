@@ -5,8 +5,8 @@ be used to store and manage all aspects related to a complete
 proteomics or metabolomics mass spectrometry experiment. This includes
 
 - experimental design
-- raw data: spectra
-- raw data: chromatograms
+- data files
+- raw data: spectra and chromatograms
 - proteomics identification results and protein database
 - quantitative features
 

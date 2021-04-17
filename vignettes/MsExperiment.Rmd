@@ -8,7 +8,7 @@ vignette: >
     %\VignetteEngine{knitr::rmarkdown}
     %\VignetteEncoding{UTF-8}
     %\VignettePackage{MsExperiment}
-    %\VignetteDepends{BiocStyle,rpx}
+    %\VignetteDepends{BiocStyle,rpx,Spectra}
 ---
 
 ```{r style, echo = FALSE, results = 'asis', message=FALSE}
@@ -22,6 +22,7 @@ BiocStyle::markdown()
 
 ```{r, echo = FALSE, message = FALSE}
 library(MsExperiment)
+library(Spectra)
 library(BiocStyle)
 ```
 
@@ -29,8 +30,8 @@ library(BiocStyle)
 
 The goal of the `MsExperiment` package is the store and handle all
 data related to a mass spectrometry experiment. In this vignette, we
-will describe how to create a `MsExperiment` and populate it with
-various types of data.
+will describe how to create a `MsExperiment` object and populate it
+with various types of data.
 
 ```{r}
 library("MsExperiment")
@@ -58,7 +59,7 @@ pxfiles(px)
 
 The project provides the vendor raw files, the converted mzML files as
 well as the identification mzid files. Let's download fractions 1 and
-2 of the mzML and mzid files.
+2 of the mzML files.
 
 If you run these commands interactively and it's the first time you
 use `pxget()`, you will be asked to create the `rpx` cache directory -
@@ -67,26 +68,139 @@ time you want to get the same files, they will be loaded automatically
 from cache.
 
 ```{r}
-(i <- grep(".+0[12].+[mzML|mzid]", pxfiles(px), value = TRUE))
+(i <- grep(".+0[12].+mzML$", pxfiles(px), value = TRUE))
 fls <- pxget(px, i)
 fls
+```
+
+# MS Experiment object
+
+Let's start by creating an empty `MsExperiment` object that we will
+late populate with different pieces of data.
+
+```{r}
+msexp <- MsExperiment()
+msexp
 ```
 
 # Experiment files
 
 Let's now start with our MS experiment management by saving the
-relevant files in a dedicated `MsExperimentFiles` object. Later, when
-loading the data, we will refer the the files in this
-`MsExperimentFiles` object.
+relevant files in a dedicated `MsExperimentFiles` object. In addition
+to the mzML files, let's also assume we have the human proteomics
+fasta files ready. Later, when loading the data, we will refer the the
+files in this `MsExperimentFiles` object.
 
 ```{r}
-msfls <- MsExperimentFiles(mxmls = grep("mzML", fls, value = TRUE),
-                           mzids = grep("mzID", fls, value = TRUE))
+msfls <- MsExperimentFiles(mzmls = fls,
+                           fasta = "homo_sapiens.fasta")
 msfls
 ```
+
+Let's add these files to the main experiment management object:
+
+```{r}
+experimentFiles(msexp) <- msfls
+msexp
+```
+
+# Raw data
+
+We can now create a `Spectra` object containing the raw data stored in
+the mzML files. If you are not familiar with the `Spectra` object,
+please refer to the package vignettes.
+
+```{r}
+sp <- Spectra(experimentFiles(msexp)[["mzmls"]])
+sp
+```
+
+We can now add these the the main experiment management object:
+
+```{r}
+spectra(msexp) <- sp
+msexp
+```
+
+## Third party applications
+
+Let's now assume we want to search the spectra in our mzML files
+against the `homo_sapiens.fasta` file. To do so, we will use a search
+engine such as MSGF+, that is run using the command line and generates
+mzid files. Here, for the sake of time and portability, we will not
+actually run MSGF+, but a simple shell script that will generate mzid
+files in a temporary R directory.
+
+
+```{r}
+outputs <- sub("mzML", "mzid", basename(experimentFiles(msexp)[["mzmls"]]))
+(outputs <- file.path(tempdir(), outputs))
+cmd <- paste("touch", outputs)
+cmd
+```
+
+The `cmd` variable holds the two commands to be run on the command
+line that will generate the new files. We can run each of these
+commands with the `system()` function.
+
+```{r}
+sapply(cmd, system)
+```
+
+Below, we recover the names of the created files (that are identical
+to those in the `outputs` variable above) and add these files names to
+our experiment.
+
+```{r}
+(mzids <- dir(tempdir(), pattern = "mzid$", full.names = TRUE))
+experimentFiles(msexp)[["mzids"]] <- mzids
+experimentFiles(msexp)
+msexp
+```
+
+We can also decide to store the commands that were used to generate
+the mzid files in the experiment files' metadata slot. Here, we use
+the convertion to name that metadata item `"mzmls_to_mzids"` to
+document to input and output of these commands.
+
+```{r}
+metadata(experimentFiles(msexp))[["mzmls_to_mzids"]] <- cmd
+metadata(experimentFiles(msexp))
+```
+
+# Conclusions
+
+The `MsExperiment` object has been used to store files and data
+pertaining to a mass spectrometry experiment. It is now possible to
+save that object and reload it later to recover all data and metadata.
+
+
+```{r}
+saveRDS(msexp, "msexp.rda")
+rm(list = ls())
+```
+
+```{r}
+msexp <- readRDS("msexp.rda")
+msexp
+experimentFiles(msexp)
+```
+
+We can access the raw data as long as the mzML files that were used to
+generate it still exist in their original location, which is the case
+here as they were saved in the `rpx` cache directory.
+
+```{r}
+sp <- spectra(msexp)
+sp
+plotSpectra(sp[1000])
+```
+
 
 # Session information
 
 ```{r si}
 sessionInfo()
 ```
+
+# References
