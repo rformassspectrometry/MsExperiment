@@ -41,9 +41,11 @@ library("MsExperiment")
 
 We will use a small subset of the
 [PXD022816](https://www.ebi.ac.uk/pride/archive/projects/PXD022816)
-project [@Morgenstern:2020]. The acquisitions correspond to the Pierce
-Thermo HeLa digestion standard, diluted to 50ng/uL with 97:3 + 0.1%
-formic acid, and acquired on a QExactive instrument.
+project [(Morgenstern et
+al. (2020)](https://doi.org/10.1021/acs.jproteome.0c00956). The
+acquisitions correspond to the Pierce Thermo HeLa digestion standard,
+diluted to 50ng/uL with 97:3 + 0.1% formic acid, and acquired on a
+QExactive instrument.
 
 Below, we use the `r Biocpkg("rpx")` package to access the project
 from the PRIDE repository, and download files of interest. Note that
@@ -108,7 +110,8 @@ msexp
 
 We can now create a `Spectra` object containing the raw data stored in
 the mzML files. If you are not familiar with the `Spectra` object,
-please refer to the package vignettes.
+please refer to the [package
+vignettes](https://rformassspectrometry.github.io/Spectra/articles/Spectra.html).
 
 ```{r}
 sp <- Spectra(experimentFiles(msexp)[["mzmls"]])
@@ -125,17 +128,45 @@ msexp
 # Third party applications
 
 Let's now assume we want to search the spectra in our mzML files
-against the `homo_sapiens.fasta` file. To do so, we will use a search
-engine such as MSGF+, that is run using the command line and generates
-mzid files. Here, for the sake of time and portability, we will not
-actually run MSGF+, but a simple shell script that will generate mzid
-files in a temporary R directory.
+against the `homo_sapiens.fasta` file. To do so, we would like to use
+a search engine such as MSGF+, that is run using the command line and
+generates mzid files.
+
+The command to run MSGF+ would look like this (see the [manual
+page](https://msgfplus.github.io/msgfplus/MSGFPlus.html) for details):
+
+```
+java -jar /path/to/MSGFPlus.jar \
+     -s input.mzML \
+     -o output.mzid
+     -d proteins.fasta \
+     -t 20ppm \ ## precursor mass tolerance
+     -tda 1 \   ## search decoy database
+     -m 0 \     ## fragmentation method as written in the spectrum or CID if no info
+     -int 1     ## Orbitrap/FTICR/Lumos
+```
+
+We can easily build such a command for each of our input file:
+
+```{r}
+mzids <- sub("mzML", "mzid", basename(experimentFiles(msexp)[["mzmls"]]))
+paste0("java -jar /path/to/MSGFPlus.jar",
+       " -s ", experimentFiles(msexp)[["mzmls"]],
+       " -o ", mzids,
+       " -d ", experimentFiles(msexp)[["fasta"]],
+       " -t 20ppm",
+       " -m 0",
+       " int 1")
+```
+
+Here, for the sake of time and portability, we will not actually run
+MSGF+, but a simple shell script that will generate mzid files in a
+temporary R directory.
 
 
 ```{r}
-outputs <- sub("mzML", "mzid", basename(experimentFiles(msexp)[["mzmls"]]))
-(outputs <- file.path(tempdir(), outputs))
-cmd <- paste("touch", outputs)
+(output <- file.path(tempdir(), mzids))
+cmd <- paste("touch", output)
 cmd
 ```
 
@@ -152,7 +183,6 @@ to those in the `outputs` variable above) and add these files names to
 our experiment.
 
 ```{r}
-(mzids <- dir(tempdir(), pattern = "mzid$", full.names = TRUE))
 experimentFiles(msexp)[["mzids"]] <- mzids
 experimentFiles(msexp)
 msexp
@@ -166,6 +196,13 @@ document to input and output of these commands.
 ```{r}
 metadata(experimentFiles(msexp))[["mzmls_to_mzids"]] <- cmd
 metadata(experimentFiles(msexp))
+```
+
+The `existMsExperimentFiles()` can be used to check which files that
+are associated with an experiment actually exist:
+
+```{r}
+existMsExperimentFiles(msexp)
 ```
 
 # Conclusions
