@@ -3,11 +3,14 @@
 \name{MsExperiment}
 \alias{MsExperiment}
 \alias{MsExperiment-class}
+\alias{metadata,MsExperiment}
 \alias{show,MsExperiment-method}
 \alias{experimentFiles}
 \alias{experimentFiles<-}
 \alias{spectra,MsExperiment-method}
 \alias{spectra<-}
+\alias{metadata,MsExperiment-method}
+\alias{metadata<-,MsExperiment-method}
 \title{Managing Mass Spectrometry Experiments}
 \usage{
 MsExperiment()
@@ -21,12 +24,17 @@ experimentFiles(object) <- value
 \S4method{spectra}{MsExperiment}(object)
 
 spectra(object) <- value
+
+\S4method{metadata}{MsExperiment}(x)
+
+\S4method{metadata}{MsExperiment}(x) <- value
 }
 \arguments{
 \item{object}{An instance of class `MsExperiment`}
 
-\item{value}{An object of the appropriate class for the slot to be
-populated.}
+\item{value}{A `list()` to replace the `MsExperiment`'s metadata.}
+
+\item{x}{An instance of `MsExperiment`.}
 }
 \description{
 The `MsExperiment` class allows the storage, management and processing of all
