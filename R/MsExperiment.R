@@ -44,6 +44,8 @@ setClassUnion("SpectraOrNull", c("NULL", "Spectra"))
 #'
 #' @import ProtGenerics
 #'
+#' @author Laurent Gatto
+#'
 #' @examples
 #'
 #' ## An empty MsExperiment object
