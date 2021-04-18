@@ -41,9 +41,9 @@ library("MsExperiment")
 
 We will use a small subset of the
 [PXD022816](https://www.ebi.ac.uk/pride/archive/projects/PXD022816)
-project [(Morgenstern et
-al. (2020)](https://doi.org/10.1021/acs.jproteome.0c00956). The
-acquisitions correspond to the Pierce Thermo HeLa digestion standard,
+project ([Morgenstern et
+al. (2020)](https://doi.org/10.1021/acs.jproteome.0c00956)). The
+acquisitions correspond to a Pierce Thermo HeLa digestion standard,
 diluted to 50ng/uL with 97:3 + 0.1% formic acid, and acquired on a
 QExactive instrument.
 
@@ -75,23 +75,24 @@ fls <- pxget(px, i)
 fls
 ```
 
-# MS Experiment object
+# Mass spectrometry experiment
 
 Let's start by creating an empty `MsExperiment` object that we will
-late populate with different pieces of data.
+populate with different pieces of data as we proceed with the analysis
+of our data.
 
 ```{r}
 msexp <- MsExperiment()
 msexp
 ```
 
-# Experiment files
+## Experiment files
 
 Let's now start with our MS experiment management by saving the
 relevant files in a dedicated `MsExperimentFiles` object. In addition
 to the mzML files, let's also assume we have the human proteomics
-fasta files ready. Later, when loading the data, we will refer the the
-files in this `MsExperimentFiles` object.
+fasta file ready. Later, when loading the raw data into R, we will
+refer directly to the files in this `MsExperimentFiles` object.
 
 ```{r}
 msfls <- MsExperimentFiles(mzmls = fls,
@@ -106,7 +107,7 @@ experimentFiles(msexp) <- msfls
 msexp
 ```
 
-# Raw data
+## Raw data
 
 We can now create a `Spectra` object containing the raw data stored in
 the mzML files. If you are not familiar with the `Spectra` object,
@@ -118,14 +119,14 @@ sp <- Spectra(experimentFiles(msexp)[["mzmls"]])
 sp
 ```
 
-We can now add these the the main experiment management object:
+We can now add this object to the main experiment management object:
 
 ```{r}
 spectra(msexp) <- sp
 msexp
 ```
 
-# Third party applications
+## Third party applications
 
 Let's now assume we want to search the spectra in our mzML files
 against the `homo_sapiens.fasta` file. To do so, we would like to use
@@ -178,9 +179,7 @@ commands with the `system()` function.
 sapply(cmd, system)
 ```
 
-Below, we recover the names of the created files (that are identical
-to those in the `outputs` variable above) and add these files names to
-our experiment.
+Below, we add the names of the newly created files to our experiment:
 
 ```{r}
 experimentFiles(msexp)[["mzids"]] <- mzids
@@ -189,17 +188,18 @@ msexp
 ```
 
 We can also decide to store the commands that were used to generate
-the mzid files in the experiment files' metadata slot. Here, we use
-the convertion to name that metadata item `"mzmls_to_mzids"` to
-document to input and output of these commands.
+the mzid files in the experiment's metadata slot. Here, we use the
+convention to name that metadata item `"mzmls_to_mzids"` to document
+to input and output of these commands.
 
 ```{r}
-metadata(experimentFiles(msexp))[["mzmls_to_mzids"]] <- cmd
-metadata(experimentFiles(msexp))
+metadata(msexp)[["mzmls_to_mzids"]] <- cmd
+metadata(msexp)
 ```
 
-The `existMsExperimentFiles()` can be used to check which files that
-are associated with an experiment actually exist:
+Finally, the `existMsExperimentFiles()` can be used at any time to
+check which of files that are associated with an experiment actually
+exist:
 
 ```{r}
 existMsExperimentFiles(msexp)
@@ -233,11 +233,8 @@ sp
 plotSpectra(sp[1000])
 ```
 
-
 # Session information
 
 ```{r si}
 sessionInfo()
 ```
-
-# References
