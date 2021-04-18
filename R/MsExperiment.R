@@ -3,7 +3,7 @@ setClassUnion("SpectraOrNull", c("NULL", "Spectra"))
 
 #' @title Managing Mass Spectrometry Experiments
 #'
-#' @aliases MsExperiment-class MsExperiment
+#' @aliases MsExperiment-class MsExperiment metadata,MsExperiment
 #'
 #' @description
 #'
@@ -144,3 +144,29 @@ setMethod("spectra", "MsExperiment", function(object) object@spectra)
     object@spectra <- value
     object
 }
+
+#' @export
+#'
+#' @importFrom S4Vectors metadata
+#'
+#' @param x An instance of `MsExperiment`.
+#'
+#' @rdname MsExperiment
+setMethod("metadata", "MsExperiment", function(x) x@metadata)
+
+#' @export
+#'
+#' @importFrom S4Vectors metadata<-
+#'
+#' @param value A `list()` to replace the `MsExperiment`'s metadata.
+#'
+#' @rdname MsExperiment
+setReplaceMethod("metadata", "MsExperiment",
+                 function(x, value) {
+                     if (!is.list(value))
+                         stop("replacement 'metadata' value must be a list")
+                     if (!length(value))
+                         names(value) <- NULL
+                     x@metadata <- value
+                     x
+                 })
