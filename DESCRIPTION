@@ -40,3 +40,4 @@ RoxygenNote: 7.1.1
 Collate:
    MsExperimentFiles.R
    MsExperiment.R
+   existMsExperimentFiles.R

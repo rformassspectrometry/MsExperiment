@@ -65,3 +65,6 @@ example(MsExperimentFiles)
 experimentFiles(msexp) <- fls
 msexp
 }
+\author{
+Laurent Gatto
+}

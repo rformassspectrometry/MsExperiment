@@ -10,6 +10,14 @@
 #' spectrometry experiment. The objects are created with the
 #' `MsExperimentFiles()` function.
 #'
+#' The files encoded in a `MsExperimentFiles` instance don't need to
+#' exist on the current filesystem - sometimes, these might be created
+#' in anticipation of their creation. The `existMsExperimentFiles()`
+#' function can be used to verify which ones currently exist: it
+#' returns a list of logicals (formally an instance of
+#' [IRanges::LogicalList()] of lenghts equal to the
+#' `MsExperimentFiles` used as input.
+#'
 #' @author Laurent Gatto
 #'
 #' @examples
@@ -26,6 +34,9 @@
 #' fls[[1]]
 #' fls[[2]]
 #' fls[["fasta"]]
+#'
+#' ## None of the files used in this example actually exist
+#' existMsExperimentFiles(fls)
 NULL
 
 #' @name MsExperimentFiles-class
