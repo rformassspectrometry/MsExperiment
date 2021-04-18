@@ -1,4 +1,4 @@
-# Managing full mass spectrometry experiments
+# Managing mass spectrometry experiments
 
 <img
 src="https://github.com/rformassspectrometry/stickers/raw/master/MsExperiment/MsExperiment.png"
