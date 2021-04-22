@@ -1,5 +1,6 @@
 setClassUnion("MsExperimentFilesOrNull", c("NULL", "MsExperimentFiles"))
 setClassUnion("SpectraOrNull", c("NULL", "Spectra"))
+setClassUnion("QFeaturesOrNull", c("NULL", "QFeatures"))
 
 #' @title Managing Mass Spectrometry Experiments
 #'
@@ -7,10 +8,11 @@ setClassUnion("SpectraOrNull", c("NULL", "Spectra"))
 #'
 #' @description
 #'
-#' The `MsExperiment` class allows the storage, management and processing of all
-#' aspects related to a complete proteomics or metabolomics mass spectrometry
-#' experiment. This includes experimantal design, raw mass spectromtry data as
-#' spectra and chromatograms, quantitative features, and identification data.
+#' The `MsExperiment` class allows the storage and management of all
+#' aspects related to a complete proteomics or metabolomics mass
+#' spectrometry experiment. This includes experimantal design, raw
+#' mass spectromtry data as spectra and chromatograms, quantitative
+#' features, and identification data.
 #'
 #' For details, see https://rformassspectrometry.github.io/MsExperiment
 #'
@@ -19,20 +21,26 @@ setClassUnion("SpectraOrNull", c("NULL", "Spectra"))
 #'
 #' @details
 #'
-#' - Data files stored in a [MsExperimentFiles()] object.
+#' An experiment is typically composed of several items
 #'
-#' - Metadata: ...
+#' - Files to data or annotations. There are stored in the
+#'   `experimentFiles` slot as an instance of class `MsExperimentFiles`.
 #'
-#' - Mass spectrometry data, i.e. spectra and their metadata are
-#'   stored as `Spectra()` objects.
+#' - General metadata about the experiment, stored as a `list` in the
+#'   `metadata` slot.
 #'
-#' - Chromatographic data will be stored as `Chromatograms()` objects.
+#' - Mass spectrometry data. Sectra and their metadata are stored as
+#'   `Spectra()` objects in the `spectra` object. Chromatographic is
+#'   noy yet supported but will be stored as `Chromatograms()` objects
+#'   in the `chromatorgrams` slot.
 #'
-#' - Proteomics identification data, i.e peptide-spectrum matches is
-#'   defined as `PSM()` objects. They are generally joined with the
-#'   spectra data.
+#' - Quantification data is stored as `QFeatures()` objects in the
+#'   `qfeatures` slot.
 #'
-#' - Quantification data is stored as `QFeatures()` objects.
+#' - Any additional data, be it other spectra data, or proteomics
+#'   identification data, i.e peptide-spectrum matches is defined as
+#'   `PSM()` objects can be added as elements to the list stored in
+#'   the `otherData` slot.
 #'
 #' @name MsExperiment
 #'
@@ -63,16 +71,28 @@ NULL
 #'
 #' @exportClass MsExperiment
 #'
-#' @noRd
+#' @slot experimentFiles An instance of class `MsExperimentFiles` or `NULL`.
+#'
+#' @slot spectra An instance of class `Spectra` or `NULL`.
+#'
+#' @slot qfeatures An instance of class `QFeatures` or `NULL`.
+#'
+#' @slot otherData A `List` to store any additional data objects.
+#'
+#' @slot colData A `DataFrame` documenting the experimental design.
+#'
+#' @slot metadata A `list` to store additional metadata.
+#'
+#' @rdname MsExperiment
 setClass("MsExperiment",
          slots = c(
              experimentFiles = "MsExperimentFilesOrNull",
              spectra = "SpectraOrNull",
-             qfeatures = "QFeatures",
+             qfeatures = "QFeaturesOrNull",
              ## chromatograms = "Chromatograms",
+             otherData = "List",
              colData = "DataFrame",
              metadata = "list"))
-
 
 #' @rdname MsExperiment
 #'
