@@ -27,7 +27,7 @@ Suggests:
     knitr (>= 1.1.0),
     roxygen2,
     BiocStyle (>= 2.5.19),
-    markdown,
+    rmarkdown,
     rpx,
     mzR
 License: Artistic-2.0
