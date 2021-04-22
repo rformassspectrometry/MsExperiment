@@ -107,6 +107,23 @@ experimentFiles(msexp) <- msfls
 msexp
 ```
 
+## Experimental design
+
+The `colData` slot is used to describe the overall experimental design
+of the experiment. It can be used to link samples to the files that
+are part of the experiment. There can be a one-to-one link between a
+sample and a file, such as for example in label-free approaches, or
+one-to-many, in labelled multiplexed approaches.
+
+Here, we are simply going to use the `colData` slot to match the files
+to their respective fractions:
+
+```{r}
+sampleData(msexp) <- DataFrame(mzmls = basename(experimentFiles(msexp)[["mzmls"]]),
+                               fractions = 1:2)
+sampleData(msexp)
+```
+
 ## Raw data
 
 We can now create a `Spectra` object containing the raw data stored in

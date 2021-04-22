@@ -79,7 +79,7 @@ NULL
 #'
 #' @slot otherData A `List` to store any additional data objects.
 #'
-#' @slot colData A `DataFrame` documenting the experimental design.
+#' @slot sampleData A `DataFrame` documenting the experimental design.
 #'
 #' @slot metadata A `list` to store additional metadata.
 #'
@@ -91,7 +91,7 @@ setClass("MsExperiment",
              qfeatures = "QFeaturesOrNull",
              ## chromatograms = "Chromatograms",
              otherData = "List",
-             colData = "DataFrame",
+             sampleData = "DataFrame",
              metadata = "list"))
 
 #' @rdname MsExperiment
@@ -113,8 +113,12 @@ setMethod("show", "MsExperiment",
                                        collapse = ", "), "\n")
               if (!is.null(object@spectra)) {
                   mstab <- table(msLevel(object@spectra))
-                  cat(" Spectra:", paste0(names(mstab), " (", mstab, ")"),
+                  cat(" Spectra:", paste0("MS", names(mstab), " (", mstab, ")"),
                       "\n")
+              }
+              if (nrow(object@sampleData)) {
+                  cat(" Experiment data:",
+                      nrow(object@sampleData), "sample(s)\n")
               }
           })
 
@@ -143,6 +147,29 @@ experimentFiles  <- function(object) {
     stopifnot(inherits(value, "MsExperimentFiles"))
     stopifnot(inherits(object, "MsExperiment"))
     object@experimentFiles <- value
+    object
+}
+
+#' @export
+#'
+#' @param object An instance of class `MsExperiment`
+#'
+#' @rdname MsExperiment
+sampleData  <- function(object) {
+    stopifnot(inherits(object, "MsExperiment"))
+    object@sampleData
+}
+
+#' @export
+#'
+#' @param value An object of the appropriate class for the slot to be
+#'     populated.
+#'
+#' @rdname MsExperiment
+"sampleData<-" <- function(object, value) {
+    stopifnot(inherits(value, "DataFrame"))
+    stopifnot(inherits(object, "MsExperiment"))
+    object@sampleData <- value
     object
 }
 

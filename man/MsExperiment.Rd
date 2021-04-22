@@ -8,6 +8,8 @@
 \alias{show,MsExperiment-method}
 \alias{experimentFiles}
 \alias{experimentFiles<-}
+\alias{sampleData}
+\alias{sampleData<-}
 \alias{spectra,MsExperiment-method}
 \alias{spectra<-}
 \alias{metadata,MsExperiment-method}
@@ -21,6 +23,10 @@ MsExperiment()
 experimentFiles(object)
 
 experimentFiles(object) <- value
+
+sampleData(object)
+
+sampleData(object) <- value
 
 \S4method{spectra}{MsExperiment}(object)
 
@@ -82,7 +88,7 @@ An experiment is typically composed of several items
 
 \item{\code{otherData}}{A `List` to store any additional data objects.}
 
-\item{\code{colData}}{A `DataFrame` documenting the experimental design.}
+\item{\code{sampleData}}{A `DataFrame` documenting the experimental design.}
 
 \item{\code{metadata}}{A `list` to store additional metadata.}
 }}
