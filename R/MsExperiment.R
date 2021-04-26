@@ -1,3 +1,14 @@
+#' @include MsExperimentFiles.R
+
+#' @importClassesFrom Spectra Spectra
+#'
+#' @importClassesFrom QFeatures QFeatures
+#'
+#' @importFrom S4Vectors List DataFrame
+#'
+#' @importClassesFrom S4Vectors List
+#'
+#' @noRd
 setClassUnion("MsExperimentFilesOrNull", c("NULL", "MsExperimentFiles"))
 setClassUnion("SpectraOrNull", c("NULL", "Spectra"))
 setClassUnion("QFeaturesOrNull", c("NULL", "QFeatures"))
@@ -44,14 +55,6 @@ setClassUnion("QFeaturesOrNull", c("NULL", "QFeatures"))
 #'
 #' @name MsExperiment
 #'
-#' @import methods
-#'
-#' @import Spectra
-#'
-#' @import QFeatures
-#'
-#' @import ProtGenerics
-#'
 #' @author Laurent Gatto
 #'
 #' @examples
@@ -92,7 +95,15 @@ setClass("MsExperiment",
              ## chromatograms = "Chromatograms",
              otherData = "List",
              sampleData = "DataFrame",
-             metadata = "list"))
+             metadata = "list"),
+         prototype = prototype(
+             experimentFiles = NULL,
+             spectra = NULL,
+             qfeatures = NULL,
+             otherData = List(),
+             sampleData = DataFrame(),
+             metadata = list())
+         )
 
 #' @rdname MsExperiment
 #'
@@ -103,6 +114,8 @@ MsExperiment <- function()
 #' @rdname MsExperiment
 #'
 #' @param object An instance of class `MsExperiment`.
+#'
+#' @importFrom Spectra msLevel
 #'
 #' @exportMethod show
 setMethod("show", "MsExperiment",

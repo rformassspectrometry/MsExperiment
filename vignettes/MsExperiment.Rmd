@@ -250,6 +250,26 @@ sp
 plotSpectra(sp[1000])
 ```
 
+# Alternative workflow with explicit links between samples and data files
+
+For some experiments and data analyses an explicit link between data, data files
+and respective samples is required. This enables an easy (and error-free)
+subsetting and re-ordering by sample as well as coloring and labeling of the
+data depending on e.g. the sample or its condition.
+
+The toy example below corresponds to the first part of a typical (LC-MS based)
+untargeted metabolomics workflow: after the initial data import we calculate
+base peak intensities per sample, plot them (using sample-dependent colors) and
+eventually subset or re-order the experiment.
+
+- define sampleData.
+- create a MsExperiment from that
+- add data files (link them to samples) addExperimentFiles(object, name, files, sampleDataIndex)
+- add data (spectra()<-
+- addLink("spectra.dataOrigin = sampleData.mzmls")
+- subset by sample
+- add additional files.
+
 # Session information
 
 ```{r si}

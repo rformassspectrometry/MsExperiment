@@ -37,14 +37,14 @@ spectra(object) <- value
 \S4method{metadata}{MsExperiment}(x) <- value
 }
 \arguments{
-\item{object}{An instance of class `MsExperiment`}
+\item{object}{An instance of class \code{MsExperiment}}
 
-\item{value}{A `list()` to replace the `MsExperiment`'s metadata.}
+\item{value}{A \code{list()} to replace the \code{MsExperiment}'s metadata.}
 
-\item{x}{An instance of `MsExperiment`.}
+\item{x}{An instance of \code{MsExperiment}.}
 }
 \description{
-The `MsExperiment` class allows the storage and management of all
+The \code{MsExperiment} class allows the storage and management of all
 aspects related to a complete proteomics or metabolomics mass
 spectrometry experiment. This includes experimantal design, raw
 mass spectromtry data as spectra and chromatograms, quantitative
@@ -57,40 +57,37 @@ https://www.rformassspectrometry.org/
 }
 \details{
 An experiment is typically composed of several items
-
-- Files to data or annotations. There are stored in the
-  `experimentFiles` slot as an instance of class `MsExperimentFiles`.
-
-- General metadata about the experiment, stored as a `list` in the
-  `metadata` slot.
-
-- Mass spectrometry data. Sectra and their metadata are stored as
-  `Spectra()` objects in the `spectra` object. Chromatographic is
-  noy yet supported but will be stored as `Chromatograms()` objects
-  in the `chromatorgrams` slot.
-
-- Quantification data is stored as `QFeatures()` objects in the
-  `qfeatures` slot.
-
-- Any additional data, be it other spectra data, or proteomics
-  identification data, i.e peptide-spectrum matches is defined as
-  `PSM()` objects can be added as elements to the list stored in
-  the `otherData` slot.
+\itemize{
+\item Files to data or annotations. There are stored in the
+\code{experimentFiles} slot as an instance of class \code{MsExperimentFiles}.
+\item General metadata about the experiment, stored as a \code{list} in the
+\code{metadata} slot.
+\item Mass spectrometry data. Sectra and their metadata are stored as
+\code{Spectra()} objects in the \code{spectra} object. Chromatographic is
+noy yet supported but will be stored as \code{Chromatograms()} objects
+in the \code{chromatorgrams} slot.
+\item Quantification data is stored as \code{QFeatures()} objects in the
+\code{qfeatures} slot.
+\item Any additional data, be it other spectra data, or proteomics
+identification data, i.e peptide-spectrum matches is defined as
+\code{PSM()} objects can be added as elements to the list stored in
+the \code{otherData} slot.
+}
 }
 \section{Slots}{
 
 \describe{
-\item{\code{experimentFiles}}{An instance of class `MsExperimentFiles` or `NULL`.}
+\item{\code{experimentFiles}}{An instance of class \code{MsExperimentFiles} or \code{NULL}.}
 
-\item{\code{spectra}}{An instance of class `Spectra` or `NULL`.}
+\item{\code{spectra}}{An instance of class \code{Spectra} or \code{NULL}.}
 
-\item{\code{qfeatures}}{An instance of class `QFeatures` or `NULL`.}
+\item{\code{qfeatures}}{An instance of class \code{QFeatures} or \code{NULL}.}
 
-\item{\code{otherData}}{A `List` to store any additional data objects.}
+\item{\code{otherData}}{A \code{List} to store any additional data objects.}
 
-\item{\code{sampleData}}{A `DataFrame` documenting the experimental design.}
+\item{\code{sampleData}}{A \code{DataFrame} documenting the experimental design.}
 
-\item{\code{metadata}}{A `list` to store additional metadata.}
+\item{\code{metadata}}{A \code{list} to store additional metadata.}
 }}
 
 \examples{
