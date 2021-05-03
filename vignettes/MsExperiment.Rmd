@@ -250,25 +250,157 @@ sp
 plotSpectra(sp[1000])
 ```
 
-# Alternative workflow with explicit links between samples and data files
+# Linking experimental data to samples
 
 For some experiments and data analyses an explicit link between data, data files
 and respective samples is required. This enables an easy (and error-free)
 subsetting and re-ordering by sample as well as coloring and labeling of the
 data depending on e.g. the sample or its condition.
 
-The toy example below corresponds to the first part of a typical (LC-MS based)
-untargeted metabolomics workflow: after the initial data import we calculate
-base peak intensities per sample, plot them (using sample-dependent colors) and
-eventually subset or re-order the experiment.
+Below we generate an `MsExperiment` object for a simple experiment consisting of
+a single sample measured in two different injections to the same LC-MS setup.
 
-- define sampleData.
-- create a MsExperiment from that
-- add data files (link them to samples) addExperimentFiles(object, name, files, sampleDataIndex)
-- add data (spectra()<-
-- addLink("spectra.dataOrigin = sampleData.mzmls")
-- subset by sample
-- add additional files.
+```{r}
+mse <- MsExperiment()
+sd <- DataFrame(sample_id = c("QC1", "QC2"),
+                sample_name = c("QC Pool", "QC Pool"),
+                injection_idx = c(1, 3))
+sampleData(mse) <- sd
+```
+
+We next add mzML files to the experiment for the sample that was measured. These
+are available within the `msdata` R package. We add also an additional
+*annotation* file `"internal_standards.txt"` to the experiment, which could be
+e.g. a file with m/z and retention times of internal standards added to the
+sample (note that such files don't necessarily have to exist).
+
+```{r}
+fls <- dir(system.file("sciex", package = "msdata"), full.names = TRUE)
+basename(fls)
+
+experimentFiles(mse) <- MsExperimentFiles(mzML_files = fls,
+                                          annotations = "internal_standards.txt")
+```
+
+Next we load the MS data from the mzML files as a `Spectra` object and add them
+to the experiment (see the vignette of the `r BiocStyle::Biocpkg("Spectra")` for
+details on import and representation of MS data).
+
+```{r}
+sps <- Spectra(fls, backend = MsBackendMzR())
+spectra(mse) <- sps
+mse
+```
+
+At this stage we have thus sample annotations and MS data in our object, but no
+explicit relationships between them. We next use the `linkSpectraData` function
+to establish and define such relationships. First we link the experimental files
+to the samples:
+
+```{r}
+mse <- linkSampleData(mse, with = "experimentFiles.mzML_file",
+                      fromIndex = c(1, 2), toIndex = c(1, 2))
+```
+
+With parameter `with` we define which element in the object we want to link
+samples. By using `"experimentFiles.mzML_file"` we link the *attribute* (or
+*element*) called `"mzML_file"` in the object's `"experimentFiles"` slot to
+samples. The way how elements are named in an `MsExperiment` is similar to SQL:
+the first part of the name (before the `"."`) defines the slot in the object
+(equivalent to a database's table), the second part (after the `"."`) is the
+name of the element in that slot (equivalent to the *field* or database table
+column in SQL). `"experimentFiles.mzML_file` thus refers to the element named
+`"mzML_file"` within `experimentFiles(mse)`. `fromIndex` and `toIndex` allows to
+define which rows in `sampleData` (`fromIndex`) should be linked to which
+elements in `with` (`toIndex`). In the example above we linked thus the first
+sample (row) in `sampleData` to the first element in
+`experimentFiles(mse)$mzML_file` and the second sample to the second element.
+
+Below we establish a second link between each sample and the *annotation*
+file `"internal_standards.txt"` in `experimentFiles(mse)$standards`:
+
+```{r}
+mse <- linkSampleData(mse, with = "experimentFiles.annotations",
+                      fromIndex = c(1, 2), toIndex = c(1, 1))
+```
+
+It is thus also possible to link different samples to the same element. We next
+link the spectra in the object to the individual samples. To simplify this, we
+add also the mzML file name (with the full patch) to the object's `sampleData`
+and describe the link then in a SQL-like join syntax.
+
+```{r}
+sampleData(mse)$raw_file <- normalizePath(fls)
+mse <- linkSampleData(mse, with = "sampleData.raw_file = spectra.dataOrigin")
+mse
+```
+
+Internally, `linkSampleData` matched each sample based on column `"raw_file"` in
+`sampleData` to spectra with a matching value in the `"dataOrigin"` spectra
+variable. Alternatively, we could also provided the indices of the
+sample-to-spectra assignment with `fromIndex` and `toIndex` as before.
+
+The main advantage of these links is that any subsetting of the experiment by
+sample will keep all the data consistent. To illustrate this we subset below the
+experiment to the second sample.
+
+```{r}
+b <- mse[, 2]
+b
+```
+
+The subsetted object contains now all data elements that are linked to this
+second sample. But what happens for data elements that are not linked to any
+sample? Below we add a `data.frame` as a `metadata` to the experiment and subset
+the object again.
+
+```{r}
+metadata(mse)$other <- data.frame(sample_name = c("study_1", "POOL", "study_2"),
+                                  index = 1:3)
+b <- mse[, 2]
+metadata(b)
+```
+
+By default, any element which is **not** linked to a sample is retained. We next
+link each sample to the second row in this data frame and subset the data again
+to the second sample.
+
+```{r}
+mse <- linkSampleData(mse, with = "metadata.other",
+                      fromIndex = 1:2, toIndex = c(2, 2))
+b <- mse[, 2]
+metadata(b)
+```
+
+Subsetting thus retained only the row in the data frame for the linked
+sample. Obviously it is also possible to subset to multiple samples, in
+arbitrary order. Below we re-order our experiment.
+
+```{r}
+mse <- mse[, c(2, 1)]
+sampleData(mse)
+```
+
+The sample order is thus reversed and also all other linked elements are
+re-ordered accordingly, such as `"mzML_file"` in the object's `experimentFiles`.
+
+```{r}
+experimentFiles(mse)$mzML_file
+```
+
+It is however important to note, that subsetting will also *duplicate* elements
+that are associated with multiple samples:
+
+```{r}
+experimentFiles(mse)$annotations
+```
+
+Thus, while we added a single *annotation* file to the data element
+`"annotations"` in `experimentFiles`, after subsetting we ended up with two
+identical files. This eventual duplication of *n:m* relationships between
+samples to elements does however not affect data consistency. A sample will
+always be linked to the correct value/element.
+
 
 # Session information
 
