@@ -4,6 +4,7 @@
 \alias{LinkedMsExperiment}
 \alias{linkSampleData}
 \alias{linkSampleData,MsExperiment-method}
+\alias{[,LinkedMsExperiment,ANY,ANY,ANY-method}
 \title{Mass spectrometry experiments with explicit links between data entities}
 \usage{
 linkSampleData(object, ...)
@@ -14,6 +15,8 @@ linkSampleData(object, ...)
   fromIndex = seq_len(nrow(sampleData(object))),
   toIndex = integer()
 )
+
+\S4method{[}{LinkedMsExperiment,ANY,ANY,ANY}(x, i, j, ..., drop = FALSE)
 }
 \description{
 The \code{linkSampleData} function allows to add or define \emph{explicit} links
@@ -29,6 +32,17 @@ Importantly, the presence of such links enables a (coherent) subsetting of an
 sample will also correctly subset the linked data. All other, not linked,
 data elements are always retained as in the original \code{MsExperiment}.
 }
+\section{Accessing data within an \code{LinkedMsExperiment}}{
+
+
+Naming of data elements in an \code{LinkedExperiment} follows the schema
+\code{"<slot name>.<element name>"} (similar to SQL
+\code{"<database table>.<column>"}). Using the shortcut
+\verb{$<slot name>.<element name>} it is thus also possible to directly access
+data elements in the different slots of the object. Note that if a element
+with the specified name does not exist in the slot \code{NULL} is returned.
+}
+
 \section{Implementation notes}{
 
 

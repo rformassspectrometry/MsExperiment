@@ -3,7 +3,7 @@
 #' @title Mass spectrometry experiments with explicit links between data entities
 #'
 #' @name LinkedMsExperiment
-#' 
+#'
 #' @description
 #'
 #' The `linkSampleData` function allows to add or define *explicit* links
@@ -17,10 +17,21 @@
 #' Importantly, the presence of such links enables a (coherent) subsetting of an
 #' `MsExperiment` by samples. Thus, once the link is defined, any subsetting by
 #' sample will also correctly subset the linked data. All other, not linked,
-#' data elements are always retained as in the original `MsExperiment`. 
+#' data elements are always retained as in the original `MsExperiment`.
+#'
+#'
+#' @section Accessing data within an `LinkedMsExperiment`:
+#'
+#' Naming of data elements in an `LinkedExperiment` follows the schema
+#' `"<slot name>.<element name>"` (similar to SQL
+#' `"<database table>.<column>"`). Using the shortcut
+#' `$<slot name>.<element name>` it is thus also possible to directly access
+#' data elements in the different slots of the object. Note that if a element
+#' with the specified name does not exist in the slot `NULL` is returned.
+#'
 #'
 #' @section Implementation notes:
-#' 
+#'
 #' Links from samples to any other element are stored as an `integer` `matrix`
 #' as a list element of the `@sampleDataLinks` slot. The link name (i.e.
 #' the name of the list element) needs to be the name of the slot that is
@@ -57,7 +68,7 @@ setClass("LinkedMsExperiment",
 #' - values within 1:length
 #'
 #' @author Johannes Rainer
-#' 
+#'
 #' @noRd
 .valid_link <- function(x, nfrom = 0L, nto = 0L) {
     if (!is.matrix(x) || !is.integer(x[1, 1]))
@@ -74,7 +85,7 @@ setClass("LinkedMsExperiment",
 
 #' The validity of the link matrix is evaluated only when adding the link. Also,
 #' eventually existing links between the same entities will be **overwritten**.
-#' 
+#'
 #' @param x `LinkedMsExperiment`.
 #'
 #' @param link two-column `integer` `matrix` with the link.
@@ -113,12 +124,12 @@ setClass("LinkedMsExperiment",
 #' @param name `character(1)` defining the element name.
 #'
 #' @return the requested element which can be a slot or a column in slot.
-#' 
+#'
 #' @author Johannes Rainer
 #'
 #' @importFrom methods slotNames slot
-#' 
-#' @noRd 
+#'
+#' @noRd
 .get_element <- function(x, name = "sampleData") {
     name <- unlist(strsplit(name[1L], split = ".", fixed = TRUE))
     slt <- name[1L]
@@ -135,15 +146,50 @@ setClass("LinkedMsExperiment",
     res
 }
 
+#' Setting/replacing an element within a slot of an `LinkedMsExperiment`. This
+#' function does **not** perform any checks except for the presence of a slot.
+#'
+#' @importMethodsFrom methods slot slot<-
+#'
+#' @author Johannes Rainer
+#'
+#' @noRd
+#'
+#' @examples
+#'
+#' ## Add a new spectra variable to a Spectra
+#' .set_element(mse, "spectra.new.value", 1:3)
+#'
+#' ## Add a new metadata element
+#' .set_element(mse, "metadata.new_entry", data.frame(1:3))
+.set_element <- function(x, name = character(), value = NULL) {
+    if (length(name) == 0)
+        return(x)
+    name <- unlist(strsplit(name[1L], split = ".", fixed = TRUE))
+    slt <- name[1L]
+    if (!any(slotNames(x) == slt))
+        stop("No slot named '", slt, "' available in 'x'")
+    if (length(name) == 1)
+        slot(x, slt, check = FALSE) <- value
+    else {
+        el <- paste0(name[-1L], collapse = ".")
+        if (length(dim(slot(x, slt))))
+            slot(x, slt, check = FALSE)[, el] <- value
+        else
+            slot(x, slt) <- do.call("$<-", list(slot(x, slt), el, value))
+    }
+    x
+}
+
 #' @param x `character` similar to a join statement, e.g.
 #'     `"sampleData.mzML = spectra.dataOrigin"`
 #'
 #' @return `character` with slot from, column from, slot to, column to.
 #'
 #' @author Johannes Rainer
-#' 
+#'
 #' @noRd
-#' 
+#'
 #' @examples
 #'
 #' x <- "sampleData.mzml_file = spectra.dataOrigin"
@@ -169,7 +215,7 @@ setClass("LinkedMsExperiment",
 #' @return `integer` `matrix` with the indices of the matches.
 #'
 #' @author Johannes Rainer
-#' 
+#'
 #' @noRd
 #'
 #' @examples
@@ -241,34 +287,80 @@ setMethod("show", "LinkedMsExperiment", function(object) {
     }
 })
 
-## establish explicit links between files and samples:
-## original raw files and samples
-## mse <- linkSampleData(mse, with = "experimentFiles.original_files",
-##                      toIndex = 1:3)
-## optionally link also the backend file
-## mse <- linkSampleData(mse, with = "experimentFiles.sql_backend", toIndex = 1)
+#' @description
+#'
+#' Subset a `LinkedMsExperiment` by sample also subsetting and updating all
+#' linked data:
+#'
+#' Subsetting with `[i, j]`:
+#' - support re-ordering (`j = c(4, 2, 3)`).
+#' - support duplication (`j = c(1, 1, 2)`). -> make that a special case?
+#' - keep only elements matching a sample after subsetting - and any unlinked
+#'   element.
+#'
+#' @note
+#'
+#' how could we improve the performance of this subsetting? Copying over the
+#' whole object sounds like not an ideal thing to do.
+#'
+#' Maybe have helper functions `splitBySample` to avoid repeatedly copying the
+#' original data. Parameter `newx` might help here - but not sure if that's
+#' indeed the case.
+#'
+#' @param x `LinkedMsExperiment`.
+#'
+#' @param j `integer`
+#'
+#' @param newx `LinkedMsExperiment`. Result objects. Might help avoiding
+#'     repeatedly copying the object if `.extractSamples` is called within
+#'     a loop. Also, providing `newx = new("LinkedMsExperiment")` would perform
+#'     a *lightweight* extraction, dropping anything which is not linked.
+#'
+#' @author Johannes Rainer
+#'
+#' @importFrom methods slot<- callNextMethod
+#'
+#' @noRd
+.extractSamples <- function(x, j, newx = x) {
+    if (!nrow(sampleData(x)))
+        return(x)
+    slot(newx, "sampleData", check = FALSE) <- x@sampleData[j, , drop = FALSE]
+    for (link in names(slot(x, "sampleDataLinks"))) {
+        lmat <- slot(x, "sampleDataLinks")[[link]]
+        idxs <- split(lmat[, 2], as.factor(lmat[, 1]))
+        idxs <- idxs[as.character(j)]
+        ls <- lengths(idxs)
+        idxs <- unlist(idxs, use.names = FALSE)
+        element <- .get_element(x, link)
+        if (length(dim(element)))
+            newx <- .set_element(newx, link, element[idxs, , drop = FALSE])
+        else newx <- .set_element(newx, link, element[idxs])
+        newx@sampleDataLinks[[link]] <- cbind(rep(seq_along(ls), ls),
+                                              seq_len(sum(ls)))
+        ## Note: keeping also empty lmat - to keep info that there was a link
+    }
+    newx
+}
 
-## Link the individual spectra to samples.
-## mse <- linkSampleData(mse, with = "spectra",
-##                      from = sampleData(mse)$original_files,
-##                      to = basename(spectra(mse)$dataOrigin))
-
-## subsetting will subset:
-## - sampleData
-## - any other slot for which a link exists
-##
-## Example use cases:
-## Re-order experiment by time
-## mse <- mse[, order(mse$time)]
-
-## extract samples/files from one group (or exclude QC samples etc)
-## group_1 <- mse[, mse$group == 1]
-
-## What would also be possible:
-## establish link as a join statement (similar to SQL join).
-## mse <- linkSampleData(mse, with = "spectra.dataOrigin = sampleData.file_name")
-
-## n:m mappings
-## mse <- linkSampleData(mse, with = "experimentfiles.annotations",
-##                      fromIndex = c(1, 2, 3), toIndex = c(1, 2, 1))
-
+#' @rdname LinkedMsExperiment
+#'
+#' @export
+setMethod("[", "LinkedMsExperiment", function(x, i, j, ..., drop = FALSE) {
+    if (!missing(i))
+        stop("Only subsetting with '[, j]' is supported.")
+    lj <- length(j)
+    if (is.character(j)) {
+        j <- match(j, rownames(sampleData(x)))
+        if (any(is.na(j)))
+            warning(sum(is.na(j)), " of ", lj, " values could not be ",
+                    "matched to rownames of 'sampleData(x)'")
+        j <- j[!is.na(j)]
+    }
+    if (is.logical(j)) {
+        if (lj != nrow(sampleData(x)))
+            stop("if 'j' is logical its length has to match the number of ",
+                 "samples in 'x'.")
+        j <- which(j)
+    }
+    .extractSamples(x, j, newx = x)
+})
