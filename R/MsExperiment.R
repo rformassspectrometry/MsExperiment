@@ -1,6 +1,16 @@
+#' @importClassesFrom Spectra Spectra
+#'
+#' @importClassesFrom QFeatures QFeatures
+#'
+#' @importClassesFrom SummarizedExperiment SummarizedExperiment
+#'
+#' @noRd
 setClassUnion("MsExperimentFilesOrNull", c("NULL", "MsExperimentFiles"))
 setClassUnion("SpectraOrNull", c("NULL", "Spectra"))
-setClassUnion("QFeaturesOrNull", c("NULL", "QFeatures"))
+
+setClassUnion("QFeaturesOrSummarizedExperiment", c("SummarizedExperiment", "QFeatures"))
+setClassUnion("QFeaturesOrSummarizedExperimentOrNull", c("NULL", "QFeaturesOrSummarizedExperiment"))
+
 
 #' @title Managing Mass Spectrometry Experiments
 #'
@@ -46,9 +56,9 @@ setClassUnion("QFeaturesOrNull", c("NULL", "QFeatures"))
 #'
 #' @import methods
 #'
-#' @import Spectra
+#' @importFrom S4Vectors List DataFrame
 #'
-#' @import QFeatures
+#' @importClassesFrom S4Vectors List
 #'
 #' @import ProtGenerics
 #'
@@ -88,7 +98,7 @@ setClass("MsExperiment",
          slots = c(
              experimentFiles = "MsExperimentFilesOrNull",
              spectra = "SpectraOrNull",
-             qfeatures = "QFeaturesOrNull",
+             qfeatures = "QFeaturesOrSummarizedExperimentOrNull",
              ## chromatograms = "Chromatograms",
              otherData = "List",
              sampleData = "DataFrame",

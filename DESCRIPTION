@@ -1,6 +1,6 @@
 Package: MsExperiment
 Title: Infrastructure for Mass Spectrometry Experiments
-Version: 0.5.0
+Version: 0.5.1
 Description: Infrastructure to store and manage all aspects related to
    a complete proteomics or metabolomics mass spectrometry experiment.
 Authors@R: c(person(given = "Laurent", family = "Gatto",
@@ -21,6 +21,7 @@ Imports:
     S4Vectors,
     IRanges,
     Spectra,
+    SummarizedExperiment,
     QFeatures
 Suggests:
     testthat,
