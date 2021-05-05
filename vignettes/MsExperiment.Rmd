@@ -278,8 +278,9 @@ sample (note that such files don't necessarily have to exist).
 fls <- dir(system.file("sciex", package = "msdata"), full.names = TRUE)
 basename(fls)
 
-experimentFiles(mse) <- MsExperimentFiles(mzML_files = fls,
-                                          annotations = "internal_standards.txt")
+experimentFiles(mse) <- MsExperimentFiles(
+    mzML_files = fls,
+    annotations = "internal_standards.txt")
 ```
 
 Next we load the MS data from the mzML files as a `Spectra` object and add them
@@ -332,6 +333,7 @@ and describe the link then in a SQL-like join syntax.
 ```{r}
 sampleData(mse)$raw_file <- normalizePath(fls)
 mse <- linkSampleData(mse, with = "sampleData.raw_file = spectra.dataOrigin")
+
 mse
 ```
 
