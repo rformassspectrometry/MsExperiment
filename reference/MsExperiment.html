@@ -90,7 +90,7 @@ https://www.rformassspectrometry.org/" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MsExperiment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.2</span>
       </span>
     </div>
 
@@ -191,8 +191,8 @@ https://www.rformassspectrometry.org/</p>
   `Spectra()` objects in the `spectra` object. Chromatographic is
   noy yet supported but will be stored as `Chromatograms()` objects
   in the `chromatorgrams` slot.</p>
-<p>- Quantification data is stored as `QFeatures()` objects in the
-  `qfeatures` slot.</p>
+<p>- Quantification data is stored as `QFeatures` or
+  `SummarizedExperiment` objects in the `assay` slot.</p>
 <p>- Any additional data, be it other spectra data, or proteomics
   identification data, i.e peptide-spectrum matches is defined as
   `PSM()` objects can be added as elements to the list stored in
@@ -206,7 +206,8 @@ https://www.rformassspectrometry.org/</p>
 
 <dt><code>spectra</code></dt><dd><p>An instance of class `Spectra` or `NULL`.</p></dd>
 
-<dt><code>qfeatures</code></dt><dd><p>An instance of class `QFeatures` or `NULL`.</p></dd>
+<dt><code>assay</code></dt><dd><p>An instance of class `QFeatures`,
+`SummarizedExperiment` or `NULL`.</p></dd>
 
 <dt><code>otherData</code></dt><dd><p>A `List` to store any additional data objects.</p></dd>
 
@@ -220,49 +221,53 @@ https://www.rformassspectrometry.org/</p>
     <p>Laurent Gatto</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='co'>## An empty MsExperiment object</span>
-<span class='va'>msexp</span> <span class='op'>&lt;-</span> <span class='fu'>MsExperiment</span><span class='op'>(</span><span class='op'>)</span>
-<span class='va'>msexp</span>
-</div><div class='co'>#&gt; Object of class MsExperiment </div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/utils/example.html'>example</a></span><span class='op'>(</span><span class='va'>MsExperimentFiles</span><span class='op'>)</span>
-</div><div class='co'>#&gt; 
-#&gt; MsExpF&gt; fls &lt;- MsExperimentFiles(mzmls = c("/path/to/f1.mzML", "/path/to/f2.mzML"),
-#&gt; MsExpF+                          mzids = "/another/path/to/id1.mzid",
-#&gt; MsExpF+                          fasta = "file.fas")
-#&gt; 
-#&gt; MsExpF&gt; fls
-#&gt; MsExperimentFiles of length  3 
-#&gt; [["mzmls"]] f1.mzML f2.mzML
-#&gt; [["mzids"]] id1.mzid
-#&gt; [["fasta"]] file.fas
-#&gt; 
-#&gt; MsExpF&gt; ## A new MsExperimentFiles containing mzML or mzid files
-#&gt; MsExpF&gt; fls[1]
-#&gt; MsExperimentFiles of length  1 
-#&gt; [["mzmls"]] f1.mzML f2.mzML
-#&gt; 
-#&gt; MsExpF&gt; fls["mzids"]
-#&gt; MsExperimentFiles of length  1 
-#&gt; [["mzids"]] id1.mzid
-#&gt; 
-#&gt; MsExpF&gt; ## The actual file names
-#&gt; MsExpF&gt; fls[[1]]
-#&gt; [1] "/path/to/f1.mzML" "/path/to/f2.mzML"
-#&gt; 
-#&gt; MsExpF&gt; fls[[2]]
-#&gt; [1] "/another/path/to/id1.mzid"
-#&gt; 
-#&gt; MsExpF&gt; fls[["fasta"]]
-#&gt; [1] "file.fas"
-#&gt; 
-#&gt; MsExpF&gt; ## None of the files used in this example actually exist
-#&gt; MsExpF&gt; existMsExperimentFiles(fls)</div><div class='co'>#&gt; mzmls: 0 out of 2 exist(s)
-#&gt; mzids: 0 out of 1 exist(s)
-#&gt; fasta: 0 out of 1 exist(s)</div><div class='input'><span class='fu'>experimentFiles</span><span class='op'>(</span><span class='va'>msexp</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>fls</span>
-<span class='va'>msexp</span>
-</div><div class='co'>#&gt; Object of class MsExperiment 
-#&gt;  Files: mzmls, mzids, fasta </div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='co'>## An empty MsExperiment object</span></span>
+<span class='r-in'><span class='va'>msexp</span> <span class='op'>&lt;-</span> <span class='fu'>MsExperiment</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>msexp</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Object of class MsExperiment </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/example.html'>example</a></span><span class='op'>(</span><span class='va'>MsExperimentFiles</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> MsExpF&gt; fls &lt;- MsExperimentFiles(mzmls = c("/path/to/f1.mzML", "/path/to/f2.mzML"),</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> MsExpF+                          mzids = "/another/path/to/id1.mzid",</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> MsExpF+                          fasta = "file.fas")</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> MsExpF&gt; fls</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> MsExperimentFiles of length  3 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [["mzmls"]] f1.mzML f2.mzML</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [["mzids"]] id1.mzid</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [["fasta"]] file.fas</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> MsExpF&gt; ## A new MsExperimentFiles containing mzML or mzid files</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> MsExpF&gt; fls[1]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> MsExperimentFiles of length  1 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [["mzmls"]] f1.mzML f2.mzML</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> MsExpF&gt; fls["mzids"]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> MsExperimentFiles of length  1 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [["mzids"]] id1.mzid</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> MsExpF&gt; ## The actual file names</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> MsExpF&gt; fls[[1]]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "/path/to/f1.mzML" "/path/to/f2.mzML"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> MsExpF&gt; fls[[2]]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "/another/path/to/id1.mzid"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> MsExpF&gt; fls[["fasta"]]</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "file.fas"</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> MsExpF&gt; ## None of the files used in this example actually exist</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> MsExpF&gt; existMsExperimentFiles(fls)</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> mzmls: 0 out of 2 exist(s)</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> mzids: 0 out of 1 exist(s)</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> fasta: 0 out of 1 exist(s)</span>
+<span class='r-in'><span class='fu'>experimentFiles</span><span class='op'>(</span><span class='va'>msexp</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>fls</span></span>
+<span class='r-in'><span class='va'>msexp</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Object of class MsExperiment </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Files: mzmls, mzids, fasta </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
