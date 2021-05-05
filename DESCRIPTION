@@ -21,6 +21,7 @@ Imports:
     S4Vectors,
     IRanges,
     Spectra,
+    SummarizedExperiment,
     QFeatures
 Suggests:
     testthat,
