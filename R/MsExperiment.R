@@ -10,8 +10,10 @@
 setClassUnion("MsExperimentFilesOrNull", c("NULL", "MsExperimentFiles"))
 setClassUnion("SpectraOrNull", c("NULL", "Spectra"))
 
-setClassUnion("QFeaturesOrSummarizedExperiment", c("SummarizedExperiment", "QFeatures"))
-setClassUnion("QFeaturesOrSummarizedExperimentOrNull", c("NULL", "QFeaturesOrSummarizedExperiment"))
+setClassUnion("QFeaturesOrSummarizedExperiment",
+              c("SummarizedExperiment", "QFeatures"))
+setClassUnion("QFeaturesOrSummarizedExperimentOrNull",
+              c("NULL", "QFeaturesOrSummarizedExperiment"))
 
 
 #' @title Managing Mass Spectrometry Experiments
@@ -24,16 +26,21 @@ setClassUnion("QFeaturesOrSummarizedExperimentOrNull", c("NULL", "QFeaturesOrSum
 #' aspects related to a complete proteomics or metabolomics mass
 #' spectrometry experiment. This includes experimantal design, raw
 #' mass spectromtry data as spectra and chromatograms, quantitative
-#' features, and identification data.
+#' features, and identification data or any other relevant data files.
 #'
 #' For details, see https://rformassspectrometry.github.io/MsExperiment
 #'
 #' This package is part of the RforMassSpectrometry initiative:
 #' https://www.rformassspectrometry.org/
 #'
-#' @details
+#' @section General information:
 #'
 #' An experiment is typically composed of several items
+#'
+#' - Description and information (covariates etc) of each sample from the
+#'   experiment. These are stored in the `sampleData` slot as a `DataFrame`,
+#'   each row being a sample with columns containing all relevant informatio on
+#'   that sample.
 #'
 #' - Files to data or annotations. There are stored in the
 #'   `experimentFiles` slot as an instance of class `MsExperimentFiles`.
@@ -54,6 +61,102 @@ setClassUnion("QFeaturesOrSummarizedExperimentOrNull", c("NULL", "QFeaturesOrSum
 #'   `PSM()` objects can be added as elements to the list stored in
 #'   the `otherData` slot.
 #'
+#' @section Linking sample data to other experimental data:
+#'
+#' By default, an `MsExperiment` is just a loose collection of files and data
+#' related to an experiment, no explicit links or associactions are present
+#' between the samples and related data. Such links can however be created with
+#' the `linkSampleData` function. This function can establish links between
+#' individual (or all) samples within the object's `sampleData` to individual,
+#' or multiple, data elements or files, such as `Spectra` or raw data files.
+#'
+#' The presence of such links enables a (coherent) subsetting of an
+#' `MsExperiment` by samples. Thus, once the link is defined, any subsetting by
+#' sample will also correctly subset the linked data. All other, not linked,
+#' data elements are always retained as in the original `MsExperiment`.
+#'
+#' To be able to link different elements within an `MsExperiment` it is also
+#' required to *identify* them with a consistent naming scheme. The naming
+#' scheme of slots and data elements within follows an SQL-like scheme, in which
+#' the variable (element) is identified by the name of the database table,
+#' followed by a `"."` and the name of the database table column. For
+#' `MsExperiment`, the naming scheme is defined as
+#' `"<slot name>.<element name>"`. A column called `"sample_name"` within the
+#' `sampleData` data frame can thus be addressed with
+#' `"sampleData.sample_name"`, while `spectra.msLevel` would represent the
+#' spectra variable called `msLevel` within the `Spectra` stored in the
+#' `spectra` slot.
+#'
+#' Links between sample data rows and any other data element are stored as
+#' `integer` matrices within the `sampleDataLinks` slot of the object (see also
+#' the vignette for examples and illustrations). Such links can be defined/added
+#' with the `linkSampleData` function which adds a relationship between rows in
+#' `sampleData` to elements in any other data within the `MsExperiment` that
+#' are specified with parameter `with`. `linkSampleData` supports two different
+#' ways to define the link:
+#'
+#' - Parameter `with` defines the data to which the link should be established.
+#'   To link samples to raw data files that would for example be available as a
+#'   `character` in an element called `"raw_files"` within the object's
+#'   `experimentFiles`, `with = experimentFiles.raw_files` would have to be
+#'   used. Next it is required to specify which samples should be linked with
+#'   which elements in `with`. This needs to be defined with the parameters
+#'   `sampleIndex` and `withIndex`, both are expected to be `integer` vectors
+#'   specifying which sample in `sampleData` should be linked to which element
+#'   in `with` (see examples below or vignette for examples and details).
+#'
+#' - As an alternative way, a link could be defined with an SQL-like syntax
+#'   that relates a column in `sampleData` to a column/element in the data to
+#'   which the link should be established. To link for example individual
+#'   spectra to the corresponding samples
+#'   `with = "sampleData.raw_file = spectra.dataOrigin"` could be used assuming
+#'   that `sampleData` contains a column named `"raw_file"` with the (full path)
+#'   of the raw data file for each sample from which the spectra were imported.
+#'   In this case both `sampleIndex` and `withIndex` can be omitted, but it is
+#'   expected/required that the columns/elements from `sampleData` and the data
+#'   element to which the link should be established contain matching values.
+#'
+#' Note that `linkSampleData` will **replace** a previously existing link to the
+#' same data element.
+#'
+#' @section Subsetting and filtering:
+#'
+#' - `[`: `MsExperiment` objects can be subsetted **by samples** with `[, j]`
+#'   where `j` is the index or a logical defining to which samples the data
+#'   should be subsetted. Subsetting by sample will (correctly) subset all
+#'   linked data to the respective samples. Not linked data (slots) will be
+#'   returned as they are. Subsetting in arbitrary order is supported.
+#'   See the vignette for details and examples.
+#'
+#' @param drop for `[`: ignored.
+#'
+#' @param i for `[`: not supported.
+#'
+#' @param j for `[`: an `integer`, `character` or `logical` being the index, the
+#'     name (rowname of `sampleData`) or a `logical` of the samples to subset.
+#'
+#' @param object an `MsExperiment`.
+#'
+#' @param sampleIndex for `linkSampleData`: `integer` with the indices of the
+#'     samples in `sampleData(object)` that should be linked.
+#'
+#' @param subsetBy for `linkSampleData`: optional `integer(1)` defining the
+#'     dimension on which the subsetting will occurr on the linked data.
+#'     Defaults to `subsetBy = 1L` thus subsetting will happen on the first
+#'     dimension (rows or elements).
+#'
+#' @param with for `linkSampleData`: `character(1)` defining the data to which
+#'     samples should be linked. See section *Linking sample data to other
+#'     experimental data* for details.
+#'
+#' @param withIndex for `linkSampleData`: `integer` with the indices of the
+#'     elements in `with` to which the samples (specified by `sampleIndex`)
+#'     should be linked to.
+#'
+#' @param x an `MsExperiment`.
+#'
+#' @param ... optional additional parameters.
+#'
 #' @name MsExperiment
 #'
 #' @import methods
@@ -64,7 +167,7 @@ setClassUnion("QFeaturesOrSummarizedExperimentOrNull", c("NULL", "QFeaturesOrSum
 #'
 #' @import ProtGenerics
 #'
-#' @author Laurent Gatto
+#' @author Laurent Gatto, Johannes Rainer
 #'
 #' @examples
 #'
@@ -96,6 +199,10 @@ NULL
 #' @slot metadata A `list` to store additional metadata.
 #'
 #' @rdname MsExperiment
+#'
+#' @importClassesFrom S4Vectors SimpleList
+#'
+#' @importFrom S4Vectors DataFrame
 setClass("MsExperiment",
          slots = c(
              experimentFiles = "MsExperimentFilesOrNull",
@@ -104,6 +211,7 @@ setClass("MsExperiment",
              ## chromatograms = "Chromatograms",
              otherData = "List",
              sampleData = "DataFrame",
+             sampleDataLinks = "List",
              metadata = "list"),
          prototype = prototype(
              experimentFiles = NULL,
@@ -111,6 +219,9 @@ setClass("MsExperiment",
              qfeatures = NULL,
              otherData = List(),
              sampleData = DataFrame(),
+             sampleDataLinks = new(
+                 "SimpleList", elementMetadata =
+                                   DataFrame(subsetBy = integer())),
              metadata = list())
          )
 
@@ -127,74 +238,33 @@ MsExperiment <- function()
 #' @importFrom Spectra msLevel
 #'
 #' @exportMethod show
-setMethod("show", "MsExperiment",
-          function(object) {
-              cat("Object of class", class(object), "\n")
-              if (!is.null(experimentFiles(object)))
-                  cat(" Files:", paste(names(experimentFiles(object)),
-                                       collapse = ", "), "\n")
-              if (!is.null(object@spectra)) {
-                  mstab <- table(msLevel(object@spectra))
-                  cat(" Spectra:", paste0("MS", names(mstab), " (", mstab, ")"),
-                      "\n")
-              }
-              if (nrow(object@sampleData)) {
-                  cat(" Experiment data:",
-                      nrow(object@sampleData), "sample(s)\n")
-              }
-          })
-
+setMethod("show", "MsExperiment", function(object) {
+    cat("Object of class", class(object), "\n")
+    if (!is.null(experimentFiles(object)))
+        cat(" Files:", paste(names(experimentFiles(object)),
+                             collapse = ", "), "\n")
+    if (!is.null(object@spectra)) {
+        mstab <- table(msLevel(object@spectra))
+        cat(" Spectra:", paste0("MS", names(mstab), " (", mstab, ")"),
+            "\n")
+    }
+    if (nrow(object@sampleData)) {
+        cat(" Experiment data:",
+            nrow(object@sampleData), "sample(s)\n")
+    }
+    lnks <- object@sampleDataLinks
+    if (length(lnks)) {
+        cat(" Sample data links:\n")
+        for (i in seq_along(lnks))
+            cat("  - ", names(lnks)[i], ": ", length(unique(lnks[[i]][, 1L])),
+                " sample(s) to ", length(unique(lnks[[i]][, 2L])),
+                " element(s).\n", sep = "")
+    }
+})
 
 ## ------------------------------##
 ##     Getters and setters       ##
 ## ------------------------------##
-
-#' @export
-#'
-#' @param object An instance of class `MsExperiment`
-#'
-#' @rdname MsExperiment
-experimentFiles  <- function(object) {
-    stopifnot(inherits(object, "MsExperiment"))
-    object@experimentFiles
-}
-
-#' @export
-#'
-#' @param value An object of the appropriate class for the slot to be
-#'     populated.
-#'
-#' @rdname MsExperiment
-"experimentFiles<-" <- function(object, value) {
-    stopifnot(inherits(value, "MsExperimentFiles"))
-    stopifnot(inherits(object, "MsExperiment"))
-    object@experimentFiles <- value
-    object
-}
-
-#' @export
-#'
-#' @param object An instance of class `MsExperiment`
-#'
-#' @rdname MsExperiment
-sampleData  <- function(object) {
-    stopifnot(inherits(object, "MsExperiment"))
-    object@sampleData
-}
-
-#' @export
-#'
-#' @param value An object of the appropriate class for the slot to be
-#'     populated.
-#'
-#' @rdname MsExperiment
-"sampleData<-" <- function(object, value) {
-    stopifnot(inherits(value, "DataFrame"))
-    stopifnot(inherits(object, "MsExperiment"))
-    object@sampleData <- value
-    object
-}
-
 
 #' @export
 #'
@@ -239,3 +309,77 @@ setReplaceMethod("metadata", "MsExperiment",
                      x@metadata <- value
                      x
                  })
+
+#' @rdname MsExperiment
+setGeneric("linkSampleData", function(object, ...)
+    standardGeneric("linkSampleData"))
+#' @rdname MsExperiment
+setMethod("linkSampleData", "MsExperiment",
+          function(object, with = character(),
+                   sampleIndex = seq_len(nrow(sampleData(object))),
+                   withIndex = integer(), subsetBy = 1L) {
+              if (!length(with))
+                  return(object)
+              subsetBy <- as.integer(subsetBy[1L])
+              if (is.na(subsetBy))
+                  stop("'subsetBy' needs to be an integer of length 1")
+              if (!length(withIndex)) {
+                  link_string <- .parse_join_string(with)
+                  if (link_string[1L] == "sampleData") {
+                      from <- paste0(link_string[1:2], collapse = ".")
+                      to_slot <- link_string[3L]
+                      to <- paste0(link_string[3:4], collapse = ".")
+                  } else if (link_string[3L] == "sampleData") {
+                      from <- paste0(link_string[3:4], collapse = ".")
+                      to_slot <- link_string[1L]
+                      to <- paste0(link_string[1:2], collapse = ".")
+                  } else stop("one of the slot names has to be 'sampleData'.")
+                  link <- .link_matrix(.get_element(object, from),
+                                       .get_element(object, to))
+                  if (nrow(link) == 0)
+                      warning("no matches found for '", with, "'")
+                  if (to_slot %in% c("spectra", "qfeatures"))
+                      to <- to_slot
+                  object <- .add_sample_data_link(object, link, with = to)
+              } else {
+                  sampleIndex <- as.integer(sampleIndex, na.rm = TRUE)
+                  withIndex <- as.integer(withIndex, na.rm = TRUE)
+                  if (length(sampleIndex) != length(withIndex))
+                      stop("Length of 'sampleIndex' and 'withIndex'",
+                           " have to match")
+                  withl <- unlist(strsplit(with, split = ".", fixed = TRUE))
+                  if (withl[1L] %in% c("spectra", "qfeatures"))
+                      with <- withl[1L]
+                  else if (length(withl) < 2)
+                      stop("'with' should be a 'character' with the name of ",
+                           "the slot and the name of element separated by a ",
+                           "'.'. See ?linkSampleData for examples")
+                  object <- .add_sample_data_link(
+                      object, cbind(sampleIndex, withIndex), with = with,
+                      subsetBy = subsetBy)
+              }
+              object
+})
+
+#' @rdname MsExperiment
+#'
+#' @export
+setMethod("[", "MsExperiment", function(x, i, j, ..., drop = FALSE) {
+    if (!missing(i))
+        stop("Only subsetting with '[, j]' is supported.")
+    lj <- length(j)
+    if (is.character(j)) {
+        j <- match(j, rownames(sampleData(x)))
+        if (any(is.na(j)))
+            warning(sum(is.na(j)), " of ", lj, " values could not be ",
+                    "matched to rownames of 'sampleData(x)'")
+        j <- j[!is.na(j)]
+    }
+    if (is.logical(j)) {
+        if (lj != nrow(sampleData(x)))
+            stop("if 'j' is logical its length has to match the number of ",
+                 "samples in 'x'.")
+        j <- which(j)
+    }
+    .extractSamples(x, j, newx = x)
+})

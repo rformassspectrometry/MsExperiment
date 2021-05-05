@@ -41,7 +41,7 @@ biocViews: Infrastructure, Proteomics, MassSpectrometry, Metabolomics
 RoxygenNote: 7.1.1
 Roxygen: list(markdown=TRUE)
 Collate:
+    'MsExperiment-functions.R'
     'MsExperimentFiles.R'
     'MsExperiment.R'
-    'LinkedMsExperiment.R'
     'existMsExperimentFiles.R'

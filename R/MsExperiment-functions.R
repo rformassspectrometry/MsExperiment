@@ -1,59 +1,3 @@
-#' @include MsExperiment.R
-
-#' @title Mass spectrometry experiments with explicit links between data entities
-#'
-#' @name LinkedMsExperiment
-#'
-#' @description
-#'
-#' The `linkSampleData` function allows to add or define *explicit* links
-#' between samples (i.e. rows in the `sampleData` `DataFrame`) and other data
-#' elements in the `MsExperiment` object. Links can be added between samples
-#' and spectra (in the `@spectra` slot) but also between individual samples and
-#' elements in any other data slot of the `MsExperiment`, such as
-#' `experimentFiles` or `otherData`. Links allow also a n:m mapping between
-#' samples and other data elements.
-#'
-#' Importantly, the presence of such links enables a (coherent) subsetting of an
-#' `MsExperiment` by samples. Thus, once the link is defined, any subsetting by
-#' sample will also correctly subset the linked data. All other, not linked,
-#' data elements are always retained as in the original `MsExperiment`.
-#'
-#'
-#' @section Accessing data within an `LinkedMsExperiment`:
-#'
-#' Naming of data elements in an `LinkedExperiment` follows the schema
-#' `"<slot name>.<element name>"` (similar to SQL
-#' `"<database table>.<column>"`). Using the shortcut
-#' `$<slot name>.<element name>` it is thus also possible to directly access
-#' data elements in the different slots of the object. Note that if a element
-#' with the specified name does not exist in the slot `NULL` is returned.
-#'
-#'
-#' @section Implementation notes:
-#'
-#' Links from samples to any other element are stored as an `integer` `matrix`
-#' as a list element of the `@sampleDataLinks` slot. The link name (i.e.
-#' the name of the list element) needs to be the name of the slot that is
-#' linked (for slots `@spectra` and `@qfeatures`) or an element within that
-#' slot (for `@experimentFiles`, `@otherData`, `@metadata`). For the latter the
-#' name needs to be in the format `<slot name>.<element name>`, e.g.
-#' `"experimentFiles.mzML_files"` to link samples to an element called
-#' `"mzML_files"` in `@experimentFiles`.
-#'
-#' @author Johannes Rainer
-#'
-#' @exportMethod linkSampleData
-#'
-#' @importFrom S4Vectors List
-NULL
-
-setClass("LinkedMsExperiment",
-         contains = "MsExperiment",
-         slots = c(sampleDataLinks = "List"),
-         prototype = prototype(sampleDataLinks = List())
-         )
-
 .sample_data_links <- function(x, name = character()) {
     if (length(name))
         x@sampleDataLinks[names(x@sampleDataLinks) %in% name]
@@ -94,10 +38,15 @@ setClass("LinkedMsExperiment",
 #'     link was established (e.g. `"spectra.dataOrigin"` or
 #'     `experimentFiles.raw_files`. See also `.get_element` for details.
 #'
+#' @param subsetBy `integer(1)` defining on which dimension (for `with` with
+#'     dimensions > 0) the subsetting should be done.
+#'
 #' @author Johannes Rainer
 #'
+#' @importMethodsFrom S4Vectors mcols<- mcols
+#'
 #' @noRd
-.add_sample_data_link <- function(x, link = matrix(), with) {
+.add_sample_data_link <- function(x, link = matrix(), with, subsetBy = 1L) {
     nfrom <- nrow(sampleData(x))
     if (nrow(link) == 0 || nfrom == 0)
         return(x)
@@ -108,6 +57,7 @@ setClass("LinkedMsExperiment",
     if (any(names(.sample_data_links(x)) == with))
         warning("Overwriting previously present link '", with, "'")
     x@sampleDataLinks[[with]] <- link
+    mcols(x@sampleDataLinks)["with", "subsetBy"] <- subsetBy
     x
 }
 
@@ -149,7 +99,7 @@ setClass("LinkedMsExperiment",
 #' Setting/replacing an element within a slot of an `LinkedMsExperiment`. This
 #' function does **not** perform any checks except for the presence of a slot.
 #'
-#' @importMethodsFrom methods slot slot<-
+#' @importFrom methods slot slot<-
 #'
 #' @author Johannes Rainer
 #'
@@ -228,65 +178,6 @@ setClass("LinkedMsExperiment",
     cbind(rep(seq_along(from), ls), unlist(res[ls > 0], use.names = FALSE))
 }
 
-#' @rdname LinkedMsExperiment
-setGeneric("linkSampleData", function(object, ...)
-    standardGeneric("linkSampleData"))
-#' @rdname LinkedMsExperiment
-setMethod("linkSampleData", "MsExperiment",
-          function(object, with = character(),
-                   fromIndex = seq_len(nrow(sampleData(object))),
-                   toIndex = integer()) {
-              object <- as(object, "LinkedMsExperiment")
-              if (!length(with))
-                  return(object)
-              if (!length(toIndex)) {
-                  link_string <- .parse_join_string(with)
-                  if (link_string[1L] == "sampleData") {
-                      from <- paste0(link_string[1:2], collapse = ".")
-                      to_slot <- link_string[3L]
-                      to <- paste0(link_string[3:4], collapse = ".")
-                  } else if (link_string[3L] == "sampleData") {
-                      from <- paste0(link_string[3:4], collapse = ".")
-                      to_slot <- link_string[1L]
-                      to <- paste0(link_string[1:2], collapse = ".")
-                  } else stop("one of the slot names has to be 'sampleData'.")
-                  link <- .link_matrix(.get_element(object, from),
-                                       .get_element(object, to))
-                  if (nrow(link) == 0)
-                      warning("no matches found for '", with, "'")
-                  if (to_slot %in% c("spectra", "qfeatures"))
-                      to <- to_slot
-                  object <- .add_sample_data_link(object, link, with = to)
-              } else {
-                  fromIndex <- as.integer(fromIndex, na.rm = TRUE)
-                  toIndex <- as.integer(toIndex, na.rm = TRUE)
-                  if (length(fromIndex) != length(toIndex))
-                      stop("Length of 'fromIndex' and 'toIndex' have to match")
-                  withl <- unlist(strsplit(with, split = ".", fixed = TRUE))
-                  if (withl[1L] %in% c("spectra", "qfeatures"))
-                      with <- withl[1L]
-                  else if (length(withl) < 2)
-                      stop("'with' should be a 'character' with the name of ",
-                           "the slot and the name of element separated by a ",
-                           "'.'. See ?linkSampleData for examples")
-                  object <- .add_sample_data_link(
-                      object, cbind(fromIndex, toIndex), with = with)
-              }
-              object
-})
-
-setMethod("show", "LinkedMsExperiment", function(object) {
-    callNextMethod()
-    lnks <- object@sampleDataLinks
-    if (length(lnks)) {
-        cat(" Sample data links:\n")
-        for (i in seq_along(lnks))
-            cat("  - ", names(lnks)[i], ": ", length(unique(lnks[[i]][, 1L])),
-                " sample(s) to ", length(unique(lnks[[i]][, 2L])),
-                " element(s).\n", sep = "")
-    }
-})
-
 #' @description
 #'
 #' Subset a `LinkedMsExperiment` by sample also subsetting and updating all
@@ -342,25 +233,48 @@ setMethod("show", "LinkedMsExperiment", function(object) {
     newx
 }
 
-#' @rdname LinkedMsExperiment
-#'
 #' @export
-setMethod("[", "LinkedMsExperiment", function(x, i, j, ..., drop = FALSE) {
-    if (!missing(i))
-        stop("Only subsetting with '[, j]' is supported.")
-    lj <- length(j)
-    if (is.character(j)) {
-        j <- match(j, rownames(sampleData(x)))
-        if (any(is.na(j)))
-            warning(sum(is.na(j)), " of ", lj, " values could not be ",
-                    "matched to rownames of 'sampleData(x)'")
-        j <- j[!is.na(j)]
-    }
-    if (is.logical(j)) {
-        if (lj != nrow(sampleData(x)))
-            stop("if 'j' is logical its length has to match the number of ",
-                 "samples in 'x'.")
-        j <- which(j)
-    }
-    .extractSamples(x, j, newx = x)
-})
+#'
+#' @param object An instance of class `MsExperiment`
+#'
+#' @rdname MsExperiment
+experimentFiles  <- function(object) {
+    stopifnot(inherits(object, "MsExperiment"))
+    object@experimentFiles
+}
+
+#' @export
+#'
+#' @param value An object of the appropriate class for the slot to be
+#'     populated.
+#'
+#' @rdname MsExperiment
+"experimentFiles<-" <- function(object, value) {
+    stopifnot(inherits(value, "MsExperimentFiles"))
+    stopifnot(inherits(object, "MsExperiment"))
+    object@experimentFiles <- value
+    object
+}
+
+#' @export
+#'
+#' @param object An instance of class `MsExperiment`
+#'
+#' @rdname MsExperiment
+sampleData  <- function(object) {
+    stopifnot(inherits(object, "MsExperiment"))
+    object@sampleData
+}
+
+#' @export
+#'
+#' @param value An object of the appropriate class for the slot to be
+#'     populated.
+#'
+#' @rdname MsExperiment
+"sampleData<-" <- function(object, value) {
+    stopifnot(inherits(value, "DataFrame"))
+    stopifnot(inherits(object, "MsExperiment"))
+    object@sampleData <- value
+    object
+}
