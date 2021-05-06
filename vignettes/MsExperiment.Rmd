@@ -222,7 +222,7 @@ exist:
 existMsExperimentFiles(msexp)
 ```
 
-# Conclusions
+# Saving and reusing experiments
 
 The `MsExperiment` object has been used to store files and data
 pertaining to a mass spectrometry experiment. It is now possible to
