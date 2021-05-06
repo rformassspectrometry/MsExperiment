@@ -37,28 +37,28 @@ setClassUnion("QFeaturesOrSummarizedExperimentOrNull",
 #'
 #' An experiment is typically composed of several items
 #'
-#' - Description and information (covariates etc) of each sample from the
-#'   experiment. These are stored in the `sampleData` slot as a `DataFrame`,
-#'   each row being a sample with columns containing all relevant informatio on
-#'   that sample.
+#' - Description and information (covariates etc) of each sample from
+#'   the experiment. These are stored in the `sampleData` slot as a
+#'   `DataFrame`, each row describing a sample with columns containing
+#'   all relevant information on that sample.
 #'
-#' - Files to data or annotations. There are stored in the
+#' - Files to data or annotations. These are stored in the
 #'   `experimentFiles` slot as an instance of class `MsExperimentFiles`.
 #'
 #' - General metadata about the experiment, stored as a `list` in the
 #'   `metadata` slot.
 #'
 #' - Mass spectrometry data. Sectra and their metadata are stored as
-#'   `Spectra()` objects in the `spectra` object. Chromatographic is
-#'   noy yet supported but will be stored as `Chromatograms()` objects
-#'   in the `chromatorgrams` slot.
+#'   an `Spectra()` object in the `spectra` slot. Chromatographic data
+#'   is not yet supported but will be stored as a `Chromatograms()`
+#'   object in the `chromatorgrams` slot.
 #'
 #' - Quantification data is stored as `QFeatures` or
 #'   `SummarizedExperiment` objects in the `assay` slot.
 #'
 #' - Any additional data, be it other spectra data, or proteomics
-#'   identification data, i.e peptide-spectrum matches is defined as
-#'   `PSM()` objects can be added as elements to the list stored in
+#'   identification data (i.e peptide-spectrum matches defined as
+#'   `PSM()` objects) can be added as elements to the list stored in
 #'   the `otherData` slot.
 #'
 #' @section Linking sample data to other experimental data:
