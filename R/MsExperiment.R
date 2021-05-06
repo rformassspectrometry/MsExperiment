@@ -271,7 +271,7 @@ setClass("MsExperiment",
          prototype = prototype(
              experimentFiles = NULL,
              spectra = NULL,
-             qfeatures = NULL,
+             assay = NULL,
              otherData = List(),
              sampleData = DataFrame(),
              sampleDataLinks = new(
@@ -410,9 +410,9 @@ setMethod(
             link <- cbind(sampleIndex, withIndex)
         }
         withl <- unlist(strsplit(with, split = ".", fixed = TRUE))
-        if (withl[1L] %in% c("spectra", "qfeatures")) {
+        if (withl[1L] %in% c("spectra", "assay")) {
             with <- withl[1L]
-            if (with == "qfeatures")
+            if (with == "assay")
                 subsetBy <- 2L
         } else if (length(withl) < 2)
             stop("'with' should be a 'character' with the name of the slot and",

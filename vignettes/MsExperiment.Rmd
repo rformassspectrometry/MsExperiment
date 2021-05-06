@@ -402,7 +402,7 @@ library(SummarizedExperiment)
 sd <- DataFrame(sample = c("QC2", "QC1", "QC3"), idx = c(3, 1, 5))
 se <- SummarizedExperiment(colData = sd, assay = cbind(1:10, 11:20, 21:30))
 
-mse@qfeatures <- se
+mse@assay <- se
 ```
 
 Next we link the samples in this `SummarizedExperiment` to the samples to in the
@@ -412,9 +412,9 @@ object's `sampleData` and the column `"sample"` in the `SummarizedExperiment`'s
 
 ```{r}
 sampleData(mse)$sample_id
-mse@qfeatures$sample
+mse@assay$sample
 
-mse <- linkSampleData(mse, with = "sampleData.sample_id = qfeatures.sample")
+mse <- linkSampleData(mse, with = "sampleData.sample_id = assay.sample")
 mse
 ```
 
@@ -429,11 +429,11 @@ b
 
 The subsetted object contains now all data elements that are linked to this
 second sample. Accessing the `assay` of the `SummarizedExperiment` in
-`qfeatures` will thus return only the quantified feature abundances for this
+`assay` will thus return only the quantified feature abundances for this
 second sample.
 
 ```{r}
-assay(b@qfeatures)
+assay(b@assay)
 ```
 
 But what happens for data elements that are not linked to any sample? Below we

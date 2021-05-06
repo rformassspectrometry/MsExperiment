@@ -168,18 +168,18 @@ test_that(".extractSamples works", {
     se <- SummarizedExperiment(
         cbind(QC2 = 1:10, QC3 = 11:20, QC1 = 21:30),
         colData = DataFrame(sample = c("QC2", "QC3", "QC1"), idx = 1:3))
-    tmp@qfeatures <- se
-    tmp <- linkSampleData(tmp, with = "sampleData.sample = qfeatures.sample")
-    expect_equal(mcols(tmp@sampleDataLinks["qfeatures"])$subsetBy, 2L)
+    tmp@assay <- se
+    tmp <- linkSampleData(tmp, with = "sampleData.sample = assay.sample")
+    expect_equal(mcols(tmp@sampleDataLinks["assay"])$subsetBy, 2L)
 
     res <- .extractSamples(tmp, j = 2)
     expect_equal(sampleData(res), sampleData(tmp)[2, ])
-    expect_equal(res@qfeatures$sample, "QC2")
-    expect_equal(assay(res@qfeatures),
+    expect_equal(res@assay$sample, "QC2")
+    expect_equal(assay(res@assay),
                  matrix(1:10, ncol = 1, dimnames = list(character(), "QC2")))
 
     res <- .extractSamples(tmp, j = c(1, 1))
-    expect_equal(res@qfeatures$sample, c("QC1", "QC1"))
+    expect_equal(res@assay$sample, c("QC1", "QC1"))
 })
 
 test_that(".nelements works", {

@@ -102,7 +102,8 @@ https://www.rformassspectrometry.org/
 
 \item{\code{spectra}}{An instance of class \code{Spectra} or \code{NULL}.}
 
-\item{\code{qfeatures}}{An instance of class \code{QFeatures} or \code{NULL}.}
+\item{\code{assay}}{An instance of class \code{QFeatures},
+\code{SummarizedExperiment} or \code{NULL}.}
 
 \item{\code{otherData}}{A \code{List} to store any additional data objects.}
 
@@ -131,8 +132,8 @@ that sample.
 \code{Spectra()} objects in the \code{spectra} object. Chromatographic is
 noy yet supported but will be stored as \code{Chromatograms()} objects
 in the \code{chromatorgrams} slot.
-\item Quantification data is stored as \code{QFeatures()} objects in the
-\code{qfeatures} slot.
+\item Quantification data is stored as \code{QFeatures} or
+\code{SummarizedExperiment} objects in the \code{assay} slot.
 \item Any additional data, be it other spectra data, or proteomics
 identification data, i.e peptide-spectrum matches is defined as
 \code{PSM()} objects can be added as elements to the list stored in
