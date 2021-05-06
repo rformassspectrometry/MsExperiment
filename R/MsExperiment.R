@@ -53,8 +53,8 @@ setClassUnion("QFeaturesOrSummarizedExperimentOrNull",
 #'   noy yet supported but will be stored as `Chromatograms()` objects
 #'   in the `chromatorgrams` slot.
 #'
-#' - Quantification data is stored as `QFeatures()` objects in the
-#'   `qfeatures` slot.
+#' - Quantification data is stored as `QFeatures` or
+#'   `SummarizedExperiment` objects in the `assay` slot.
 #'
 #' - Any additional data, be it other spectra data, or proteomics
 #'   identification data, i.e peptide-spectrum matches is defined as
@@ -241,7 +241,8 @@ NULL
 #'
 #' @slot spectra An instance of class `Spectra` or `NULL`.
 #'
-#' @slot qfeatures An instance of class `QFeatures` or `NULL`.
+#' @slot assay An instance of class `QFeatures`,
+#'     `SummarizedExperiment` or `NULL`.
 #'
 #' @slot otherData A `List` to store any additional data objects.
 #'
@@ -261,7 +262,7 @@ setClass("MsExperiment",
          slots = c(
              experimentFiles = "MsExperimentFilesOrNull",
              spectra = "SpectraOrNull",
-             qfeatures = "QFeaturesOrSummarizedExperimentOrNull",
+             assay = "QFeaturesOrSummarizedExperimentOrNull",
              ## chromatograms = "Chromatograms",
              otherData = "List",
              sampleData = "DataFrame",
