@@ -37,6 +37,14 @@ with various types of data.
 library("MsExperiment")
 ```
 
+We will also use the `Spectra` package to import mass spectrometry
+data and thus load it here too.
+
+```{r}
+library("Spectra")
+```
+
+
 # Getting data
 
 We will use a small subset of the
@@ -52,7 +60,7 @@ from the PRIDE repository, and download files of interest. Note that
 these will automatically be cached in the `rpx` packages' cache
 directory.
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 library("rpx")
 px <- PXDataset("PXD022816")
 px
