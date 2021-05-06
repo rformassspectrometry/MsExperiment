@@ -69,7 +69,7 @@ you can safelfy answer *yes*. The files will then be downloaded. Next
 time you want to get the same files, they will be loaded automatically
 from cache.
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 (i <- grep(".+0[12].+mzML$", pxfiles(px), value = TRUE))
 fls <- pxget(px, i)
 fls
@@ -81,7 +81,7 @@ Let's start by creating an empty `MsExperiment` object that we will
 populate with different pieces of data as we proceed with the analysis
 of our data.
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 msexp <- MsExperiment()
 msexp
 ```
@@ -94,7 +94,7 @@ to the mzML files, let's also assume we have the human proteomics
 fasta file ready. Later, when loading the raw data into R, we will
 refer directly to the files in this `MsExperimentFiles` object.
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 msfls <- MsExperimentFiles(mzmls = fls,
                            fasta = "homo_sapiens.fasta")
 msfls
@@ -102,7 +102,7 @@ msfls
 
 Let's add these files to the main experiment management object:
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 experimentFiles(msexp) <- msfls
 msexp
 ```
@@ -118,7 +118,7 @@ one-to-many, in labelled multiplexed approaches.
 Here, we are simply going to use the `colData` slot to match the files
 to their respective fractions:
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 sampleData(msexp) <- DataFrame(mzmls = basename(experimentFiles(msexp)[["mzmls"]]),
                                fractions = 1:2)
 sampleData(msexp)
@@ -131,14 +131,14 @@ the mzML files. If you are not familiar with the `Spectra` object,
 please refer to the [package
 vignettes](https://rformassspectrometry.github.io/Spectra/articles/Spectra.html).
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 sp <- Spectra(experimentFiles(msexp)[["mzmls"]])
 sp
 ```
 
 We can now add this object to the main experiment management object:
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 spectra(msexp) <- sp
 msexp
 ```
@@ -166,7 +166,7 @@ java -jar /path/to/MSGFPlus.jar \
 
 We can easily build such a command for each of our input file:
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 mzids <- sub("mzML", "mzid", basename(experimentFiles(msexp)[["mzmls"]]))
 paste0("java -jar /path/to/MSGFPlus.jar",
        " -s ", experimentFiles(msexp)[["mzmls"]],
@@ -182,7 +182,7 @@ MSGF+, but a simple shell script that will generate mzid files in a
 temporary R directory.
 
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 (output <- file.path(tempdir(), mzids))
 cmd <- paste("touch", output)
 cmd
@@ -192,13 +192,13 @@ The `cmd` variable holds the two commands to be run on the command
 line that will generate the new files. We can run each of these
 commands with the `system()` function.
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 sapply(cmd, system)
 ```
 
 Below, we add the names of the newly created files to our experiment:
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 experimentFiles(msexp)[["mzids"]] <- mzids
 experimentFiles(msexp)
 msexp
@@ -209,7 +209,7 @@ the mzid files in the experiment's metadata slot. Here, we use the
 convention to name that metadata item `"mzmls_to_mzids"` to document
 to input and output of these commands.
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 metadata(msexp)[["mzmls_to_mzids"]] <- cmd
 metadata(msexp)
 ```
@@ -218,7 +218,7 @@ Finally, the `existMsExperimentFiles()` can be used at any time to
 check which of files that are associated with an experiment actually
 exist:
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 existMsExperimentFiles(msexp)
 ```
 
@@ -229,12 +229,12 @@ pertaining to a mass spectrometry experiment. It is now possible to
 save that object and reload it later to recover all data and metadata.
 
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 saveRDS(msexp, "msexp.rda")
 rm(list = ls())
 ```
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 msexp <- readRDS("msexp.rda")
 msexp
 experimentFiles(msexp)
@@ -244,7 +244,7 @@ We can access the raw data as long as the mzML files that were used to
 generate it still exist in their original location, which is the case
 here as they were saved in the `rpx` cache directory.
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 sp <- spectra(msexp)
 sp
 plotSpectra(sp[1000])
