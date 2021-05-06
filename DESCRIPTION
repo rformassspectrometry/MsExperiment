@@ -8,9 +8,11 @@ Authors@R: c(person(given = "Laurent", family = "Gatto",
                     email = "laurent.gatto@uclouvain.be",
                     role = c("aut", "cre")),
              person(given = "Johannes", family = "Rainer",
+                    comment = c(ORCID = "0000-0002-6977-7147"),
                     email = "Johannes.Rainer@eurac.edu",
                     role = "aut"),
              person(given = "Sebastian", family = "Gibb",
+                    comment = c(ORCID = "0000-0001-7406-4443"),
                     email = "mail@sebastiangibb.de",
                     role = "aut"))
 Depends:

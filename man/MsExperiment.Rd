@@ -108,6 +108,9 @@ https://www.rformassspectrometry.org/
 
 \item{\code{sampleData}}{A \code{DataFrame} documenting the experimental design.}
 
+\item{\code{sampleDataLinks}}{A \code{List} with link definitions between samples and
+data elements. Should not be directly accessed or modified by the user.}
+
 \item{\code{metadata}}{A \code{list} to store additional metadata.}
 }}
 
@@ -218,6 +221,57 @@ msexp
 example(MsExperimentFiles)
 experimentFiles(msexp) <- fls
 msexp
+
+## Linking samples to data elements
+
+## Create a small experiment
+library(S4Vectors)
+mse <- MsExperiment()
+sd <- DataFrame(sample_id = c("QC1", "QC2"),
+                sample_name = c("QC Pool", "QC Pool"),
+                injection_idx = c(1, 3))
+sampleData(mse) <- sd
+
+## define file names containing spectra data for the samples and
+## add them, along with other arbitrary files to the experiment
+fls <- dir(system.file("sciex", package = "msdata"), full.names = TRUE)
+experimentFiles(mse) <- MsExperimentFiles(
+    mzML_files = fls,
+    annotations = "internal_standards.txt")
+
+## Link samples to data files: first sample to first file in "mzML_files",
+## second sample to second file in "mzML_files"
+mse <- linkSampleData(mse, with = "experimentFiles.mzML_files",
+    sampleIndex = c(1, 2), withIndex = c(1, 2))
+
+## Link all samples to the one file in "annotations"
+mse <- linkSampleData(mse, with = "experimentFiles.annotations",
+    sampleIndex = c(1, 2), withIndex = c(1, 1))
+mse
+
+## Import the spectra data and add it to the experiment
+library(Spectra)
+spectra(mse) <- Spectra(fls, backend = MsBackendMzR())
+
+## Link each spectrum to the respective sample. We use the alternative
+## link definition that does not require sampleIndex and withIndex but
+## links elements based on matching values in the specified data elements.
+## We need to add the full file name as an additional column to sampleData
+## in order to allow matching this file names with the value in
+## spectra(mse)$dataOrigin which contains the original file names from which
+## the spectra were imported.
+sampleData(mse)$raw_file <- normalizePath(fls)
+
+## The links can be added using the short notation below
+mse <- linkSampleData(mse, with = "sampleData.raw_file = spectra.dataOrigin")
+mse
+
+## With sampleData links present, any subsetting of the experiment by sample
+## will ensure that all linked elements are subsetted accordingly
+b <- mse[, 2]
+b
+sampleData(b)
+experimentFiles(b)$mzML_files
 }
 \author{
 Laurent Gatto, Johannes Rainer

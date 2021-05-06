@@ -1,6 +1,8 @@
 test_that(".sample_data_links works", {
-    x <- new("LinkedMsExperiment")
-    expect_equal(.sample_data_links(x), List())
+    x <- new("MsExperiment")
+    expect_equal(
+        .sample_data_links(x),
+        new("SimpleList", elementMetadata = DataFrame(subsetBy = integer())))
 
     x@sampleDataLinks$a <- cbind(1:2, 2:3)
     x@sampleDataLinks$b <- cbind(1:4, 1:4)
@@ -23,7 +25,7 @@ test_that(".valid_link works", {
 })
 
 test_that(".add_sample_data_link works", {
-    x <- new("LinkedMsExperiment")
+    x <- new("MsExperiment")
     mat <- cbind(1:3, 1L)
     expect_equal(.add_sample_data_link(x, mat), x)
 
@@ -42,7 +44,7 @@ test_that(".add_sample_data_link works", {
 
     res@metadata$other_var = c("b")
     mat <- cbind(1L, 1L)
-    res <- .add_sample_data_link(x, mat, with = "metadata.other_var",
+    res <- .add_sample_data_link(res, mat, with = "metadata.other_var",
                                  subsetBy = 2L)
     expect_equal(mcols(res@sampleDataLinks)["metadata.other_var", "subsetBy"],
                  2L)
@@ -68,7 +70,7 @@ test_that(".get_element works", {
 })
 
 test_that(".set_element works", {
-    tmp <- new("LinkedMsExperiment")
+    tmp <- new("MsExperiment")
     expect_error(.set_element(tmp, "does_not_exist", 4), "No slot")
     res <- .set_element(tmp, "metadata.new_val", data.frame(id = 1:3))
     expect_true(names(metadata(res)) == "new_val")
@@ -96,35 +98,37 @@ test_that(".link_matrix works", {
 })
 
 test_that(".extractSamples works", {
-    tmp <- as(mse, "LinkedMsExperiment")
-    res <- MsExperiment:::.extractSamples(tmp, j = 2)
+    tmp <- mse
+    res <- .extractSamples(tmp, j = 2)
     expect_equal(spectra(res), spectra(tmp))
     expect_equal(sampleData(res), sampleData(tmp)[2, ])
 
     ## Establish links.
     ## n:1 mapping
     tmp <- linkSampleData(tmp, "experimentFiles.other_file",
-                          fromIndex = c(1, 2), toIndex = c(1, 1))
+                          sampleIndex = c(1, 2), withIndex = c(1, 1))
     ## 1:1 mapping
     tmp <- linkSampleData(tmp, "experimentFiles.mzML_file",
-                          fromIndex = c(1, 2), toIndex = c(1, 2))
+                          sampleIndex = c(1, 2), withIndex = c(1, 2))
     ## 1:n mapping
     tmp <- linkSampleData(tmp, "spectra",
-                          fromIndex = match(basename(spectra(mse)$dataOrigin),
-                                            sampleData(mse)$mzML_file),
-                          toIndex = seq_along(spectra(mse)))
+                          sampleIndex = match(basename(spectra(mse)$dataOrigin),
+                                              sampleData(mse)$mzML_file),
+                          withIndex = seq_along(spectra(mse)))
     ## n:m mapping
     metadata(tmp)[["multivals"]] <- c("AB", "A", "B")
-    tmp <- linkSampleData(tmp, "metadata.multivals", fromIndex = c(1, 1, 2, 2),
-                          toIndex = c(1, 2, 1, 3))
+    tmp <- linkSampleData(tmp, "metadata.multivals",
+                          sampleIndex = c(1, 1, 2, 2),
+                          withIndex = c(1, 2, 1, 3))
     ## link a data.frame
     metadata(tmp)$df <- data.frame(a = 1:3, b = 5:7)
-    tmp <- linkSampleData(tmp, "metadata.df", fromIndex = c(1, 2), toIndex = c(1, 2))
+    tmp <- linkSampleData(tmp, "metadata.df", sampleIndex = c(1, 2),
+                          withIndex = c(1, 2))
     ## Add a non-linked element
     metadata(tmp)$not_linked <- "not linked"
 
     ## Extract a single sample
-    res <- MsExperiment:::.extractSamples(tmp, j = 2)
+    res <- .extractSamples(tmp, j = 2)
     expect_equal(sampleData(res), sampleData(tmp)[2, ])
     expect_equal(experimentFiles(res)$other_file, "other_file.txt")
     expect_equal(experimentFiles(res)$mzML_file, experimentFiles(tmp)$mzML_file[2])
@@ -134,12 +138,13 @@ test_that(".extractSamples works", {
     expect_equal(metadata(res)$not_linked, "not linked")
 
     ## Re-ordering of samples
-    res <- MsExperiment:::.extractSamples(tmp, j = c(2, 1))
+    res <- .extractSamples(tmp, j = c(2, 1))
     expect_equal(sampleData(res), sampleData(tmp)[2:1, ])
     ## ! n:1 mapping gets duplicated!
     expect_equal(experimentFiles(res)$other_file, rep("other_file.txt", 2))
     ## 1:n mapping are fine
-    expect_equal(experimentFiles(res)$mzML_file, experimentFiles(tmp)$mzML_file[2:1])
+    expect_equal(experimentFiles(res)$mzML_file,
+                 experimentFiles(tmp)$mzML_file[2:1])
     expect_equal(rtime(spectra(res))[932:1862], rtime(spectra(tmp))[1:931])
     expect_equal(rtime(spectra(res))[1:931], rtime(spectra(tmp))[932:1862])
     expect_equal(metadata(res)$df, metadata(tmp)$df[2:1, , drop = FALSE])
@@ -147,13 +152,47 @@ test_that(".extractSamples works", {
     expect_equal(metadata(res)$multivals, c("AB", "B", "AB", "A"))
 
     ## Duplication of samples
-    res <- MsExperiment:::.extractSamples(tmp, j = c(2, 2))
+    res <- .extractSamples(tmp, j = c(2, 2))
     expect_equal(sampleData(res), sampleData(tmp)[c(2, 2), ])
     expect_equal(experimentFiles(res)$other_file, rep("other_file.txt", 2))
-    expect_equal(experimentFiles(res)$mzML_file, experimentFiles(tmp)$mzML_file[c(2, 2)])
+    expect_equal(experimentFiles(res)$mzML_file,
+                 experimentFiles(tmp)$mzML_file[c(2, 2)])
     expect_equal(spectra(res)[1:931], spectra(tmp)[932:1862])
     expect_equal(spectra(res)[932:1862], spectra(tmp)[932:1862])
     expect_equal(metadata(res)$multivals, c("AB", "B", "AB", "B"))
     expect_equal(metadata(res)$df, metadata(tmp)$df[c(2, 2), , drop = FALSE])
     expect_equal(metadata(res)$not_linked, "not linked")
+
+    ## Link a SummarizedExperiment (by column).
+    library(SummarizedExperiment)
+    se <- SummarizedExperiment(
+        cbind(QC2 = 1:10, QC3 = 11:20, QC1 = 21:30),
+        colData = DataFrame(sample = c("QC2", "QC3", "QC1"), idx = 1:3))
+    tmp@qfeatures <- se
+    tmp <- linkSampleData(tmp, with = "sampleData.sample = qfeatures.sample")
+    expect_equal(mcols(tmp@sampleDataLinks["qfeatures"])$subsetBy, 2L)
+
+    res <- .extractSamples(tmp, j = 2)
+    expect_equal(sampleData(res), sampleData(tmp)[2, ])
+    expect_equal(res@qfeatures$sample, "QC2")
+    expect_equal(assay(res@qfeatures),
+                 matrix(1:10, ncol = 1, dimnames = list(character(), "QC2")))
+
+    res <- .extractSamples(tmp, j = c(1, 1))
+    expect_equal(res@qfeatures$sample, c("QC1", "QC1"))
+})
+
+test_that(".nelements works", {
+    expect_equal(.nelements(1:10), 10)
+    expect_equal(.nelements(matrix(nrow = 3, ncol = 2)), 3)
+    expect_equal(.nelements(matrix(nrow = 3, ncol = 2), 2), 2)
+})
+
+test_that(".subset_dim works", {
+    res <- .subset_dim(1:10, c(2, 3))
+    expect_equal(res, 2:3)
+    res <- .subset_dim(cbind(1:10, 11:20), c(2, 3))
+    expect_equal(res, cbind(2:3, 12:13))
+    res <- .subset_dim(cbind(1:10, 11:20), 2, subsetBy = 2)
+    expect_equal(res, matrix(11:20, ncol = 1))
 })

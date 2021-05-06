@@ -178,6 +178,57 @@ setClassUnion("QFeaturesOrSummarizedExperimentOrNull",
 #' example(MsExperimentFiles)
 #' experimentFiles(msexp) <- fls
 #' msexp
+#'
+#' ## Linking samples to data elements
+#'
+#' ## Create a small experiment
+#' library(S4Vectors)
+#' mse <- MsExperiment()
+#' sd <- DataFrame(sample_id = c("QC1", "QC2"),
+#'                 sample_name = c("QC Pool", "QC Pool"),
+#'                 injection_idx = c(1, 3))
+#' sampleData(mse) <- sd
+#'
+#' ## define file names containing spectra data for the samples and
+#' ## add them, along with other arbitrary files to the experiment
+#' fls <- dir(system.file("sciex", package = "msdata"), full.names = TRUE)
+#' experimentFiles(mse) <- MsExperimentFiles(
+#'     mzML_files = fls,
+#'     annotations = "internal_standards.txt")
+#'
+#' ## Link samples to data files: first sample to first file in "mzML_files",
+#' ## second sample to second file in "mzML_files"
+#' mse <- linkSampleData(mse, with = "experimentFiles.mzML_files",
+#'     sampleIndex = c(1, 2), withIndex = c(1, 2))
+#'
+#' ## Link all samples to the one file in "annotations"
+#' mse <- linkSampleData(mse, with = "experimentFiles.annotations",
+#'     sampleIndex = c(1, 2), withIndex = c(1, 1))
+#' mse
+#'
+#' ## Import the spectra data and add it to the experiment
+#' library(Spectra)
+#' spectra(mse) <- Spectra(fls, backend = MsBackendMzR())
+#'
+#' ## Link each spectrum to the respective sample. We use the alternative
+#' ## link definition that does not require sampleIndex and withIndex but
+#' ## links elements based on matching values in the specified data elements.
+#' ## We need to add the full file name as an additional column to sampleData
+#' ## in order to allow matching this file names with the value in
+#' ## spectra(mse)$dataOrigin which contains the original file names from which
+#' ## the spectra were imported.
+#' sampleData(mse)$raw_file <- normalizePath(fls)
+#'
+#' ## The links can be added using the short notation below
+#' mse <- linkSampleData(mse, with = "sampleData.raw_file = spectra.dataOrigin")
+#' mse
+#'
+#' ## With sampleData links present, any subsetting of the experiment by sample
+#' ## will ensure that all linked elements are subsetted accordingly
+#' b <- mse[, 2]
+#' b
+#' sampleData(b)
+#' experimentFiles(b)$mzML_files
 NULL
 
 #' @name MsExperiment-class
@@ -195,6 +246,9 @@ NULL
 #' @slot otherData A `List` to store any additional data objects.
 #'
 #' @slot sampleData A `DataFrame` documenting the experimental design.
+#'
+#' @slot sampleDataLinks A `List` with link definitions between samples and
+#'     data elements. Should not be directly accessed or modified by the user.
 #'
 #' @slot metadata A `list` to store additional metadata.
 #'
@@ -255,10 +309,14 @@ setMethod("show", "MsExperiment", function(object) {
     lnks <- object@sampleDataLinks
     if (length(lnks)) {
         cat(" Sample data links:\n")
-        for (i in seq_along(lnks))
+        for (i in seq_along(lnks)) {
+            if (mcols(lnks)$subsetBy[i] == 2)
+                cols <- " column(s).\n"
+            else cols <- " element(s).\n"
             cat("  - ", names(lnks)[i], ": ", length(unique(lnks[[i]][, 1L])),
-                " sample(s) to ", length(unique(lnks[[i]][, 2L])),
-                " element(s).\n", sep = "")
+                " sample(s) to ", length(unique(lnks[[i]][, 2L])), cols,
+                sep = "")
+        }
     }
 })
 
@@ -314,52 +372,53 @@ setReplaceMethod("metadata", "MsExperiment",
 setGeneric("linkSampleData", function(object, ...)
     standardGeneric("linkSampleData"))
 #' @rdname MsExperiment
-setMethod("linkSampleData", "MsExperiment",
-          function(object, with = character(),
-                   sampleIndex = seq_len(nrow(sampleData(object))),
-                   withIndex = integer(), subsetBy = 1L) {
-              if (!length(with))
-                  return(object)
-              subsetBy <- as.integer(subsetBy[1L])
-              if (is.na(subsetBy))
-                  stop("'subsetBy' needs to be an integer of length 1")
-              if (!length(withIndex)) {
-                  link_string <- .parse_join_string(with)
-                  if (link_string[1L] == "sampleData") {
-                      from <- paste0(link_string[1:2], collapse = ".")
-                      to_slot <- link_string[3L]
-                      to <- paste0(link_string[3:4], collapse = ".")
-                  } else if (link_string[3L] == "sampleData") {
-                      from <- paste0(link_string[3:4], collapse = ".")
-                      to_slot <- link_string[1L]
-                      to <- paste0(link_string[1:2], collapse = ".")
-                  } else stop("one of the slot names has to be 'sampleData'.")
-                  link <- .link_matrix(.get_element(object, from),
-                                       .get_element(object, to))
-                  if (nrow(link) == 0)
-                      warning("no matches found for '", with, "'")
-                  if (to_slot %in% c("spectra", "qfeatures"))
-                      to <- to_slot
-                  object <- .add_sample_data_link(object, link, with = to)
-              } else {
-                  sampleIndex <- as.integer(sampleIndex, na.rm = TRUE)
-                  withIndex <- as.integer(withIndex, na.rm = TRUE)
-                  if (length(sampleIndex) != length(withIndex))
-                      stop("Length of 'sampleIndex' and 'withIndex'",
-                           " have to match")
-                  withl <- unlist(strsplit(with, split = ".", fixed = TRUE))
-                  if (withl[1L] %in% c("spectra", "qfeatures"))
-                      with <- withl[1L]
-                  else if (length(withl) < 2)
-                      stop("'with' should be a 'character' with the name of ",
-                           "the slot and the name of element separated by a ",
-                           "'.'. See ?linkSampleData for examples")
-                  object <- .add_sample_data_link(
-                      object, cbind(sampleIndex, withIndex), with = with,
-                      subsetBy = subsetBy)
-              }
-              object
-})
+#'
+#' @export
+setMethod(
+    "linkSampleData", "MsExperiment",
+    function(object, with = character(),
+             sampleIndex = seq_len(nrow(sampleData(object))),
+             withIndex = integer(), subsetBy = 1L) {
+        if (!length(with))
+            return(object)
+        subsetBy <- as.integer(subsetBy[1L])
+        if (is.na(subsetBy))
+            stop("'subsetBy' needs to be an integer of length 1")
+        if (!length(withIndex)) {
+            link_string <- .parse_join_string(with)
+            if (link_string[1L] == "sampleData") {
+                from <- paste0(link_string[1:2], collapse = ".")
+                to_slot <- link_string[3L]
+                with <- paste0(link_string[3:4], collapse = ".")
+            } else if (link_string[3L] == "sampleData") {
+                from <- paste0(link_string[3:4], collapse = ".")
+                to_slot <- link_string[1L]
+                with <- paste0(link_string[1:2], collapse = ".")
+            } else stop("one of the slot names has to be 'sampleData'.")
+            link <- .link_matrix(.get_element(object, from),
+                                 .get_element(object, with))
+            if (nrow(link) == 0)
+                warning("no matches found for '", with, "'")
+        } else {
+            sampleIndex <- as.integer(sampleIndex)
+            withIndex <- as.integer(withIndex)
+            sampleIndex <- sampleIndex[!is.na(sampleIndex)]
+            withIndex <- withIndex[!is.na(withIndex)]
+            if (length(sampleIndex) != length(withIndex))
+                stop("Length of 'sampleIndex' and 'withIndex' have to match")
+            link <- cbind(sampleIndex, withIndex)
+        }
+        withl <- unlist(strsplit(with, split = ".", fixed = TRUE))
+        if (withl[1L] %in% c("spectra", "qfeatures")) {
+            with <- withl[1L]
+            if (with == "qfeatures")
+                subsetBy <- 2L
+        } else if (length(withl) < 2)
+            stop("'with' should be a 'character' with the name of the slot and",
+                 " the name of element separated by a '.'. ",
+                 "See ?linkSampleData for examples")
+        .add_sample_data_link(object, link, with = with, subsetBy = subsetBy)
+    })
 
 #' @rdname MsExperiment
 #'

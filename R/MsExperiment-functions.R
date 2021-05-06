@@ -50,14 +50,14 @@
     nfrom <- nrow(sampleData(x))
     if (nrow(link) == 0 || nfrom == 0)
         return(x)
-    nto <- length(.get_element(x, with))
+    nto <- .nelements(.get_element(x, with), subsetBy) # support link to column
     if (nto == 0)
         stop("'", with, "' is empty. Can not link to empty data")
     .valid_link(link, nfrom, nto)
     if (any(names(.sample_data_links(x)) == with))
         warning("Overwriting previously present link '", with, "'")
     x@sampleDataLinks[[with]] <- link
-    mcols(x@sampleDataLinks)["with", "subsetBy"] <- subsetBy
+    mcols(x@sampleDataLinks)[with, "subsetBy"] <- subsetBy
     x
 }
 
@@ -77,7 +77,7 @@
 #'
 #' @author Johannes Rainer
 #'
-#' @importFrom methods slotNames slot
+#' @importFrom methods slotNames slot slot<-
 #'
 #' @noRd
 .get_element <- function(x, name = "sampleData") {
@@ -124,7 +124,7 @@
     else {
         el <- paste0(name[-1L], collapse = ".")
         if (length(dim(slot(x, slt))))
-            slot(x, slt, check = FALSE)[, el] <- value
+            slot(x, slt)[, el] <- value
         else
             slot(x, slt) <- do.call("$<-", list(slot(x, slt), el, value))
     }
@@ -218,14 +218,13 @@
     slot(newx, "sampleData", check = FALSE) <- x@sampleData[j, , drop = FALSE]
     for (link in names(slot(x, "sampleDataLinks"))) {
         lmat <- slot(x, "sampleDataLinks")[[link]]
+        subsetBy <- mcols(slot(x, "sampleDataLinks"))[link, "subsetBy"]
         idxs <- split(lmat[, 2], as.factor(lmat[, 1]))
         idxs <- idxs[as.character(j)]
         ls <- lengths(idxs)
         idxs <- unlist(idxs, use.names = FALSE)
         element <- .get_element(x, link)
-        if (length(dim(element)))
-            newx <- .set_element(newx, link, element[idxs, , drop = FALSE])
-        else newx <- .set_element(newx, link, element[idxs])
+        newx <- .set_element(newx, link, .subset_dim(element, idxs, subsetBy))
         newx@sampleDataLinks[[link]] <- cbind(rep(seq_along(ls), ls),
                                               seq_len(sum(ls)))
         ## Note: keeping also empty lmat - to keep info that there was a link
@@ -277,4 +276,32 @@ sampleData  <- function(object) {
     stopifnot(inherits(object, "MsExperiment"))
     object@sampleData <- value
     object
+}
+
+#' Simple helper function that returns the number of elements (for the selected
+#' dimension).
+#'
+#' @noRd
+.nelements <- function(x, dim = 1L) {
+    dims <- dim(x)
+    if (length(dims))
+        dims[dim]
+    else length(x)
+}
+
+#' Helper to subset `x` to elements `i` on dimension `subsetBy`. If `x` has
+#' no dimensions `x[i]` is returned, if it has dimensions and `subsetBy == 1L`
+#' `x[i, ]` is returned and if `subsetBy == 2L` `x[, i]` is returned.
+#'
+#' @author Johannes Rainer
+#'
+#' @noRd
+.subset_dim <- function(x, i, subsetBy = 1L) {
+    if (length(dim(x))) {
+        if (subsetBy == 1L)
+            x <- x[i, , drop = FALSE]
+        if (subsetBy == 2L)
+            x <- x[, i, drop = FALSE]
+    } else x <- x[i]
+    x
 }

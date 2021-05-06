@@ -52,7 +52,7 @@ test_that("linkSampleData,MsExperiment works", {
 })
 
 test_that("[,LinkedMsExperiment works", {
-    tmp <- as(mse, "LinkedMsExperiment")
+    tmp <- mse
     expect_error(res <- tmp[, 4], "out-of-bound")
     expect_error(res <- tmp[1, 2], "is supported")
     expect_error(res <- tmp[, c(TRUE, FALSE, TRUE)], "number of")
