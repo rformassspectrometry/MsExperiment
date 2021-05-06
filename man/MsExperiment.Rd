@@ -15,7 +15,6 @@
 \alias{metadata,MsExperiment-method}
 \alias{metadata<-,MsExperiment-method}
 \alias{linkSampleData}
-\alias{linkSampleData,MsExperiment-method}
 \alias{[,MsExperiment,ANY,ANY,ANY-method}
 \title{Managing Mass Spectrometry Experiments}
 \usage{
@@ -39,9 +38,7 @@ spectra(object) <- value
 
 \S4method{metadata}{MsExperiment}(x) <- value
 
-linkSampleData(object, ...)
-
-\S4method{linkSampleData}{MsExperiment}(
+linkSampleData(
   object,
   with = character(),
   sampleIndex = seq_len(nrow(sampleData(object))),
@@ -57,8 +54,6 @@ linkSampleData(object, ...)
 \item{value}{A \code{list()} to replace the \code{MsExperiment}'s metadata.}
 
 \item{x}{An instance of \code{MsExperiment}.}
-
-\item{...}{optional additional parameters.}
 
 \item{with}{for \code{linkSampleData}: \code{character(1)} defining the data to which
 samples should be linked. See section \emph{Linking sample data to other
@@ -80,6 +75,8 @@ dimension (rows or elements).}
 
 \item{j}{for \code{[}: an \code{integer}, \code{character} or \code{logical} being the index, the
 name (rowname of \code{sampleData}) or a \code{logical} of the samples to subset.}
+
+\item{...}{optional additional parameters.}
 
 \item{drop}{for \code{[}: ignored.}
 }

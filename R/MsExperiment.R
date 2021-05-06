@@ -370,56 +370,51 @@ setReplaceMethod("metadata", "MsExperiment",
                  })
 
 #' @rdname MsExperiment
-setGeneric("linkSampleData", function(object, ...)
-    standardGeneric("linkSampleData"))
-#' @rdname MsExperiment
 #'
 #' @export
-setMethod(
-    "linkSampleData", "MsExperiment",
-    function(object, with = character(),
-             sampleIndex = seq_len(nrow(sampleData(object))),
-             withIndex = integer(), subsetBy = 1L) {
-        if (!length(with))
-            return(object)
-        subsetBy <- as.integer(subsetBy[1L])
-        if (is.na(subsetBy))
-            stop("'subsetBy' needs to be an integer of length 1")
-        if (!length(withIndex)) {
-            link_string <- .parse_join_string(with)
-            if (link_string[1L] == "sampleData") {
-                from <- paste0(link_string[1:2], collapse = ".")
-                to_slot <- link_string[3L]
-                with <- paste0(link_string[3:4], collapse = ".")
-            } else if (link_string[3L] == "sampleData") {
-                from <- paste0(link_string[3:4], collapse = ".")
-                to_slot <- link_string[1L]
-                with <- paste0(link_string[1:2], collapse = ".")
-            } else stop("one of the slot names has to be 'sampleData'.")
-            link <- .link_matrix(.get_element(object, from),
-                                 .get_element(object, with))
-            if (nrow(link) == 0)
-                warning("no matches found for '", with, "'")
-        } else {
-            sampleIndex <- as.integer(sampleIndex)
-            withIndex <- as.integer(withIndex)
-            sampleIndex <- sampleIndex[!is.na(sampleIndex)]
-            withIndex <- withIndex[!is.na(withIndex)]
-            if (length(sampleIndex) != length(withIndex))
-                stop("Length of 'sampleIndex' and 'withIndex' have to match")
-            link <- cbind(sampleIndex, withIndex)
-        }
-        withl <- unlist(strsplit(with, split = ".", fixed = TRUE))
-        if (withl[1L] %in% c("spectra", "assay")) {
-            with <- withl[1L]
-            if (with == "assay")
-                subsetBy <- 2L
-        } else if (length(withl) < 2)
-            stop("'with' should be a 'character' with the name of the slot and",
-                 " the name of element separated by a '.'. ",
-                 "See ?linkSampleData for examples")
-        .add_sample_data_link(object, link, with = with, subsetBy = subsetBy)
-    })
+linkSampleData <- function(object, with = character(),
+                           sampleIndex = seq_len(nrow(sampleData(object))),
+                           withIndex = integer(), subsetBy = 1L) {
+    if (!length(with))
+        return(object)
+    subsetBy <- as.integer(subsetBy[1L])
+    if (is.na(subsetBy))
+        stop("'subsetBy' needs to be an integer of length 1")
+    if (!length(withIndex)) {
+        link_string <- .parse_join_string(with)
+        if (link_string[1L] == "sampleData") {
+            from <- paste0(link_string[1:2], collapse = ".")
+            to_slot <- link_string[3L]
+            with <- paste0(link_string[3:4], collapse = ".")
+        } else if (link_string[3L] == "sampleData") {
+            from <- paste0(link_string[3:4], collapse = ".")
+            to_slot <- link_string[1L]
+            with <- paste0(link_string[1:2], collapse = ".")
+        } else stop("one of the slot names has to be 'sampleData'.")
+        link <- .link_matrix(.get_element(object, from),
+                             .get_element(object, with))
+        if (nrow(link) == 0)
+            warning("no matches found for '", with, "'")
+    } else {
+        sampleIndex <- as.integer(sampleIndex)
+        withIndex <- as.integer(withIndex)
+        sampleIndex <- sampleIndex[!is.na(sampleIndex)]
+        withIndex <- withIndex[!is.na(withIndex)]
+        if (length(sampleIndex) != length(withIndex))
+            stop("Length of 'sampleIndex' and 'withIndex' have to match")
+        link <- cbind(sampleIndex, withIndex)
+    }
+    withl <- unlist(strsplit(with, split = ".", fixed = TRUE))
+    if (withl[1L] %in% c("spectra", "assay")) {
+        with <- withl[1L]
+        if (with == "assay")
+            subsetBy <- 2L
+    } else if (length(withl) < 2)
+        stop("'with' should be a 'character' with the name of the slot and",
+             " the name of element separated by a '.'. ",
+             "See ?linkSampleData for examples")
+    .add_sample_data_link(object, link, with = with, subsetBy = subsetBy)
+}
 
 #' @rdname MsExperiment
 #'
