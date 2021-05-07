@@ -73,8 +73,8 @@ dimension (rows or elements).}
 
 \item{i}{for \code{[}: not supported.}
 
-\item{j}{for \code{[}: an \code{integer}, \code{character} or \code{logical} being the index, the
-name (rowname of \code{sampleData}) or a \code{logical} of the samples to subset.}
+\item{j}{for \code{[}: an \code{integer}, \code{character} or \code{logical} referring to the
+indices or names (rowname of \code{sampleData}) of the samples to subset.}
 
 \item{...}{optional additional parameters.}
 
@@ -117,23 +117,23 @@ data elements. Should not be directly accessed or modified by the user.}
 
 An experiment is typically composed of several items
 \itemize{
-\item Description and information (covariates etc) of each sample from the
-experiment. These are stored in the \code{sampleData} slot as a \code{DataFrame},
-each row being a sample with columns containing all relevant informatio on
-that sample.
-\item Files to data or annotations. There are stored in the
+\item Description and information (covariates etc) of each sample from
+the experiment. These are stored in the \code{sampleData} slot as a
+\code{DataFrame}, each row describing a sample with columns containing
+all relevant information on that sample.
+\item Files to data or annotations. These are stored in the
 \code{experimentFiles} slot as an instance of class \code{MsExperimentFiles}.
 \item General metadata about the experiment, stored as a \code{list} in the
 \code{metadata} slot.
 \item Mass spectrometry data. Sectra and their metadata are stored as
-\code{Spectra()} objects in the \code{spectra} object. Chromatographic is
-noy yet supported but will be stored as \code{Chromatograms()} objects
-in the \code{chromatorgrams} slot.
+an \code{Spectra()} object in the \code{spectra} slot. Chromatographic data
+is not yet supported but will be stored as a \code{Chromatograms()}
+object in the \code{chromatorgrams} slot.
 \item Quantification data is stored as \code{QFeatures} or
 \code{SummarizedExperiment} objects in the \code{assay} slot.
 \item Any additional data, be it other spectra data, or proteomics
-identification data, i.e peptide-spectrum matches is defined as
-\code{PSM()} objects can be added as elements to the list stored in
+identification data (i.e peptide-spectrum matches defined as
+\code{PSM()} objects) can be added as elements to the list stored in
 the \code{otherData} slot.
 }
 }
@@ -141,14 +141,14 @@ the \code{otherData} slot.
 \section{Linking sample data to other experimental data}{
 
 
-By default, an \code{MsExperiment} is just a loose collection of files and data
+To start with, an \code{MsExperiment} is just a loose collection of files and data
 related to an experiment, no explicit links or associactions are present
 between the samples and related data. Such links can however be created with
-the \code{linkSampleData} function. This function can establish links between
+the \code{linkSampleData()} function. This function can establish links between
 individual (or all) samples within the object's \code{sampleData} to individual,
 or multiple, data elements or files, such as \code{Spectra} or raw data files.
 
-The presence of such links enables a (coherent) subsetting of an
+The presence of such links enables a (consistent) subsetting of an
 \code{MsExperiment} by samples. Thus, once the link is defined, any subsetting by
 sample will also correctly subset the linked data. All other, not linked,
 data elements are always retained as in the original \code{MsExperiment}.

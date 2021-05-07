@@ -271,11 +271,11 @@ Below we generate an `MsExperiment` object for a simple experiment consisting of
 a single sample measured in two different injections to the same LC-MS setup.
 
 ```{r}
-mse <- MsExperiment()
+lcmse <- MsExperiment()
 sd <- DataFrame(sample_id = c("QC1", "QC2"),
                 sample_name = c("QC Pool", "QC Pool"),
                 injection_idx = c(1, 3))
-sampleData(mse) <- sd
+sampleData(lcmse) <- sd
 ```
 
 We next add mzML files to the experiment for the sample that was measured. These
@@ -288,7 +288,7 @@ sample (note that such files don't necessarily have to exist).
 fls <- dir(system.file("sciex", package = "msdata"), full.names = TRUE)
 basename(fls)
 
-experimentFiles(mse) <- MsExperimentFiles(
+experimentFiles(lcmse) <- MsExperimentFiles(
     mzML_files = fls,
     annotations = "internal_standards.txt")
 ```
@@ -299,8 +299,8 @@ details on import and representation of MS data).
 
 ```{r}
 sps <- Spectra(fls, backend = MsBackendMzR())
-spectra(mse) <- sps
-mse
+spectra(lcmse) <- sps
+lcmse
 ```
 
 At this stage we have thus sample annotations and MS data in our object, but no
@@ -311,8 +311,8 @@ to the samples: we want to link the first mzML file in the element called
 and the second file to the second row.
 
 ```{r}
-mse <- linkSampleData(mse, with = "experimentFiles.mzML_file",
-                      sampleIndex = c(1, 2), withIndex = c(1, 2))
+lcmse <- linkSampleData(lcmse, with = "experimentFiles.mzML_file",
+                        sampleIndex = c(1, 2), withIndex = c(1, 2))
 ```
 
 To define the link we have thus to specify with which *element* within our
@@ -323,7 +323,7 @@ data element. The name is a combination of the name of the slot within the
 separated by a `"."`. Using `with = "experimentFiles.mzML_file"` means we want
 to link samples to values within the `"mzML_file"` element of the object's
 `experimentFiles` slot - in other words, we want to link samples to values in
-`experimentFiles(mse)$mzML_file`. The indices of the rows (samples) in
+`experimentFiles(lcmse)$mzML_file`. The indices of the rows (samples) in
 `sampleData` and the indices of the values in `with` to which we want to link
 the samples can be defined with `sampleIndex` and `withIndex`. In the example
 above we used `sampleIndex = c(1, 2)` and `withIndex = c(1, 2)`, thus, we want
@@ -343,16 +343,16 @@ knitr::include_graphics("imgs/Links_01.png")
 ```
 
 We next establish a second link between each sample and the *annotation*
-file `"internal_standards.txt"` in `experimentFiles(mse)$standards`:
+file `"internal_standards.txt"` in `experimentFiles(lcmse)$standards`:
 
 ```{r}
-mse <- linkSampleData(mse, with = "experimentFiles.annotations",
-                      sampleIndex = c(1, 2), withIndex = c(1, 1))
+lcmse <- linkSampleData(lcmse, with = "experimentFiles.annotations",
+                        sampleIndex = c(1, 2), withIndex = c(1, 1))
 ```
 
 The figure below illustrates again what happened internally by this call: a new
 *link matrix* was added establishing the relationship between the two samples
-and the one value in `experimentFiles(mse)$annotations`.
+and the one value in `experimentFiles(lcmse)$annotations`.
 
 ```{r, echo = FALSE}
 knitr::include_graphics("imgs/Links_02.png")
@@ -374,16 +374,17 @@ the original file name from which the spectra were imported (which is available
 in the `"dataOrigin"` spectra variable).
 
 ```{r}
-sampleData(mse)$raw_file <- normalizePath(fls)
-mse <- linkSampleData(mse, with = "sampleData.raw_file = spectra.dataOrigin")
+sampleData(lcmse)$raw_file <- normalizePath(fls)
+lcmse <- linkSampleData(
+    lcmse, with = "sampleData.raw_file = spectra.dataOrigin")
 ```
 
 The link was thus established between matching values in
-`sampleData(mse)$raw_file` and `spectra(mse)$dataOrigin`.
+`sampleData(lcmse)$raw_file` and `spectra(lcmse)$dataOrigin`.
 
 ```{r}
-sampleData(mse)$raw_file
-head(spectra(mse)$dataOrigin)
+sampleData(lcmse)$raw_file
+head(spectra(lcmse)$dataOrigin)
 ```
 
 The figure below illustrates this link. With that last call we have thus
@@ -395,7 +396,7 @@ knitr::include_graphics("imgs/Links_03.png")
 ```
 
 ```{r}
-mse
+lcmse
 ```
 
 If we had also quantified *feature* values, we could also link them to the
@@ -410,7 +411,7 @@ library(SummarizedExperiment)
 sd <- DataFrame(sample = c("QC2", "QC1", "QC3"), idx = c(3, 1, 5))
 se <- SummarizedExperiment(colData = sd, assay = cbind(1:10, 11:20, 21:30))
 
-mse@assay <- se
+lcmse@assay <- se
 ```
 
 Next we link the samples in this `SummarizedExperiment` to the samples to in the
@@ -419,11 +420,11 @@ object's `sampleData` and the column `"sample"` in the `SummarizedExperiment`'s
 `"sample"` variable.
 
 ```{r}
-sampleData(mse)$sample_id
-mse@assay$sample
+sampleData(lcmse)$sample_id
+lcmse@assay$sample
 
-mse <- linkSampleData(mse, with = "sampleData.sample_id = assay.sample")
-mse
+lcmse <- linkSampleData(lcmse, with = "sampleData.sample_id = assay.sample")
+lcmse
 ```
 
 The main advantage of all these links is that any subsetting of the experiment
@@ -431,7 +432,7 @@ by sample will keep the (linked) data consistent. To illustrate this we subset
 below the experiment to the second sample.
 
 ```{r}
-b <- mse[, 2]
+b <- lcmse[, 2]
 b
 ```
 
@@ -449,9 +450,9 @@ add a `data.frame` as a `metadata` to the experiment and subset the object
 again.
 
 ```{r}
-metadata(mse)$other <- data.frame(sample_name = c("study_1", "POOL", "study_2"),
+metadata(lcmse)$other <- data.frame(sample_name = c("study_1", "POOL", "study_2"),
                                   index = 1:3)
-b <- mse[, 2]
+b <- lcmse[, 2]
 metadata(b)
 ```
 
@@ -460,9 +461,9 @@ link each sample to the second row in this data frame and subset the data again
 to the second sample.
 
 ```{r}
-mse <- linkSampleData(mse, with = "metadata.other",
+lcmse <- linkSampleData(lcmse, with = "metadata.other",
                       sampleIndex = 1:2, withIndex = c(2, 2))
-b <- mse[, 2]
+b <- lcmse[, 2]
 metadata(b)
 ```
 
@@ -471,22 +472,22 @@ sample. Obviously it is also possible to subset to multiple samples, in
 arbitrary order. Below we re-order our experiment.
 
 ```{r}
-mse <- mse[, c(2, 1)]
-sampleData(mse)
+lcmse <- lcmse[, c(2, 1)]
+sampleData(lcmse)
 ```
 
 The sample order is thus reversed and also all other linked elements are
 re-ordered accordingly, such as `"mzML_file"` in the object's `experimentFiles`.
 
 ```{r}
-experimentFiles(mse)$mzML_file
+experimentFiles(lcmse)$mzML_file
 ```
 
 It is however important to note, that subsetting will also *duplicate* elements
 that are associated with multiple samples:
 
 ```{r}
-experimentFiles(mse)$annotations
+experimentFiles(lcmse)$annotations
 ```
 
 Thus, while we added a single *annotation* file to the data element

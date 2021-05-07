@@ -63,14 +63,14 @@ setClassUnion("QFeaturesOrSummarizedExperimentOrNull",
 #'
 #' @section Linking sample data to other experimental data:
 #'
-#' By default, an `MsExperiment` is just a loose collection of files and data
+#' To start with, an `MsExperiment` is just a loose collection of files and data
 #' related to an experiment, no explicit links or associactions are present
 #' between the samples and related data. Such links can however be created with
-#' the `linkSampleData` function. This function can establish links between
+#' the `linkSampleData()` function. This function can establish links between
 #' individual (or all) samples within the object's `sampleData` to individual,
 #' or multiple, data elements or files, such as `Spectra` or raw data files.
 #'
-#' The presence of such links enables a (coherent) subsetting of an
+#' The presence of such links enables a (consistent) subsetting of an
 #' `MsExperiment` by samples. Thus, once the link is defined, any subsetting by
 #' sample will also correctly subset the linked data. All other, not linked,
 #' data elements are always retained as in the original `MsExperiment`.
@@ -132,8 +132,8 @@ setClassUnion("QFeaturesOrSummarizedExperimentOrNull",
 #'
 #' @param i for `[`: not supported.
 #'
-#' @param j for `[`: an `integer`, `character` or `logical` being the index, the
-#'     name (rowname of `sampleData`) or a `logical` of the samples to subset.
+#' @param j for `[`: an `integer`, `character` or `logical` referring to the
+#'     indices or names (rowname of `sampleData`) of the samples to subset.
 #'
 #' @param object an `MsExperiment`.
 #'
