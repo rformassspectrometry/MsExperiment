@@ -59,6 +59,8 @@ setClass("MsExperimentFiles",
 #'
 #' @importFrom S4Vectors metadata metadata<-
 #'
+#' @importFrom methods new as validObject
+#'
 #' @param ... Either a named list or a set of named vectors. All
 #'     elements are coerced to characters.
 #'
@@ -99,6 +101,8 @@ setValidity("MsExperimentFiles",
 #' @rdname MsExperimentFiles
 #'
 #' @param object An instance of class `MsExperimentFiles`.
+#'
+#' @importMethodsFrom methods show
 #'
 #' @exportMethod show
 setMethod("show", "MsExperimentFiles",
