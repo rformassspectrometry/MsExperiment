@@ -17,24 +17,24 @@ existMsExperimentFiles(object)
 \item{...}{Either a named list or a set of named vectors. All
 elements are coerced to characters.}
 
-\item{metadata}{`list()` holding arbitrary R objects as
+\item{metadata}{\code{list()} holding arbitrary R objects as
 annotations.}
 
-\item{object}{The `existMsExperimentFiles()` fonction works with
-either an instance of `MsExperimentFiles` or `MsExperiment`.}
+\item{object}{The \code{existMsExperimentFiles()} fonction works with
+either an instance of \code{MsExperimentFiles} or \code{MsExperiment}.}
 }
 \description{
-The `MsExperimentFiles` class stores files that are part of a mass
+The \code{MsExperimentFiles} class stores files that are part of a mass
 spectrometry experiment. The objects are created with the
-`MsExperimentFiles()` function.
+\code{MsExperimentFiles()} function.
 
-The files encoded in a `MsExperimentFiles` instance don't need to
+The files encoded in a \code{MsExperimentFiles} instance don't need to
 exist on the current filesystem - sometimes, these might be created
-in anticipation of their creation. The `existMsExperimentFiles()`
+in anticipation of their creation. The \code{existMsExperimentFiles()}
 function can be used to verify which ones currently exist: it
 returns a list of logicals (formally an instance of
-[IRanges::LogicalList()] of lenghts equal to the
-`MsExperimentFiles` used as input.
+\code{\link[IRanges:AtomicList-class]{IRanges::LogicalList()}} of lenghts equal to the
+\code{MsExperimentFiles} used as input.
 }
 \examples{
 fls <- MsExperimentFiles(mzmls = c("/path/to/f1.mzML", "/path/to/f2.mzML"),
