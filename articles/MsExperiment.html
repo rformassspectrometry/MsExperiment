@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function() {
     if (links[i].hostname != window.location.hostname)
       links[i].target = '_blank';
 });
-</script><p><strong>Package</strong>: <em><a href="https://bioconductor.org/packages/3.13/MsExperiment" class="external-link">MsExperiment</a></em><br><strong>Authors</strong>: Laurent Gatto [aut, cre] (<a href="https://orcid.org/0000-0002-1520-2268" class="external-link uri">https://orcid.org/0000-0002-1520-2268</a>), Johannes Rainer [aut] (<a href="https://orcid.org/0000-0002-6977-7147" class="external-link uri">https://orcid.org/0000-0002-6977-7147</a>), Sebastian Gibb [aut] (<a href="https://orcid.org/0000-0001-7406-4443" class="external-link uri">https://orcid.org/0000-0001-7406-4443</a>)<br><strong>Last modified:</strong> 2021-05-08 11:57:49<br><strong>Compiled</strong>: Sat May 8 12:09:45 2021</p>
+</script><p><strong>Package</strong>: <em><a href="https://bioconductor.org/packages/3.13/MsExperiment" class="external-link">MsExperiment</a></em><br><strong>Authors</strong>: Laurent Gatto [aut, cre] (<a href="https://orcid.org/0000-0002-1520-2268" class="external-link uri">https://orcid.org/0000-0002-1520-2268</a>), Johannes Rainer [aut] (<a href="https://orcid.org/0000-0002-6977-7147" class="external-link uri">https://orcid.org/0000-0002-6977-7147</a>), Sebastian Gibb [aut] (<a href="https://orcid.org/0000-0001-7406-4443" class="external-link uri">https://orcid.org/0000-0001-7406-4443</a>)<br><strong>Last modified:</strong> 2021-05-09 11:28:39<br><strong>Compiled</strong>: Sun May 9 11:39:42 2021</p>
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor" aria-hidden="true"></a>Introduction</h1>
@@ -157,8 +157,8 @@ document.addEventListener("DOMContentLoaded", function() {
 <pre><code>## Loading QEP2LC6_HeLa_50ng_251120_02-calib.mzML from cache.</code></pre>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fls</span></code></pre></div>
-<pre><code>## [1] "/github/home/.cache/R/rpx/52006bc848ee_QEP2LC6_HeLa_50ng_251120_01-calib.mzML"
-## [2] "/github/home/.cache/R/rpx/5200bef1ab1_QEP2LC6_HeLa_50ng_251120_02-calib.mzML"</code></pre>
+<pre><code>## [1] "/github/home/.cache/R/rpx/4f2670c145ff_QEP2LC6_HeLa_50ng_251120_01-calib.mzML"
+## [2] "/github/home/.cache/R/rpx/4f267b3d87da_QEP2LC6_HeLa_50ng_251120_02-calib.mzML"</code></pre>
 </div>
 <div id="mass-spectrometry-experiment" class="section level1">
 <h1 class="hasAnchor">
@@ -177,7 +177,7 @@ document.addEventListener("DOMContentLoaded", function() {
                            fasta <span class="op">=</span> <span class="st">"homo_sapiens.fasta"</span><span class="op">)</span>
 <span class="va">msfls</span></code></pre></div>
 <pre><code>## MsExperimentFiles of length  2 
-## [["mzmls"]] 52006bc848ee_QEP2LC6_HeLa_50ng_251120_01-calib.mzML ...
+## [["mzmls"]] 4f2670c145ff_QEP2LC6_HeLa_50ng_251120_01-calib.mzML ...
 ## [["fasta"]] homo_sapiens.fasta</code></pre>
 <p>Let’s add these files to the main experiment management object:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
@@ -198,8 +198,8 @@ document.addEventListener("DOMContentLoaded", function() {
 <pre><code>## DataFrame with 2 rows and 2 columns
 ##           mzmls fractions
 ##     &lt;character&gt; &lt;integer&gt;
-## 1 52006bc848...         1
-## 2 5200bef1ab...         2</code></pre>
+## 1 4f2670c145...         1
+## 2 4f267b3d87...         2</code></pre>
 </div>
 <div id="raw-data" class="section level2">
 <h2 class="hasAnchor">
@@ -225,8 +225,8 @@ document.addEventListener("DOMContentLoaded", function() {
 ##  ... 33 more variables/columns.
 ## 
 ## file(s):
-## 52006bc848ee_QEP2LC6_HeLa_50ng_251120_01-calib.mzML
-## 5200bef1ab1_QEP2LC6_HeLa_50ng_251120_02-calib.mzML</code></pre>
+## 4f2670c145ff_QEP2LC6_HeLa_50ng_251120_01-calib.mzML
+## 4f267b3d87da_QEP2LC6_HeLa_50ng_251120_02-calib.mzML</code></pre>
 <p>We can now add this object to the main experiment management object:</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/ProtGenerics/man/protgenerics.html" class="external-link">spectra</a></span><span class="op">(</span><span class="va">msexp</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">sp</span>
@@ -259,33 +259,33 @@ document.addEventListener("DOMContentLoaded", function() {
        <span class="st">" -t 20ppm"</span>,
        <span class="st">" -m 0"</span>,
        <span class="st">" int 1"</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] "java -jar /path/to/MSGFPlus.jar -s /github/home/.cache/R/rpx/52006bc848ee_QEP2LC6_HeLa_50ng_251120_01-calib.mzML -o 52006bc848ee_QEP2LC6_HeLa_50ng_251120_01-calib.mzid -d homo_sapiens.fasta -t 20ppm -m 0 int 1"
-## [2] "java -jar /path/to/MSGFPlus.jar -s /github/home/.cache/R/rpx/5200bef1ab1_QEP2LC6_HeLa_50ng_251120_02-calib.mzML -o 5200bef1ab1_QEP2LC6_HeLa_50ng_251120_02-calib.mzid -d homo_sapiens.fasta -t 20ppm -m 0 int 1"</code></pre>
+<pre><code>## [1] "java -jar /path/to/MSGFPlus.jar -s /github/home/.cache/R/rpx/4f2670c145ff_QEP2LC6_HeLa_50ng_251120_01-calib.mzML -o 4f2670c145ff_QEP2LC6_HeLa_50ng_251120_01-calib.mzid -d homo_sapiens.fasta -t 20ppm -m 0 int 1"
+## [2] "java -jar /path/to/MSGFPlus.jar -s /github/home/.cache/R/rpx/4f267b3d87da_QEP2LC6_HeLa_50ng_251120_02-calib.mzML -o 4f267b3d87da_QEP2LC6_HeLa_50ng_251120_02-calib.mzid -d homo_sapiens.fasta -t 20ppm -m 0 int 1"</code></pre>
 <p>Here, for the sake of time and portability, we will not actually run MSGF+, but a simple shell script that will generate mzid files in a temporary R directory.</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="op">(</span><span class="va">output</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">mzids</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] "/tmp/Rtmp3QdZxY/52006bc848ee_QEP2LC6_HeLa_50ng_251120_01-calib.mzid"
-## [2] "/tmp/Rtmp3QdZxY/5200bef1ab1_QEP2LC6_HeLa_50ng_251120_02-calib.mzid"</code></pre>
+<pre><code>## [1] "/tmp/RtmpQkDWxI/4f2670c145ff_QEP2LC6_HeLa_50ng_251120_01-calib.mzid"
+## [2] "/tmp/RtmpQkDWxI/4f267b3d87da_QEP2LC6_HeLa_50ng_251120_02-calib.mzid"</code></pre>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cmd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"touch"</span>, <span class="va">output</span><span class="op">)</span>
 <span class="va">cmd</span></code></pre></div>
-<pre><code>## [1] "touch /tmp/Rtmp3QdZxY/52006bc848ee_QEP2LC6_HeLa_50ng_251120_01-calib.mzid"
-## [2] "touch /tmp/Rtmp3QdZxY/5200bef1ab1_QEP2LC6_HeLa_50ng_251120_02-calib.mzid"</code></pre>
+<pre><code>## [1] "touch /tmp/RtmpQkDWxI/4f2670c145ff_QEP2LC6_HeLa_50ng_251120_01-calib.mzid"
+## [2] "touch /tmp/RtmpQkDWxI/4f267b3d87da_QEP2LC6_HeLa_50ng_251120_02-calib.mzid"</code></pre>
 <p>The <code>cmd</code> variable holds the two commands to be run on the command line that will generate the new files. We can run each of these commands with the <code><a href="https://rdrr.io/r/base/system.html" class="external-link">system()</a></code> function.</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">cmd</span>, <span class="va">system</span><span class="op">)</span></code></pre></div>
-<pre><code>## touch /tmp/Rtmp3QdZxY/52006bc848ee_QEP2LC6_HeLa_50ng_251120_01-calib.mzid 
+<pre><code>## touch /tmp/RtmpQkDWxI/4f2670c145ff_QEP2LC6_HeLa_50ng_251120_01-calib.mzid 
 ##                                                                         0 
-##  touch /tmp/Rtmp3QdZxY/5200bef1ab1_QEP2LC6_HeLa_50ng_251120_02-calib.mzid 
+## touch /tmp/RtmpQkDWxI/4f267b3d87da_QEP2LC6_HeLa_50ng_251120_02-calib.mzid 
 ##                                                                         0</code></pre>
 <p>Below, we add the names of the newly created files to our experiment:</p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/MsExperiment.html">experimentFiles</a></span><span class="op">(</span><span class="va">msexp</span><span class="op">)</span><span class="op">[[</span><span class="st">"mzids"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">mzids</span>
 <span class="fu"><a href="../reference/MsExperiment.html">experimentFiles</a></span><span class="op">(</span><span class="va">msexp</span><span class="op">)</span></code></pre></div>
 <pre><code>## MsExperimentFiles of length  3 
-## [["mzmls"]] 52006bc848ee_QEP2LC6_HeLa_50ng_251120_01-calib.mzML ...
+## [["mzmls"]] 4f2670c145ff_QEP2LC6_HeLa_50ng_251120_01-calib.mzML ...
 ## [["fasta"]] homo_sapiens.fasta
-## [["mzids"]] 52006bc848ee_QEP2LC6_HeLa_50ng_251120_01-calib.mzid ...</code></pre>
+## [["mzids"]] 4f2670c145ff_QEP2LC6_HeLa_50ng_251120_01-calib.mzid ...</code></pre>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">msexp</span></code></pre></div>
 <pre><code>## Object of class MsExperiment 
@@ -297,8 +297,8 @@ document.addEventListener("DOMContentLoaded", function() {
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html" class="external-link">metadata</a></span><span class="op">(</span><span class="va">msexp</span><span class="op">)</span><span class="op">[[</span><span class="st">"mzmls_to_mzids"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">cmd</span>
 <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html" class="external-link">metadata</a></span><span class="op">(</span><span class="va">msexp</span><span class="op">)</span></code></pre></div>
 <pre><code>## $mzmls_to_mzids
-## [1] "touch /tmp/Rtmp3QdZxY/52006bc848ee_QEP2LC6_HeLa_50ng_251120_01-calib.mzid"
-## [2] "touch /tmp/Rtmp3QdZxY/5200bef1ab1_QEP2LC6_HeLa_50ng_251120_02-calib.mzid"</code></pre>
+## [1] "touch /tmp/RtmpQkDWxI/4f2670c145ff_QEP2LC6_HeLa_50ng_251120_01-calib.mzid"
+## [2] "touch /tmp/RtmpQkDWxI/4f267b3d87da_QEP2LC6_HeLa_50ng_251120_02-calib.mzid"</code></pre>
 <p>Finally, the <code><a href="../reference/MsExperimentFiles.html">existMsExperimentFiles()</a></code> can be used at any time to check which of files that are associated with an experiment actually exist:</p>
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/MsExperimentFiles.html">existMsExperimentFiles</a></span><span class="op">(</span><span class="va">msexp</span><span class="op">)</span></code></pre></div>
@@ -324,9 +324,9 @@ document.addEventListener("DOMContentLoaded", function() {
 <div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/MsExperiment.html">experimentFiles</a></span><span class="op">(</span><span class="va">msexp</span><span class="op">)</span></code></pre></div>
 <pre><code>## MsExperimentFiles of length  3 
-## [["mzmls"]] 52006bc848ee_QEP2LC6_HeLa_50ng_251120_01-calib.mzML ...
+## [["mzmls"]] 4f2670c145ff_QEP2LC6_HeLa_50ng_251120_01-calib.mzML ...
 ## [["fasta"]] homo_sapiens.fasta
-## [["mzids"]] 52006bc848ee_QEP2LC6_HeLa_50ng_251120_01-calib.mzid ...</code></pre>
+## [["mzids"]] 4f2670c145ff_QEP2LC6_HeLa_50ng_251120_01-calib.mzid ...</code></pre>
 <p>We can access the raw data as long as the mzML files that were used to generate it still exist in their original location, which is the case here as they were saved in the <code>rpx</code> cache directory.</p>
 <div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">sp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ProtGenerics/man/protgenerics.html" class="external-link">spectra</a></span><span class="op">(</span><span class="va">msexp</span><span class="op">)</span>
@@ -348,8 +348,8 @@ document.addEventListener("DOMContentLoaded", function() {
 ##  ... 33 more variables/columns.
 ## 
 ## file(s):
-## 52006bc848ee_QEP2LC6_HeLa_50ng_251120_01-calib.mzML
-## 5200bef1ab1_QEP2LC6_HeLa_50ng_251120_02-calib.mzML</code></pre>
+## 4f2670c145ff_QEP2LC6_HeLa_50ng_251120_01-calib.mzML
+## 4f267b3d87da_QEP2LC6_HeLa_50ng_251120_02-calib.mzML</code></pre>
 <div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/Spectra/man/spectra-plotting.html" class="external-link">plotSpectra</a></span><span class="op">(</span><span class="va">sp</span><span class="op">[</span><span class="fl">1000</span><span class="op">]</span><span class="op">)</span></code></pre></div>
 <p><img src="MsExperiment_files/figure-html/unnamed-chunk-20-1.png" width="700"></p>
@@ -360,54 +360,54 @@ document.addEventListener("DOMContentLoaded", function() {
 <p>For some experiments and data analyses an explicit link between data, data files and respective samples is required. Such links enable an easy (and error-free) subsetting or re-ordering of a whole experiment by sample and would also simplify coloring and labeling of the data depending on the sample or of its variables or conditions.</p>
 <p>Below we generate an <code>MsExperiment</code> object for a simple experiment consisting of a single sample measured in two different injections to the same LC-MS setup.</p>
 <div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">lcmse</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MsExperiment.html">MsExperiment</a></span><span class="op">(</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">lmse</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MsExperiment.html">MsExperiment</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">sd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/DataFrame-class.html" class="external-link">DataFrame</a></span><span class="op">(</span>sample_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"QC1"</span>, <span class="st">"QC2"</span><span class="op">)</span>,
                 sample_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"QC Pool"</span>, <span class="st">"QC Pool"</span><span class="op">)</span>,
                 injection_idx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="../reference/MsExperiment.html">sampleData</a></span><span class="op">(</span><span class="va">lcmse</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">sd</span></code></pre></div>
+<span class="fu"><a href="../reference/MsExperiment.html">sampleData</a></span><span class="op">(</span><span class="va">lmse</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">sd</span></code></pre></div>
 <p>We next add mzML files to the experiment for the sample that was measured. These are available within the <code>msdata</code> R package. We add also an additional <em>annotation</em> file <code>"internal_standards.txt"</code> to the experiment, which could be e.g. a file with m/z and retention times of internal standards added to the sample (note that such files don’t necessarily have to exist).</p>
 <div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fls</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">dir</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"sciex"</span>, package <span class="op">=</span> <span class="st">"msdata"</span><span class="op">)</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/path.html" class="external-link">basename</a></span><span class="op">(</span><span class="va">fls</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] "20171016_POOL_POS_1_105-134.mzML" "20171016_POOL_POS_3_105-134.mzML"</code></pre>
 <div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/MsExperiment.html">experimentFiles</a></span><span class="op">(</span><span class="va">lcmse</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MsExperimentFiles.html">MsExperimentFiles</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/MsExperiment.html">experimentFiles</a></span><span class="op">(</span><span class="va">lmse</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MsExperimentFiles.html">MsExperimentFiles</a></span><span class="op">(</span>
     mzML_files <span class="op">=</span> <span class="va">fls</span>,
     annotations <span class="op">=</span> <span class="st">"internal_standards.txt"</span><span class="op">)</span></code></pre></div>
 <p>Next we load the MS data from the mzML files as a <code>Spectra</code> object and add them to the experiment (see the vignette of the <em><a href="https://bioconductor.org/packages/3.13/Spectra" class="external-link">Spectra</a></em> for details on import and representation of MS data).</p>
 <div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">sps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Spectra/man/Spectra.html" class="external-link">Spectra</a></span><span class="op">(</span><span class="va">fls</span>, backend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/Spectra/man/MsBackend.html" class="external-link">MsBackendMzR</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/pkg/ProtGenerics/man/protgenerics.html" class="external-link">spectra</a></span><span class="op">(</span><span class="va">lcmse</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">sps</span>
-<span class="va">lcmse</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/pkg/ProtGenerics/man/protgenerics.html" class="external-link">spectra</a></span><span class="op">(</span><span class="va">lmse</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">sps</span>
+<span class="va">lmse</span></code></pre></div>
 <pre><code>## Object of class MsExperiment 
 ##  Files: mzML_files, annotations 
 ##  Spectra: MS1 (1862) 
 ##  Experiment data: 2 sample(s)</code></pre>
 <p>At this stage we have thus sample annotations and MS data in our object, but no explicit relationships between them. We next use the <code>linkSpectraData</code> function to establish and define such relationships. First we link the experimental files to the samples: we want to link the first mzML file in the element called <code>"mzML_file"</code> in the object’s <code>experimentFiles</code> to the first row in <code>sampleData</code> and the second file to the second row.</p>
 <div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">lcmse</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MsExperiment.html">linkSampleData</a></span><span class="op">(</span><span class="va">lcmse</span>, with <span class="op">=</span> <span class="st">"experimentFiles.mzML_file"</span>,
+<code class="sourceCode R"><span class="va">lmse</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MsExperiment.html">linkSampleData</a></span><span class="op">(</span><span class="va">lmse</span>, with <span class="op">=</span> <span class="st">"experimentFiles.mzML_file"</span>,
                         sampleIndex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, withIndex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>To define the link we have thus to specify with which <em>element</em> within our <code>MsExperiment</code> we want to link samples. This can be done with the parameter <code>with</code> that takes a single <code>character</code> representing the name (<em>address</em>) of the data element. The name is a combination of the name of the slot within the <code>MsExperiment</code> and the name of the element (or column) within that slot separated by a <code>"."</code>. Using <code>with = "experimentFiles.mzML_file"</code> means we want to link samples to values within the <code>"mzML_file"</code> element of the object’s <code>experimentFiles</code> slot - in other words, we want to link samples to values in <code>experimentFiles(lcmse)$mzML_file</code>. The indices of the rows (samples) in <code>sampleData</code> and the indices of the values in <code>with</code> to which we want to link the samples can be defined with <code>sampleIndex</code> and <code>withIndex</code>. In the example above we used <code>sampleIndex = c(1, 2)</code> and <code>withIndex = c(1, 2)</code>, thus, we want to link the first row in <code>sampleData</code> to the first value in <code>with</code> and the second row to the second value. See also the section <em>Linking sample data to other experimental data</em> in the documentation of <code>MsExperiment</code> for more information and details.</p>
+<p>To define the link we have thus to specify with which <em>element</em> within our <code>MsExperiment</code> we want to link samples. This can be done with the parameter <code>with</code> that takes a single <code>character</code> representing the name (<em>address</em>) of the data element. The name is a combination of the name of the slot within the <code>MsExperiment</code> and the name of the element (or column) within that slot separated by a <code>"."</code>. Using <code>with = "experimentFiles.mzML_file"</code> means we want to link samples to values within the <code>"mzML_file"</code> element of the object’s <code>experimentFiles</code> slot - in other words, we want to link samples to values in <code>experimentFiles(lmse)$mzML_file</code>. The indices of the rows (samples) in <code>sampleData</code> and the indices of the values in <code>with</code> to which we want to link the samples can be defined with <code>sampleIndex</code> and <code>withIndex</code>. In the example above we used <code>sampleIndex = c(1, 2)</code> and <code>withIndex = c(1, 2)</code>, thus, we want to link the first row in <code>sampleData</code> to the first value in <code>with</code> and the second row to the second value. See also the section <em>Linking sample data to other experimental data</em> in the documentation of <code>MsExperiment</code> for more information and details.</p>
 <p>What happened internally by the call above is illustrated in the figure below. The link is represented as a two-column integer <code>matrix</code> with the indices of the linked sample in the first and the indices of the associated elements in the second columns (this matrix is essentially a <code>cbind(sampleIndex, withIndex)</code>).</p>
 <p><img src="imgs/Links_01.png"><!-- --></p>
-<p>We next establish a second link between each sample and the <em>annotation</em> file <code>"internal_standards.txt"</code> in <code>experimentFiles(lcmse)$standards</code>:</p>
+<p>We next establish a second link between each sample and the <em>annotation</em> file <code>"internal_standards.txt"</code> in <code>experimentFiles(lmse)$standards</code>:</p>
 <div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">lcmse</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MsExperiment.html">linkSampleData</a></span><span class="op">(</span><span class="va">lcmse</span>, with <span class="op">=</span> <span class="st">"experimentFiles.annotations"</span>,
+<code class="sourceCode R"><span class="va">lmse</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MsExperiment.html">linkSampleData</a></span><span class="op">(</span><span class="va">lmse</span>, with <span class="op">=</span> <span class="st">"experimentFiles.annotations"</span>,
                         sampleIndex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, withIndex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>The figure below illustrates again what happened internally by this call: a new <em>link matrix</em> was added establishing the relationship between the two samples and the one value in <code>experimentFiles(lcmse)$annotations</code>.</p>
+<p>The figure below illustrates again what happened internally by this call: a new <em>link matrix</em> was added establishing the relationship between the two samples and the one value in <code>experimentFiles(lmse)$annotations</code>.</p>
 <p><img src="imgs/Links_02.png"><!-- --></p>
 <p>It is thus also possible to link different samples to the same element. We next link the spectra in the object to the individual samples. We use for that an alternative way to specify the link without the need to provide <code>sampleIndex</code> and <code>withIndex</code>. Sample-to-data links can also be specified using a syntax similar to an SQL join: <code>"sampleData.&lt;column in sampleData&gt; = &lt;slot&gt;.&lt;element in slot&gt;"</code>. Links will be thus established between elements with matching values in the specified data fields (i.e. between rows in <code>sampleData</code> for which values in the specified column matches values in <code>&lt;slot&gt;.&lt;element&gt;</code>). In order to use this alternative approach to link spectra to the respective samples we have to first add the (full) raw file name as an additional column to the object’s <code>sampleData</code>. We can now add links between spectra and samples by matching this raw file name to the original file name from which the spectra were imported (which is available in the <code>"dataOrigin"</code> spectra variable).</p>
 <div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/MsExperiment.html">sampleData</a></span><span class="op">(</span><span class="va">lcmse</span><span class="op">)</span><span class="op">$</span><span class="va">raw_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/normalizePath.html" class="external-link">normalizePath</a></span><span class="op">(</span><span class="va">fls</span><span class="op">)</span>
-<span class="va">lcmse</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MsExperiment.html">linkSampleData</a></span><span class="op">(</span>
-    <span class="va">lcmse</span>, with <span class="op">=</span> <span class="st">"sampleData.raw_file = spectra.dataOrigin"</span><span class="op">)</span></code></pre></div>
-<p>The link was thus established between matching values in <code>sampleData(lcmse)$raw_file</code> and <code>spectra(lcmse)$dataOrigin</code>.</p>
+<code class="sourceCode R"><span class="fu"><a href="../reference/MsExperiment.html">sampleData</a></span><span class="op">(</span><span class="va">lmse</span><span class="op">)</span><span class="op">$</span><span class="va">raw_file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/normalizePath.html" class="external-link">normalizePath</a></span><span class="op">(</span><span class="va">fls</span><span class="op">)</span>
+<span class="va">lmse</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MsExperiment.html">linkSampleData</a></span><span class="op">(</span>
+    <span class="va">lmse</span>, with <span class="op">=</span> <span class="st">"sampleData.raw_file = spectra.dataOrigin"</span><span class="op">)</span></code></pre></div>
+<p>The link was thus established between matching values in <code>sampleData(lmse)$raw_file</code> and <code>spectra(lmse)$dataOrigin</code>.</p>
 <div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/MsExperiment.html">sampleData</a></span><span class="op">(</span><span class="va">lcmse</span><span class="op">)</span><span class="op">$</span><span class="va">raw_file</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/MsExperiment.html">sampleData</a></span><span class="op">(</span><span class="va">lmse</span><span class="op">)</span><span class="op">$</span><span class="va">raw_file</span></code></pre></div>
 <pre><code>## [1] "/usr/local/lib/R/host-site-library/msdata/sciex/20171016_POOL_POS_1_105-134.mzML"
 ## [2] "/usr/local/lib/R/host-site-library/msdata/sciex/20171016_POOL_POS_3_105-134.mzML"</code></pre>
 <div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/ProtGenerics/man/protgenerics.html" class="external-link">spectra</a></span><span class="op">(</span><span class="va">lcmse</span><span class="op">)</span><span class="op">$</span><span class="va">dataOrigin</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/ProtGenerics/man/protgenerics.html" class="external-link">spectra</a></span><span class="op">(</span><span class="va">lmse</span><span class="op">)</span><span class="op">$</span><span class="va">dataOrigin</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] "/usr/local/lib/R/host-site-library/msdata/sciex/20171016_POOL_POS_1_105-134.mzML"
 ## [2] "/usr/local/lib/R/host-site-library/msdata/sciex/20171016_POOL_POS_1_105-134.mzML"
 ## [3] "/usr/local/lib/R/host-site-library/msdata/sciex/20171016_POOL_POS_1_105-134.mzML"
@@ -417,7 +417,7 @@ document.addEventListener("DOMContentLoaded", function() {
 <p>The figure below illustrates this link. With that last call we have thus established links between samples and 3 different data elements in the <code>MsExperiment</code>.</p>
 <p><img src="imgs/Links_03.png"><!-- --></p>
 <div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">lcmse</span></code></pre></div>
+<code class="sourceCode R"><span class="va">lmse</span></code></pre></div>
 <pre><code>## Object of class MsExperiment 
 ##  Files: mzML_files, annotations 
 ##  Spectra: MS1 (1862) 
@@ -432,17 +432,17 @@ document.addEventListener("DOMContentLoaded", function() {
 <span class="va">sd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/DataFrame-class.html" class="external-link">DataFrame</a></span><span class="op">(</span>sample <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"QC2"</span>, <span class="st">"QC1"</span>, <span class="st">"QC3"</span><span class="op">)</span>, idx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">1</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span>
 <span class="va">se</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/RangedSummarizedExperiment-class.html" class="external-link">SummarizedExperiment</a></span><span class="op">(</span>colData <span class="op">=</span> <span class="va">sd</span>, assay <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">11</span><span class="op">:</span><span class="fl">20</span>, <span class="fl">21</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span><span class="op">)</span>
 
-<span class="va">lcmse</span><span class="op">@</span><span class="va">assay</span> <span class="op">&lt;-</span> <span class="va">se</span></code></pre></div>
+<span class="va">lmse</span><span class="op">@</span><span class="va">assay</span> <span class="op">&lt;-</span> <span class="va">se</span></code></pre></div>
 <p>Next we link the samples in this <code>SummarizedExperiment</code> to the samples to in the <code>MsExperiment</code> using matching values between the <code>"sample_id"</code> column in the object’s <code>sampleData</code> and the column <code>"sample"</code> in the <code>SummarizedExperiment</code>’s <code>"sample"</code> variable.</p>
 <div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/MsExperiment.html">sampleData</a></span><span class="op">(</span><span class="va">lcmse</span><span class="op">)</span><span class="op">$</span><span class="va">sample_id</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/MsExperiment.html">sampleData</a></span><span class="op">(</span><span class="va">lmse</span><span class="op">)</span><span class="op">$</span><span class="va">sample_id</span></code></pre></div>
 <pre><code>## [1] "QC1" "QC2"</code></pre>
 <div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">lcmse</span><span class="op">@</span><span class="va">assay</span><span class="op">$</span><span class="va">sample</span></code></pre></div>
+<code class="sourceCode R"><span class="va">lmse</span><span class="op">@</span><span class="va">assay</span><span class="op">$</span><span class="va">sample</span></code></pre></div>
 <pre><code>## [1] "QC2" "QC1" "QC3"</code></pre>
 <div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">lcmse</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MsExperiment.html">linkSampleData</a></span><span class="op">(</span><span class="va">lcmse</span>, with <span class="op">=</span> <span class="st">"sampleData.sample_id = assay.sample"</span><span class="op">)</span>
-<span class="va">lcmse</span></code></pre></div>
+<code class="sourceCode R"><span class="va">lmse</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MsExperiment.html">linkSampleData</a></span><span class="op">(</span><span class="va">lmse</span>, with <span class="op">=</span> <span class="st">"sampleData.sample_id = assay.sample"</span><span class="op">)</span>
+<span class="va">lmse</span></code></pre></div>
 <pre><code>## Object of class MsExperiment 
 ##  Files: mzML_files, annotations 
 ##  Spectra: MS1 (1862) 
@@ -454,7 +454,7 @@ document.addEventListener("DOMContentLoaded", function() {
 ##   - assay: 2 sample(s) to 2 column(s).</code></pre>
 <p>The main advantage of all these links is that any subsetting of the experiment by sample will keep the (linked) data consistent. To illustrate this we subset below the experiment to the second sample.</p>
 <div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">b</span> <span class="op">&lt;-</span> <span class="va">lcmse</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>
+<code class="sourceCode R"><span class="va">b</span> <span class="op">&lt;-</span> <span class="va">lmse</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>
 <span class="va">b</span></code></pre></div>
 <pre><code>## Object of class MsExperiment 
 ##  Files: mzML_files, annotations, mzML_file 
@@ -481,9 +481,9 @@ document.addEventListener("DOMContentLoaded", function() {
 ## [10,]   10</code></pre>
 <p>But what happens for data elements that are not linked to any sample? Below we add a <code>data.frame</code> as a <code>metadata</code> to the experiment and subset the object again.</p>
 <div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html" class="external-link">metadata</a></span><span class="op">(</span><span class="va">lcmse</span><span class="op">)</span><span class="op">$</span><span class="va">other</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>sample_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"study_1"</span>, <span class="st">"POOL"</span>, <span class="st">"study_2"</span><span class="op">)</span>,
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html" class="external-link">metadata</a></span><span class="op">(</span><span class="va">lmse</span><span class="op">)</span><span class="op">$</span><span class="va">other</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>sample_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"study_1"</span>, <span class="st">"POOL"</span>, <span class="st">"study_2"</span><span class="op">)</span>,
                                   index <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span>
-<span class="va">b</span> <span class="op">&lt;-</span> <span class="va">lcmse</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>
+<span class="va">b</span> <span class="op">&lt;-</span> <span class="va">lmse</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>
 <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html" class="external-link">metadata</a></span><span class="op">(</span><span class="va">b</span><span class="op">)</span></code></pre></div>
 <pre><code>## $other
 ##   sample_name index
@@ -492,17 +492,17 @@ document.addEventListener("DOMContentLoaded", function() {
 ## 3     study_2     3</code></pre>
 <p>By default, any element which is <strong>not</strong> linked to a sample is retained. We next link each sample to the second row in this data frame and subset the data again to the second sample.</p>
 <div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">lcmse</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MsExperiment.html">linkSampleData</a></span><span class="op">(</span><span class="va">lcmse</span>, with <span class="op">=</span> <span class="st">"metadata.other"</span>,
+<code class="sourceCode R"><span class="va">lmse</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/MsExperiment.html">linkSampleData</a></span><span class="op">(</span><span class="va">lmse</span>, with <span class="op">=</span> <span class="st">"metadata.other"</span>,
                       sampleIndex <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, withIndex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>
-<span class="va">b</span> <span class="op">&lt;-</span> <span class="va">lcmse</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>
+<span class="va">b</span> <span class="op">&lt;-</span> <span class="va">lmse</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>
 <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html" class="external-link">metadata</a></span><span class="op">(</span><span class="va">b</span><span class="op">)</span></code></pre></div>
 <pre><code>## $other
 ##   sample_name index
 ## 2        POOL     2</code></pre>
 <p>Subsetting thus retained only the row in the data frame for the linked sample. Obviously it is also possible to subset to multiple samples, in arbitrary order. Below we re-order our experiment.</p>
 <div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">lcmse</span> <span class="op">&lt;-</span> <span class="va">lcmse</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span><span class="op">]</span>
-<span class="fu"><a href="../reference/MsExperiment.html">sampleData</a></span><span class="op">(</span><span class="va">lcmse</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">lmse</span> <span class="op">&lt;-</span> <span class="va">lmse</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span><span class="op">]</span>
+<span class="fu"><a href="../reference/MsExperiment.html">sampleData</a></span><span class="op">(</span><span class="va">lmse</span><span class="op">)</span></code></pre></div>
 <pre><code>## DataFrame with 2 rows and 4 columns
 ##     sample_id sample_name injection_idx      raw_file
 ##   &lt;character&gt; &lt;character&gt;     &lt;numeric&gt;   &lt;character&gt;
@@ -510,12 +510,12 @@ document.addEventListener("DOMContentLoaded", function() {
 ## 2         QC1     QC Pool             1 /usr/local...</code></pre>
 <p>The sample order is thus reversed and also all other linked elements are re-ordered accordingly, such as <code>"mzML_file"</code> in the object’s <code>experimentFiles</code>.</p>
 <div class="sourceCode" id="cb83"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/MsExperiment.html">experimentFiles</a></span><span class="op">(</span><span class="va">lcmse</span><span class="op">)</span><span class="op">$</span><span class="va">mzML_file</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/MsExperiment.html">experimentFiles</a></span><span class="op">(</span><span class="va">lmse</span><span class="op">)</span><span class="op">$</span><span class="va">mzML_file</span></code></pre></div>
 <pre><code>## [1] "/usr/local/lib/R/host-site-library/msdata/sciex/20171016_POOL_POS_3_105-134.mzML"
 ## [2] "/usr/local/lib/R/host-site-library/msdata/sciex/20171016_POOL_POS_1_105-134.mzML"</code></pre>
 <p>It is however important to note, that subsetting will also <em>duplicate</em> elements that are associated with multiple samples:</p>
 <div class="sourceCode" id="cb85"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/MsExperiment.html">experimentFiles</a></span><span class="op">(</span><span class="va">lcmse</span><span class="op">)</span><span class="op">$</span><span class="va">annotations</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/MsExperiment.html">experimentFiles</a></span><span class="op">(</span><span class="va">lmse</span><span class="op">)</span><span class="op">$</span><span class="va">annotations</span></code></pre></div>
 <pre><code>## [1] "internal_standards.txt" "internal_standards.txt"</code></pre>
 <p>Thus, while we added a single <em>annotation</em> file to the data element <code>"annotations"</code> in <code>experimentFiles</code>, after subsetting we ended up with two identical files. This duplication of <em>n:m</em> relationships between samples to elements does however not affect data consistency. A sample will always be linked to the correct value/element.</p>
 </div>
