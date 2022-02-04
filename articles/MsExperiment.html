@@ -19,7 +19,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Managing mass spectrometry experiments">
 <meta property="og:description" content="MsExperiment">
-<meta property="og:image" content="https://rformassspectrometry.github.io/Spectra/logo.png">
+<meta property="og:image" content="https://rformassspectrometry.github.io/MsExperiment/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", function() {
     if (links[i].hostname != window.location.hostname)
       links[i].target = '_blank';
 });
-</script><p><strong>Package</strong>: <em><a href="https://bioconductor.org/packages/3.15/MsExperiment" class="external-link">MsExperiment</a></em><br><strong>Authors</strong>: Laurent Gatto [aut, cre] (<a href="https://orcid.org/0000-0002-1520-2268" class="external-link uri">https://orcid.org/0000-0002-1520-2268</a>), Johannes Rainer [aut] (<a href="https://orcid.org/0000-0002-6977-7147" class="external-link uri">https://orcid.org/0000-0002-6977-7147</a>), Sebastian Gibb [aut] (<a href="https://orcid.org/0000-0001-7406-4443" class="external-link uri">https://orcid.org/0000-0001-7406-4443</a>)<br><strong>Last modified:</strong> 2022-02-04 08:45:38<br><strong>Compiled</strong>: Fri Feb 4 09:41:19 2022</p>
+</script><p><strong>Package</strong>: <em><a href="https://bioconductor.org/packages/3.15/MsExperiment" class="external-link">MsExperiment</a></em><br><strong>Authors</strong>: Laurent Gatto [aut, cre] (<a href="https://orcid.org/0000-0002-1520-2268" class="external-link uri">https://orcid.org/0000-0002-1520-2268</a>), Johannes Rainer [aut] (<a href="https://orcid.org/0000-0002-6977-7147" class="external-link uri">https://orcid.org/0000-0002-6977-7147</a>), Sebastian Gibb [aut] (<a href="https://orcid.org/0000-0001-7406-4443" class="external-link uri">https://orcid.org/0000-0001-7406-4443</a>)<br><strong>Last modified:</strong> 2022-02-04 10:39:30<br><strong>Compiled</strong>: Fri Feb 4 10:46:54 2022</p>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
@@ -157,8 +157,8 @@ document.addEventListener("DOMContentLoaded", function() {
 <pre><code><span class="co">## Loading QEP2LC6_HeLa_50ng_251120_02-calib.mzML from cache.</span></code></pre>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fls</span></code></pre></div>
-<pre><code><span class="co">## [1] "/github/home/.cache/R/rpx/6a292c9e4e95_QEP2LC6_HeLa_50ng_251120_01-calib.mzML"</span>
-<span class="co">## [2] "/github/home/.cache/R/rpx/6a293c05ba1e_QEP2LC6_HeLa_50ng_251120_02-calib.mzML"</span></code></pre>
+<pre><code><span class="co">## [1] "/github/home/.cache/R/rpx/3ad439329e5_QEP2LC6_HeLa_50ng_251120_01-calib.mzML"</span>
+<span class="co">## [2] "/github/home/.cache/R/rpx/3ad11ef3948_QEP2LC6_HeLa_50ng_251120_02-calib.mzML"</span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="mass-spectrometry-experiment">Mass spectrometry experiment<a class="anchor" aria-label="anchor" href="#mass-spectrometry-experiment"></a>
@@ -177,7 +177,7 @@ document.addEventListener("DOMContentLoaded", function() {
                            fasta <span class="op">=</span> <span class="st">"homo_sapiens.fasta"</span><span class="op">)</span>
 <span class="va">msfls</span></code></pre></div>
 <pre><code><span class="co">## MsExperimentFiles of length  2 </span>
-<span class="co">## [["mzmls"]] 6a292c9e4e95_QEP2LC6_HeLa_50ng_251120_01-calib.mzML ...</span>
+<span class="co">## [["mzmls"]] 3ad439329e5_QEP2LC6_HeLa_50ng_251120_01-calib.mzML ...</span>
 <span class="co">## [["fasta"]] homo_sapiens.fasta</span></code></pre>
 <p>Let’s add these files to the main experiment management object:</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
@@ -198,13 +198,13 @@ document.addEventListener("DOMContentLoaded", function() {
 <pre><code><span class="co">## DataFrame with 2 rows and 2 columns</span>
 <span class="co">##           mzmls fractions</span>
 <span class="co">##     &lt;character&gt; &lt;integer&gt;</span>
-<span class="co">## 1 6a292c9e4e...         1</span>
-<span class="co">## 2 6a293c05ba...         2</span></code></pre>
+<span class="co">## 1 3ad439329e...         1</span>
+<span class="co">## 2 3ad11ef394...         2</span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="raw-data">Raw data<a class="anchor" aria-label="anchor" href="#raw-data"></a>
 </h3>
-<p>We can now create a <code>Spectra</code> object containing the raw data stored in the mzML files. If you are not familiar with the <code>Spectra</code> object, please refer to the <a href="https://rformassspectrometry.github.io/Spectra/articles/Spectra.html">package vignettes</a>.</p>
+<p>We can now create a <code>Spectra</code> object containing the raw data stored in the mzML files. If you are not familiar with the <code>Spectra</code> object, please refer to the <a href="https://rformassspectrometry.github.io/Spectra/articles/Spectra.html" class="external-link">package vignettes</a>.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">sp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Spectra/man/Spectra.html" class="external-link">Spectra</a></span><span class="op">(</span><span class="fu"><a href="../reference/MsExperiment.html">experimentFiles</a></span><span class="op">(</span><span class="va">msexp</span><span class="op">)</span><span class="op">[[</span><span class="st">"mzmls"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
 <span class="va">sp</span></code></pre></div>
@@ -225,8 +225,8 @@ document.addEventListener("DOMContentLoaded", function() {
 <span class="co">##  ... 33 more variables/columns.</span>
 <span class="co">## </span>
 <span class="co">## file(s):</span>
-<span class="co">## 6a292c9e4e95_QEP2LC6_HeLa_50ng_251120_01-calib.mzML</span>
-<span class="co">## 6a293c05ba1e_QEP2LC6_HeLa_50ng_251120_02-calib.mzML</span></code></pre>
+<span class="co">## 3ad439329e5_QEP2LC6_HeLa_50ng_251120_01-calib.mzML</span>
+<span class="co">## 3ad11ef3948_QEP2LC6_HeLa_50ng_251120_02-calib.mzML</span></code></pre>
 <p>We can now add this object to the main experiment management object:</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/ProtGenerics/man/protgenerics.html" class="external-link">spectra</a></span><span class="op">(</span><span class="va">msexp</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">sp</span>
@@ -259,33 +259,33 @@ document.addEventListener("DOMContentLoaded", function() {
        <span class="st">" -t 20ppm"</span>,
        <span class="st">" -m 0"</span>,
        <span class="st">" int 1"</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## [1] "java -jar /path/to/MSGFPlus.jar -s /github/home/.cache/R/rpx/6a292c9e4e95_QEP2LC6_HeLa_50ng_251120_01-calib.mzML -o 6a292c9e4e95_QEP2LC6_HeLa_50ng_251120_01-calib.mzid -d homo_sapiens.fasta -t 20ppm -m 0 int 1"</span>
-<span class="co">## [2] "java -jar /path/to/MSGFPlus.jar -s /github/home/.cache/R/rpx/6a293c05ba1e_QEP2LC6_HeLa_50ng_251120_02-calib.mzML -o 6a293c05ba1e_QEP2LC6_HeLa_50ng_251120_02-calib.mzid -d homo_sapiens.fasta -t 20ppm -m 0 int 1"</span></code></pre>
+<pre><code><span class="co">## [1] "java -jar /path/to/MSGFPlus.jar -s /github/home/.cache/R/rpx/3ad439329e5_QEP2LC6_HeLa_50ng_251120_01-calib.mzML -o 3ad439329e5_QEP2LC6_HeLa_50ng_251120_01-calib.mzid -d homo_sapiens.fasta -t 20ppm -m 0 int 1"</span>
+<span class="co">## [2] "java -jar /path/to/MSGFPlus.jar -s /github/home/.cache/R/rpx/3ad11ef3948_QEP2LC6_HeLa_50ng_251120_02-calib.mzML -o 3ad11ef3948_QEP2LC6_HeLa_50ng_251120_02-calib.mzid -d homo_sapiens.fasta -t 20ppm -m 0 int 1"</span></code></pre>
 <p>Here, for the sake of time and portability, we will not actually run MSGF+, but a simple shell script that will generate mzid files in a temporary R directory.</p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="op">(</span><span class="va">output</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">mzids</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## [1] "/tmp/RtmpQ53wBj/6a292c9e4e95_QEP2LC6_HeLa_50ng_251120_01-calib.mzid"</span>
-<span class="co">## [2] "/tmp/RtmpQ53wBj/6a293c05ba1e_QEP2LC6_HeLa_50ng_251120_02-calib.mzid"</span></code></pre>
+<pre><code><span class="co">## [1] "/tmp/Rtmp6xBKjU/3ad439329e5_QEP2LC6_HeLa_50ng_251120_01-calib.mzid"</span>
+<span class="co">## [2] "/tmp/Rtmp6xBKjU/3ad11ef3948_QEP2LC6_HeLa_50ng_251120_02-calib.mzid"</span></code></pre>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cmd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"touch"</span>, <span class="va">output</span><span class="op">)</span>
 <span class="va">cmd</span></code></pre></div>
-<pre><code><span class="co">## [1] "touch /tmp/RtmpQ53wBj/6a292c9e4e95_QEP2LC6_HeLa_50ng_251120_01-calib.mzid"</span>
-<span class="co">## [2] "touch /tmp/RtmpQ53wBj/6a293c05ba1e_QEP2LC6_HeLa_50ng_251120_02-calib.mzid"</span></code></pre>
+<pre><code><span class="co">## [1] "touch /tmp/Rtmp6xBKjU/3ad439329e5_QEP2LC6_HeLa_50ng_251120_01-calib.mzid"</span>
+<span class="co">## [2] "touch /tmp/Rtmp6xBKjU/3ad11ef3948_QEP2LC6_HeLa_50ng_251120_02-calib.mzid"</span></code></pre>
 <p>The <code>cmd</code> variable holds the two commands to be run on the command line that will generate the new files. We can run each of these commands with the <code><a href="https://rdrr.io/r/base/system.html" class="external-link">system()</a></code> function.</p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">cmd</span>, <span class="va">system</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## touch /tmp/RtmpQ53wBj/6a292c9e4e95_QEP2LC6_HeLa_50ng_251120_01-calib.mzid </span>
-<span class="co">##                                                                         0 </span>
-<span class="co">## touch /tmp/RtmpQ53wBj/6a293c05ba1e_QEP2LC6_HeLa_50ng_251120_02-calib.mzid </span>
-<span class="co">##                                                                         0</span></code></pre>
+<pre><code><span class="co">## touch /tmp/Rtmp6xBKjU/3ad439329e5_QEP2LC6_HeLa_50ng_251120_01-calib.mzid </span>
+<span class="co">##                                                                        0 </span>
+<span class="co">## touch /tmp/Rtmp6xBKjU/3ad11ef3948_QEP2LC6_HeLa_50ng_251120_02-calib.mzid </span>
+<span class="co">##                                                                        0</span></code></pre>
 <p>Below, we add the names of the newly created files to our experiment:</p>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/MsExperiment.html">experimentFiles</a></span><span class="op">(</span><span class="va">msexp</span><span class="op">)</span><span class="op">[[</span><span class="st">"mzids"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">mzids</span>
 <span class="fu"><a href="../reference/MsExperiment.html">experimentFiles</a></span><span class="op">(</span><span class="va">msexp</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## MsExperimentFiles of length  3 </span>
-<span class="co">## [["mzmls"]] 6a292c9e4e95_QEP2LC6_HeLa_50ng_251120_01-calib.mzML ...</span>
+<span class="co">## [["mzmls"]] 3ad439329e5_QEP2LC6_HeLa_50ng_251120_01-calib.mzML ...</span>
 <span class="co">## [["fasta"]] homo_sapiens.fasta</span>
-<span class="co">## [["mzids"]] 6a292c9e4e95_QEP2LC6_HeLa_50ng_251120_01-calib.mzid ...</span></code></pre>
+<span class="co">## [["mzids"]] 3ad439329e5_QEP2LC6_HeLa_50ng_251120_01-calib.mzid ...</span></code></pre>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">msexp</span></code></pre></div>
 <pre><code><span class="co">## Object of class MsExperiment </span>
@@ -297,8 +297,8 @@ document.addEventListener("DOMContentLoaded", function() {
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html" class="external-link">metadata</a></span><span class="op">(</span><span class="va">msexp</span><span class="op">)</span><span class="op">[[</span><span class="st">"mzmls_to_mzids"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">cmd</span>
 <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html" class="external-link">metadata</a></span><span class="op">(</span><span class="va">msexp</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## $mzmls_to_mzids</span>
-<span class="co">## [1] "touch /tmp/RtmpQ53wBj/6a292c9e4e95_QEP2LC6_HeLa_50ng_251120_01-calib.mzid"</span>
-<span class="co">## [2] "touch /tmp/RtmpQ53wBj/6a293c05ba1e_QEP2LC6_HeLa_50ng_251120_02-calib.mzid"</span></code></pre>
+<span class="co">## [1] "touch /tmp/Rtmp6xBKjU/3ad439329e5_QEP2LC6_HeLa_50ng_251120_01-calib.mzid"</span>
+<span class="co">## [2] "touch /tmp/Rtmp6xBKjU/3ad11ef3948_QEP2LC6_HeLa_50ng_251120_02-calib.mzid"</span></code></pre>
 <p>Finally, the <code><a href="../reference/MsExperimentFiles.html">existMsExperimentFiles()</a></code> can be used at any time to check which of files that are associated with an experiment actually exist:</p>
 <div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/MsExperimentFiles.html">existMsExperimentFiles</a></span><span class="op">(</span><span class="va">msexp</span><span class="op">)</span></code></pre></div>
@@ -324,9 +324,9 @@ document.addEventListener("DOMContentLoaded", function() {
 <div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/MsExperiment.html">experimentFiles</a></span><span class="op">(</span><span class="va">msexp</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## MsExperimentFiles of length  3 </span>
-<span class="co">## [["mzmls"]] 6a292c9e4e95_QEP2LC6_HeLa_50ng_251120_01-calib.mzML ...</span>
+<span class="co">## [["mzmls"]] 3ad439329e5_QEP2LC6_HeLa_50ng_251120_01-calib.mzML ...</span>
 <span class="co">## [["fasta"]] homo_sapiens.fasta</span>
-<span class="co">## [["mzids"]] 6a292c9e4e95_QEP2LC6_HeLa_50ng_251120_01-calib.mzid ...</span></code></pre>
+<span class="co">## [["mzids"]] 3ad439329e5_QEP2LC6_HeLa_50ng_251120_01-calib.mzid ...</span></code></pre>
 <p>We can access the raw data as long as the mzML files that were used to generate it still exist in their original location, which is the case here as they were saved in the <code>rpx</code> cache directory.</p>
 <div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">sp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ProtGenerics/man/protgenerics.html" class="external-link">spectra</a></span><span class="op">(</span><span class="va">msexp</span><span class="op">)</span>
@@ -348,8 +348,8 @@ document.addEventListener("DOMContentLoaded", function() {
 <span class="co">##  ... 33 more variables/columns.</span>
 <span class="co">## </span>
 <span class="co">## file(s):</span>
-<span class="co">## 6a292c9e4e95_QEP2LC6_HeLa_50ng_251120_01-calib.mzML</span>
-<span class="co">## 6a293c05ba1e_QEP2LC6_HeLa_50ng_251120_02-calib.mzML</span></code></pre>
+<span class="co">## 3ad439329e5_QEP2LC6_HeLa_50ng_251120_01-calib.mzML</span>
+<span class="co">## 3ad11ef3948_QEP2LC6_HeLa_50ng_251120_02-calib.mzML</span></code></pre>
 <div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/Spectra/man/spectra-plotting.html" class="external-link">plotSpectra</a></span><span class="op">(</span><span class="va">sp</span><span class="op">[</span><span class="fl">1000</span><span class="op">]</span><span class="op">)</span></code></pre></div>
 <p><img src="MsExperiment_files/figure-html/unnamed-chunk-20-1.png" width="700"></p>
