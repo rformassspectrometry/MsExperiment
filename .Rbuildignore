@@ -5,3 +5,4 @@
 .Rbuildignore
 .github
 .editorconfig
+_pkgdown.yml
