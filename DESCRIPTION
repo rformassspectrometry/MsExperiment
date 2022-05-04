@@ -23,7 +23,7 @@ Authors@R: c(person(given = "Laurent", family = "Gatto",
                     email = "mail@sebastiangibb.de",
                     role = "aut"))
 Depends:
-    R (>= 3.5.0),
+    R (>= 4.2),
     ProtGenerics (>= 1.9.1),
 Imports:
     methods,
@@ -46,7 +46,7 @@ LazyData: no
 VignetteBuilder: knitr
 BugReports: https://github.com/RforMassSpectrometry/MsExperiment/issues
 URL: https://github.com/RforMassSpectrometry/MsExperiment
-biocViews: Infrastructure, Proteomics, MassSpectrometry, Metabolomics
+biocViews: Infrastructure, Proteomics, MassSpectrometry, Metabolomics, ExperimentalDesign, DataImport
 RoxygenNote: 7.1.2
 Roxygen: list(markdown=TRUE)
 Collate:

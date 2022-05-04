@@ -80,6 +80,9 @@ indices or names (rowname of \code{sampleData}) of the samples to subset.}
 
 \item{drop}{for \code{[}: ignored.}
 }
+\value{
+See help of the individual functions.
+}
 \description{
 The \code{MsExperiment} class allows the storage and management of all
 aspects related to a complete proteomics or metabolomics mass

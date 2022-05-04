@@ -6,3 +6,4 @@
 .github
 .editorconfig
 _pkgdown.yml
+local_data

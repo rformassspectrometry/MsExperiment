@@ -23,6 +23,9 @@ annotations.}
 \item{object}{The \code{existMsExperimentFiles()} fonction works with
 either an instance of \code{MsExperimentFiles} or \code{MsExperiment}.}
 }
+\value{
+\code{MsExperimentFiles} returns an instance of \code{MsExperimentFiles}.
+}
 \description{
 The \code{MsExperimentFiles} class stores files that are part of a mass
 spectrometry experiment. The objects are created with the

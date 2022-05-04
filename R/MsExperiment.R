@@ -128,6 +128,8 @@ setClassUnion("QFeaturesOrSummarizedExperimentOrNull",
 #'   returned as they are. Subsetting in arbitrary order is supported.
 #'   See the vignette for details and examples.
 #'
+#' @return See help of the individual functions.
+#'
 #' @param drop for `[`: ignored.
 #'
 #' @param i for `[`: not supported.
@@ -383,13 +385,13 @@ linkSampleData <- function(object, with = character(),
     if (!length(withIndex)) {
         link_string <- .parse_join_string(with)
         if (link_string[1L] == "sampleData") {
-            from <- paste0(link_string[1:2], collapse = ".")
+            from <- paste0(link_string[c(1, 2)], collapse = ".")
             to_slot <- link_string[3L]
-            with <- paste0(link_string[3:4], collapse = ".")
+            with <- paste0(link_string[c(3, 4)], collapse = ".")
         } else if (link_string[3L] == "sampleData") {
-            from <- paste0(link_string[3:4], collapse = ".")
+            from <- paste0(link_string[c(3, 4)], collapse = ".")
             to_slot <- link_string[1L]
-            with <- paste0(link_string[1:2], collapse = ".")
+            with <- paste0(link_string[c(1, 2)], collapse = ".")
         } else stop("one of the slot names has to be 'sampleData'.")
         link <- .link_matrix(.get_element(object, from),
                              .get_element(object, with))

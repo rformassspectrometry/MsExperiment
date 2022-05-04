@@ -20,6 +20,8 @@
 #'
 #' @author Laurent Gatto
 #'
+#' @return `MsExperimentFiles` returns an instance of `MsExperimentFiles`.
+#'
 #' @examples
 #' fls <- MsExperimentFiles(mzmls = c("/path/to/f1.mzML", "/path/to/f2.mzML"),
 #'                          mzids = "/another/path/to/id1.mzid",
