@@ -1,10 +1,10 @@
 ---
-title: "Managing mass spectrometry experiments"
+title: "Managing Mass Spectrometry Experiments"
 output:
     BiocStyle::html_document:
         toc_float: true
 vignette: >
-    %\VignetteIndexEntry{Managing mass spectrometry experiments}
+    %\VignetteIndexEntry{Managing Mass Spectrometry Experiments}
     %\VignetteEngine{knitr::rmarkdown}
     %\VignetteEncoding{UTF-8}
     %\VignettePackage{MsExperiment}
@@ -15,7 +15,7 @@ vignette: >
 BiocStyle::markdown()
 ```
 
-**Package**: `r Biocpkg("MsExperiment")`<br />
+**Package**: `r BiocStyle::Biocpkg("MsExperiment")`<br />
 **Authors**: `r packageDescription("MsExperiment")[["Author"]] `<br />
 **Last modified:** `r file.info("MsExperiment.Rmd")$mtime`<br />
 **Compiled**: `r date()`
@@ -28,21 +28,36 @@ library(BiocStyle)
 
 # Introduction
 
-The goal of the `MsExperiment` package is the store and handle all
-data related to a mass spectrometry experiment. In this vignette, we
-will describe how to create a `MsExperiment` object and populate it
-with various types of data.
+The goal of the `MsExperiment` package is to provide a container for all data
+related to a mass spectrometry (MS) experiment. Also other Bioconductor packages
+allow to represent MS experiment data (such as the `r Biocpkg("MSnbase")`
+package). The `MsExperiment` however aims at being very light-weight and
+flexible to accommodate all possible types of MS experiments (proteomics,
+metabolomics, ...) and all types of MS data representations (chromatographic and
+spectral data, quantified features etc). In addition, it allows to bundle
+additional files and data, such as annotations, within the object.
+
+In this vignette, we will describe how to create a `MsExperiment` object and
+populate it with various types of data.
 
 ```{r}
 library("MsExperiment")
 ```
 
-We will also use the `Spectra` package to import mass spectrometry
-data and thus load it here too.
+We will also use the `r Biocpkg("Spectra")` package to import MS data and thus
+load it here too.
 
 ```{r}
 library("Spectra")
 ```
+
+
+# Installation
+
+The package can be installed with the `BiocManager` package. To
+install `BiocManager` use `install.packages("BiocManager")` and, after that,
+`BiocManager::install("MsExperiment")` to install `MsExperiment` which will
+install the package including all required dependencies.
 
 
 # Getting data
