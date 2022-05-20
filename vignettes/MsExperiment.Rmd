@@ -426,7 +426,7 @@ library(SummarizedExperiment)
 sd <- DataFrame(sample = c("QC2", "QC1", "QC3"), idx = c(3, 1, 5))
 se <- SummarizedExperiment(colData = sd, assay = cbind(1:10, 11:20, 21:30))
 
-lmse@assay <- se
+qdata(lmse) <- se
 ```
 
 Next we link the samples in this `SummarizedExperiment` to the samples to in the
@@ -436,7 +436,7 @@ object's `sampleData` and the column `"sample"` in the `SummarizedExperiment`'s
 
 ```{r}
 sampleData(lmse)$sample_id
-lmse@assay$sample
+qdata(lmse)$sample
 
 lmse <- linkSampleData(lmse, with = "sampleData.sample_id = assay.sample")
 lmse
@@ -457,7 +457,7 @@ second sample. Accessing the `assay` of the `SummarizedExperiment` in
 second sample.
 
 ```{r}
-assay(b@assay)
+assay(qdata(b))
 ```
 
 But what happens for data elements that are not linked to any sample? Below we

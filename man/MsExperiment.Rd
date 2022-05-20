@@ -6,6 +6,8 @@
 \alias{experimentFiles<-}
 \alias{sampleData}
 \alias{sampleData<-}
+\alias{qdata}
+\alias{qdata<-}
 \alias{MsExperiment}
 \alias{MsExperiment-class}
 \alias{metadata,MsExperiment}
@@ -25,6 +27,10 @@ experimentFiles(object) <- value
 sampleData(object)
 
 sampleData(object) <- value
+
+qdata(object)
+
+qdata(object) <- value
 
 MsExperiment()
 
@@ -102,8 +108,8 @@ https://www.rformassspectrometry.org/
 
 \item{\code{spectra}}{An instance of class \code{Spectra} or \code{NULL}.}
 
-\item{\code{assay}}{An instance of class \code{QFeatures},
-\code{SummarizedExperiment} or \code{NULL}.}
+\item{\code{assay}}{An instance of class \code{QFeatures}, \code{SummarizedExperiment} or
+\code{NULL}.}
 
 \item{\code{otherData}}{A \code{List} to store any additional data objects.}
 
@@ -133,11 +139,30 @@ an \code{Spectra()} object in the \code{spectra} slot. Chromatographic data
 is not yet supported but will be stored as a \code{Chromatograms()}
 object in the \code{chromatorgrams} slot.
 \item Quantification data is stored as \code{QFeatures} or
-\code{SummarizedExperiment} objects in the \code{assay} slot.
+\code{SummarizedExperiment} objects in the \code{assay} slot and can be accessed or
+replaced with the \code{qdata} or \verb{qdata<-} functions, respectively.
 \item Any additional data, be it other spectra data, or proteomics
 identification data (i.e peptide-spectrum matches defined as
 \code{PSM()} objects) can be added as elements to the list stored in
 the \code{otherData} slot.
+}
+}
+
+\section{Accessing data}{
+
+
+Data from an \code{MsExperiment} object can be accessed with the dedicated
+accessor functions:
+\itemize{
+\item \code{experimentFiles}, \verb{experimentFiles<-}: gets or sets experiment files.
+\item \code{metadata}, \verb{metadata<-}: gets or sets the object's metadata.
+\item \code{sampleData}, \code{sampleData}: gets or sets the object's sample data (i.e. a
+\code{DataFrame} containing sample descriptions).
+\item \code{spectra}, \verb{spectra<-}: gets or sets spectra data. \code{spectra} returns a
+\code{\link[=Spectra]{Spectra()}} object, \verb{spectra<-} takes a \code{Spectra} data as input and returns
+the updated \code{MsExperiment}.
+\item \code{qdata}, \verb{qdata<-}: gets or sets the quantification data, which can be a
+\code{QFeatures} or \code{SummarizedExperiment}.
 }
 }
 

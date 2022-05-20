@@ -54,12 +54,32 @@ setClassUnion("QFeaturesOrSummarizedExperimentOrNull",
 #'   object in the `chromatorgrams` slot.
 #'
 #' - Quantification data is stored as `QFeatures` or
-#'   `SummarizedExperiment` objects in the `assay` slot.
+#'   `SummarizedExperiment` objects in the `assay` slot and can be accessed or
+#'   replaced with the `qdata` or `qdata<-` functions, respectively.
 #'
 #' - Any additional data, be it other spectra data, or proteomics
 #'   identification data (i.e peptide-spectrum matches defined as
 #'   `PSM()` objects) can be added as elements to the list stored in
 #'   the `otherData` slot.
+#'
+#' @section Accessing data:
+#'
+#' Data from an `MsExperiment` object can be accessed with the dedicated
+#' accessor functions:
+#'
+#' - `experimentFiles`, `experimentFiles<-`: gets or sets experiment files.
+#'
+#' - `metadata`, `metadata<-`: gets or sets the object's metadata.
+#'
+#' - `sampleData`, `sampleData`: gets or sets the object's sample data (i.e. a
+#'   `DataFrame` containing sample descriptions).
+#'
+#' - `spectra`, `spectra<-`: gets or sets spectra data. `spectra` returns a
+#'   [Spectra()] object, `spectra<-` takes a `Spectra` data as input and returns
+#'   the updated `MsExperiment`.
+#'
+#' - `qdata`, `qdata<-`: gets or sets the quantification data, which can be a
+#'   `QFeatures` or `SummarizedExperiment`.
 #'
 #' @section Linking sample data to other experimental data:
 #'
@@ -243,8 +263,8 @@ NULL
 #'
 #' @slot spectra An instance of class `Spectra` or `NULL`.
 #'
-#' @slot assay An instance of class `QFeatures`,
-#'     `SummarizedExperiment` or `NULL`.
+#' @slot assay An instance of class `QFeatures`, `SummarizedExperiment` or
+#'     `NULL`.
 #'
 #' @slot otherData A `List` to store any additional data objects.
 #'
@@ -333,7 +353,6 @@ setMethod("show", "MsExperiment", function(object) {
 #'
 #' @rdname MsExperiment
 setMethod("spectra", "MsExperiment", function(object) object@spectra)
-
 
 #' @export
 #'
