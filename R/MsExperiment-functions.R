@@ -318,6 +318,6 @@ qdata <- function(object) {
 #' @rdname MsExperiment
 "qdata<-" <- function(object, value) {
     stopifnot(inherits(object, "MsExperiment"))
-    object@spectra <- value
+    object@assay <- value
     object
 }
