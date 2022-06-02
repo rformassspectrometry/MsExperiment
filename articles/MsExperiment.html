@@ -94,7 +94,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 </script><p><strong>Package</strong>: <em><a href="https://bioconductor.org/packages/3.15/MsExperiment" class="external-link">MsExperiment</a></em><br><strong>Authors</strong>: Laurent Gatto [aut, cre] (<a href="https://orcid.org/0000-0002-1520-2268" class="external-link uri">https://orcid.org/0000-0002-1520-2268</a>), Johannes Rainer
 [aut] (<a href="https://orcid.org/0000-0002-6977-7147" class="external-link uri">https://orcid.org/0000-0002-6977-7147</a>), Sebastian Gibb
-[aut] (<a href="https://orcid.org/0000-0001-7406-4443" class="external-link uri">https://orcid.org/0000-0001-7406-4443</a>)<br><strong>Last modified:</strong> 2022-06-02 09:19:38<br><strong>Compiled</strong>: Thu Jun 2 09:29:25 2022</p>
+[aut] (<a href="https://orcid.org/0000-0001-7406-4443" class="external-link uri">https://orcid.org/0000-0001-7406-4443</a>)<br><strong>Last modified:</strong> 2022-06-02 11:23:15<br><strong>Compiled</strong>: Thu Jun 2 11:30:12 2022</p>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
@@ -176,8 +176,8 @@ files, they will be loaded automatically from cache.</p>
 <pre><code><span class="co">## Loading QEP2LC6_HeLa_50ng_251120_02-calib.mzML from cache.</span></code></pre>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fls</span></code></pre></div>
-<pre><code><span class="co">## [1] "/github/home/.cache/R/rpx/4f65956a3c0_QEP2LC6_HeLa_50ng_251120_01-calib.mzML"</span>
-<span class="co">## [2] "/github/home/.cache/R/rpx/4f67def9086_QEP2LC6_HeLa_50ng_251120_02-calib.mzML"</span></code></pre>
+<pre><code><span class="co">## [1] "/github/home/.cache/R/rpx/45ce059355_QEP2LC6_HeLa_50ng_251120_01-calib.mzML" </span>
+<span class="co">## [2] "/github/home/.cache/R/rpx/45c62e3c58d_QEP2LC6_HeLa_50ng_251120_02-calib.mzML"</span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="mass-spectrometry-experiment">Mass spectrometry experiment<a class="anchor" aria-label="anchor" href="#mass-spectrometry-experiment"></a>
@@ -203,7 +203,7 @@ object.</p>
                            fasta <span class="op">=</span> <span class="st">"homo_sapiens.fasta"</span><span class="op">)</span>
 <span class="va">msfls</span></code></pre></div>
 <pre><code><span class="co">## MsExperimentFiles of length  2 </span>
-<span class="co">## [["mzmls"]] 4f65956a3c0_QEP2LC6_HeLa_50ng_251120_01-calib.mzML ...</span>
+<span class="co">## [["mzmls"]] 45ce059355_QEP2LC6_HeLa_50ng_251120_01-calib.mzML ...</span>
 <span class="co">## [["fasta"]] homo_sapiens.fasta</span></code></pre>
 <p>Let’s add these files to the main experiment management object:</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
@@ -229,8 +229,8 @@ match the files to their respective fractions:</p>
 <pre><code><span class="co">## DataFrame with 2 rows and 2 columns</span>
 <span class="co">##           mzmls fractions</span>
 <span class="co">##     &lt;character&gt; &lt;integer&gt;</span>
-<span class="co">## 1 4f65956a3c...         1</span>
-<span class="co">## 2 4f67def908...         2</span></code></pre>
+<span class="co">## 1 45ce059355...         1</span>
+<span class="co">## 2 45c62e3c58...         2</span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="raw-data">Raw data<a class="anchor" aria-label="anchor" href="#raw-data"></a>
@@ -259,8 +259,8 @@ vignettes</a>.</p>
 <span class="co">##  ... 33 more variables/columns.</span>
 <span class="co">## </span>
 <span class="co">## file(s):</span>
-<span class="co">## 4f65956a3c0_QEP2LC6_HeLa_50ng_251120_01-calib.mzML</span>
-<span class="co">## 4f67def9086_QEP2LC6_HeLa_50ng_251120_02-calib.mzML</span></code></pre>
+<span class="co">## 45ce059355_QEP2LC6_HeLa_50ng_251120_01-calib.mzML</span>
+<span class="co">## 45c62e3c58d_QEP2LC6_HeLa_50ng_251120_02-calib.mzML</span></code></pre>
 <p>We can now add this object to the main experiment management
 object:</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
@@ -298,28 +298,28 @@ for details):</p>
        <span class="st">" -t 20ppm"</span>,
        <span class="st">" -m 0"</span>,
        <span class="st">" int 1"</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## [1] "java -jar /path/to/MSGFPlus.jar -s /github/home/.cache/R/rpx/4f65956a3c0_QEP2LC6_HeLa_50ng_251120_01-calib.mzML -o 4f65956a3c0_QEP2LC6_HeLa_50ng_251120_01-calib.mzid -d homo_sapiens.fasta -t 20ppm -m 0 int 1"</span>
-<span class="co">## [2] "java -jar /path/to/MSGFPlus.jar -s /github/home/.cache/R/rpx/4f67def9086_QEP2LC6_HeLa_50ng_251120_02-calib.mzML -o 4f67def9086_QEP2LC6_HeLa_50ng_251120_02-calib.mzid -d homo_sapiens.fasta -t 20ppm -m 0 int 1"</span></code></pre>
+<pre><code><span class="co">## [1] "java -jar /path/to/MSGFPlus.jar -s /github/home/.cache/R/rpx/45ce059355_QEP2LC6_HeLa_50ng_251120_01-calib.mzML -o 45ce059355_QEP2LC6_HeLa_50ng_251120_01-calib.mzid -d homo_sapiens.fasta -t 20ppm -m 0 int 1"  </span>
+<span class="co">## [2] "java -jar /path/to/MSGFPlus.jar -s /github/home/.cache/R/rpx/45c62e3c58d_QEP2LC6_HeLa_50ng_251120_02-calib.mzML -o 45c62e3c58d_QEP2LC6_HeLa_50ng_251120_02-calib.mzid -d homo_sapiens.fasta -t 20ppm -m 0 int 1"</span></code></pre>
 <p>Here, for the sake of time and portability, we will not actually run
 MSGF+, but a simple shell script that will generate mzid files in a
 temporary R directory.</p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="op">(</span><span class="va">output</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">mzids</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## [1] "/tmp/Rtmp41dyHn/4f65956a3c0_QEP2LC6_HeLa_50ng_251120_01-calib.mzid"</span>
-<span class="co">## [2] "/tmp/Rtmp41dyHn/4f67def9086_QEP2LC6_HeLa_50ng_251120_02-calib.mzid"</span></code></pre>
+<pre><code><span class="co">## [1] "/tmp/RtmpyODPQV/45ce059355_QEP2LC6_HeLa_50ng_251120_01-calib.mzid" </span>
+<span class="co">## [2] "/tmp/RtmpyODPQV/45c62e3c58d_QEP2LC6_HeLa_50ng_251120_02-calib.mzid"</span></code></pre>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cmd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"touch"</span>, <span class="va">output</span><span class="op">)</span>
 <span class="va">cmd</span></code></pre></div>
-<pre><code><span class="co">## [1] "touch /tmp/Rtmp41dyHn/4f65956a3c0_QEP2LC6_HeLa_50ng_251120_01-calib.mzid"</span>
-<span class="co">## [2] "touch /tmp/Rtmp41dyHn/4f67def9086_QEP2LC6_HeLa_50ng_251120_02-calib.mzid"</span></code></pre>
+<pre><code><span class="co">## [1] "touch /tmp/RtmpyODPQV/45ce059355_QEP2LC6_HeLa_50ng_251120_01-calib.mzid" </span>
+<span class="co">## [2] "touch /tmp/RtmpyODPQV/45c62e3c58d_QEP2LC6_HeLa_50ng_251120_02-calib.mzid"</span></code></pre>
 <p>The <code>cmd</code> variable holds the two commands to be run on the
 command line that will generate the new files. We can run each of these
 commands with the <code><a href="https://rdrr.io/r/base/system.html" class="external-link">system()</a></code> function.</p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">cmd</span>, <span class="va">system</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## touch /tmp/Rtmp41dyHn/4f65956a3c0_QEP2LC6_HeLa_50ng_251120_01-calib.mzid </span>
+<pre><code><span class="co">##  touch /tmp/RtmpyODPQV/45ce059355_QEP2LC6_HeLa_50ng_251120_01-calib.mzid </span>
 <span class="co">##                                                                        0 </span>
-<span class="co">## touch /tmp/Rtmp41dyHn/4f67def9086_QEP2LC6_HeLa_50ng_251120_02-calib.mzid </span>
+<span class="co">## touch /tmp/RtmpyODPQV/45c62e3c58d_QEP2LC6_HeLa_50ng_251120_02-calib.mzid </span>
 <span class="co">##                                                                        0</span></code></pre>
 <p>Below, we add the names of the newly created files to our
 experiment:</p>
@@ -327,9 +327,9 @@ experiment:</p>
 <code class="sourceCode R"><span class="fu"><a href="../reference/MsExperiment.html">experimentFiles</a></span><span class="op">(</span><span class="va">msexp</span><span class="op">)</span><span class="op">[[</span><span class="st">"mzids"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">mzids</span>
 <span class="fu"><a href="../reference/MsExperiment.html">experimentFiles</a></span><span class="op">(</span><span class="va">msexp</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## MsExperimentFiles of length  3 </span>
-<span class="co">## [["mzmls"]] 4f65956a3c0_QEP2LC6_HeLa_50ng_251120_01-calib.mzML ...</span>
+<span class="co">## [["mzmls"]] 45ce059355_QEP2LC6_HeLa_50ng_251120_01-calib.mzML ...</span>
 <span class="co">## [["fasta"]] homo_sapiens.fasta</span>
-<span class="co">## [["mzids"]] 4f65956a3c0_QEP2LC6_HeLa_50ng_251120_01-calib.mzid ...</span></code></pre>
+<span class="co">## [["mzids"]] 45ce059355_QEP2LC6_HeLa_50ng_251120_01-calib.mzid ...</span></code></pre>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">msexp</span></code></pre></div>
 <pre><code><span class="co">## Object of class MsExperiment </span>
@@ -344,8 +344,8 @@ document to input and output of these commands.</p>
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html" class="external-link">metadata</a></span><span class="op">(</span><span class="va">msexp</span><span class="op">)</span><span class="op">[[</span><span class="st">"mzmls_to_mzids"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">cmd</span>
 <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html" class="external-link">metadata</a></span><span class="op">(</span><span class="va">msexp</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## $mzmls_to_mzids</span>
-<span class="co">## [1] "touch /tmp/Rtmp41dyHn/4f65956a3c0_QEP2LC6_HeLa_50ng_251120_01-calib.mzid"</span>
-<span class="co">## [2] "touch /tmp/Rtmp41dyHn/4f67def9086_QEP2LC6_HeLa_50ng_251120_02-calib.mzid"</span></code></pre>
+<span class="co">## [1] "touch /tmp/RtmpyODPQV/45ce059355_QEP2LC6_HeLa_50ng_251120_01-calib.mzid" </span>
+<span class="co">## [2] "touch /tmp/RtmpyODPQV/45c62e3c58d_QEP2LC6_HeLa_50ng_251120_02-calib.mzid"</span></code></pre>
 <p>Finally, the <code><a href="../reference/MsExperimentFiles.html">existMsExperimentFiles()</a></code> can be used at any
 time to check which of files that are associated with an experiment
 actually exist:</p>
@@ -376,9 +376,9 @@ metadata.</p>
 <div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/MsExperiment.html">experimentFiles</a></span><span class="op">(</span><span class="va">msexp</span><span class="op">)</span></code></pre></div>
 <pre><code><span class="co">## MsExperimentFiles of length  3 </span>
-<span class="co">## [["mzmls"]] 4f65956a3c0_QEP2LC6_HeLa_50ng_251120_01-calib.mzML ...</span>
+<span class="co">## [["mzmls"]] 45ce059355_QEP2LC6_HeLa_50ng_251120_01-calib.mzML ...</span>
 <span class="co">## [["fasta"]] homo_sapiens.fasta</span>
-<span class="co">## [["mzids"]] 4f65956a3c0_QEP2LC6_HeLa_50ng_251120_01-calib.mzid ...</span></code></pre>
+<span class="co">## [["mzids"]] 45ce059355_QEP2LC6_HeLa_50ng_251120_01-calib.mzid ...</span></code></pre>
 <p>We can access the raw data as long as the mzML files that were used
 to generate it still exist in their original location, which is the case
 here as they were saved in the <code>rpx</code> cache directory.</p>
@@ -402,8 +402,8 @@ here as they were saved in the <code>rpx</code> cache directory.</p>
 <span class="co">##  ... 33 more variables/columns.</span>
 <span class="co">## </span>
 <span class="co">## file(s):</span>
-<span class="co">## 4f65956a3c0_QEP2LC6_HeLa_50ng_251120_01-calib.mzML</span>
-<span class="co">## 4f67def9086_QEP2LC6_HeLa_50ng_251120_02-calib.mzML</span></code></pre>
+<span class="co">## 45ce059355_QEP2LC6_HeLa_50ng_251120_01-calib.mzML</span>
+<span class="co">## 45c62e3c58d_QEP2LC6_HeLa_50ng_251120_02-calib.mzML</span></code></pre>
 <div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/Spectra/man/spectra-plotting.html" class="external-link">plotSpectra</a></span><span class="op">(</span><span class="va">sp</span><span class="op">[</span><span class="fl">1000</span><span class="op">]</span><span class="op">)</span></code></pre></div>
 <p><img src="MsExperiment_files/figure-html/unnamed-chunk-20-1.png" width="700"></p>

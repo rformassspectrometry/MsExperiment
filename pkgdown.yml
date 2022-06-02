@@ -3,7 +3,7 @@ pkgdown: 2.0.3.9000
 pkgdown_sha: 6849d7aed9d3149638fa6db651e62bf951c70921
 articles:
   MsExperiment: MsExperiment.html
-last_built: 2022-06-02T09:29Z
+last_built: 2022-06-02T11:29Z
 urls:
   reference: https://rformassspectrometry.github.io/MsExperiment/reference
   article: https://rformassspectrometry.github.io/MsExperiment/articles
