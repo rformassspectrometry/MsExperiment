@@ -25,3 +25,7 @@ for more information.
 
 This package is part of the RforMassSpectrometry initiative:
 https://www.rformassspectrometry.org/
+
+## Contributions
+
+Please the *R for Mass Spectrometry* [code of conduct](https://rformassspectrometry.github.io/RforMassSpectrometry/articles/RforMassSpectrometry.html#code-of-conduct) and [contribution guidelines](https://rformassspectrometry.github.io/RforMassSpectrometry/articles/RforMassSpectrometry.html#contributions).
