@@ -235,3 +235,15 @@ test_that(".subset_dim works", {
     res <- .subset_dim(cbind(1:10, 11:20), 2, subsetBy = 2)
     expect_equal(res, matrix(11:20, ncol = 1))
 })
+
+test_that("qdata, qdata<- works", {
+    expect_error(qdata(3), "MsExperiment")
+
+    expect_equal(qdata(mse), NULL)
+
+    tmp <- MsExperiment()
+    se <- SummarizedExperiment::SummarizedExperiment(matrix(nrow = 3, ncol = 4))
+    expect_error(qdata(se) <- 4, "MsExperiment")
+    qdata(tmp) <- se
+    expect_equal(qdata(tmp), se)
+})
