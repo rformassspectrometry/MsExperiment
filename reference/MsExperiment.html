@@ -24,7 +24,7 @@ https://www.rformassspectrometry.org/"><meta property="og:image" content="https:
     
     <a class="navbar-brand me-2" href="../index.html">MsExperiment</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,6 +37,9 @@ https://www.rformassspectrometry.org/"><meta property="og:image" content="https:
 </li>
 <li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -80,6 +83,10 @@ sampleData(object)
 
 sampleData(object) &lt;- value
 
+qdata(object)
+
+qdata(object) &lt;- value
+
 MsExperiment()
 
 # S4 method for MsExperiment
@@ -110,17 +117,64 @@ linkSampleData(
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
-<p></p>
+    <dl><dt>object</dt>
+<dd><p>An instance of class <code>MsExperiment</code>.</p></dd>
+
+
+<dt>value</dt>
+<dd><p>A <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> to replace the <code>MsExperiment</code>'s metadata.</p></dd>
+
+
+<dt>x</dt>
+<dd><p>An instance of <code>MsExperiment</code>.</p></dd>
+
+
+<dt>with</dt>
+<dd><p>for <code>linkSampleData</code>: <code>character(1)</code> defining the data to which
+samples should be linked. See section <em>Linking sample data to other
+experimental data</em> for details.</p></dd>
+
+
+<dt>sampleIndex</dt>
+<dd><p>for <code>linkSampleData</code>: <code>integer</code> with the indices of the
+samples in <code>sampleData(object)</code> that should be linked.</p></dd>
+
+
+<dt>withIndex</dt>
+<dd><p>for <code>linkSampleData</code>: <code>integer</code> with the indices of the
+elements in <code>with</code> to which the samples (specified by <code>sampleIndex</code>)
+should be linked to.</p></dd>
+
+
+<dt>subsetBy</dt>
+<dd><p>for <code>linkSampleData</code>: optional <code>integer(1)</code> defining the
+dimension on which the subsetting will occurr on the linked data.
+Defaults to <code>subsetBy = 1L</code> thus subsetting will happen on the first
+dimension (rows or elements).</p></dd>
+
+
+<dt>i</dt>
+<dd><p>for <code>[</code>: not supported.</p></dd>
+
+
+<dt>j</dt>
+<dd><p>for <code>[</code>: an <code>integer</code>, <code>character</code> or <code>logical</code> referring to the
+indices or names (rowname of <code>sampleData</code>) of the samples to subset.</p></dd>
+
+
+<dt>...</dt>
+<dd><p>optional additional parameters.</p></dd>
+
+
+<dt>drop</dt>
+<dd><p>for <code>[</code>: ignored.</p></dd>
+
+</dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    
+
+<p>See help of the individual functions.</p>
     </div>
     <div class="section level2">
     <h2 id="slots">Slots<a class="anchor" aria-label="anchor" href="#slots"></a></h2>
@@ -135,8 +189,8 @@ linkSampleData(
 
 
 <dt><code>assay</code></dt>
-<dd><p>An instance of class <code>QFeatures</code>,
-<code>SummarizedExperiment</code> or <code>NULL</code>.</p></dd>
+<dd><p>An instance of class <code>QFeatures</code>, <code>SummarizedExperiment</code> or
+<code>NULL</code>.</p></dd>
 
 
 <dt><code>otherData</code></dt>
@@ -175,11 +229,28 @@ an <code><a href="https://rdrr.io/pkg/Spectra/man/Spectra.html" class="external-
 is not yet supported but will be stored as a <code>Chromatograms()</code>
 object in the <code>chromatorgrams</code> slot.</p></li>
 <li><p>Quantification data is stored as <code>QFeatures</code> or
-<code>SummarizedExperiment</code> objects in the <code>assay</code> slot.</p></li>
+<code>SummarizedExperiment</code> objects in the <code>assay</code> slot and can be accessed or
+replaced with the <code>qdata</code> or <code>qdata&lt;-</code> functions, respectively.</p></li>
 <li><p>Any additional data, be it other spectra data, or proteomics
 identification data (i.e peptide-spectrum matches defined as
 <code>PSM()</code> objects) can be added as elements to the list stored in
 the <code>otherData</code> slot.</p></li>
+</ul></div>
+    <div class="section level2">
+    <h2 id="accessing-data">Accessing data<a class="anchor" aria-label="anchor" href="#accessing-data"></a></h2>
+    
+
+
+<p>Data from an <code>MsExperiment</code> object can be accessed with the dedicated
+accessor functions:</p><ul><li><p><code>experimentFiles</code>, <code>experimentFiles&lt;-</code>: gets or sets experiment files.</p></li>
+<li><p><code>metadata</code>, <code>metadata&lt;-</code>: gets or sets the object's metadata.</p></li>
+<li><p><code>sampleData</code>, <code>sampleData</code>: gets or sets the object's sample data (i.e. a
+<code>DataFrame</code> containing sample descriptions).</p></li>
+<li><p><code>spectra</code>, <code>spectra&lt;-</code>: gets or sets spectra data. <code>spectra</code> returns a
+<code><a href="https://rdrr.io/pkg/Spectra/man/Spectra.html" class="external-link">Spectra()</a></code> object, <code>spectra&lt;-</code> takes a <code>Spectra</code> data as input and returns
+the updated <code>MsExperiment</code>.</p></li>
+<li><p><code>qdata</code>, <code>qdata&lt;-</code>: gets or sets the quantification data, which can be a
+<code>QFeatures</code> or <code>SummarizedExperiment</code>.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="linking-sample-data-to-other-experimental-data">Linking sample data to other experimental data<a class="anchor" aria-label="anchor" href="#linking-sample-data-to-other-experimental-data"></a></h2>
@@ -414,7 +485,7 @@ See the vignette for details and examples.</p></li>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
 </div>
 
     </footer></div>
