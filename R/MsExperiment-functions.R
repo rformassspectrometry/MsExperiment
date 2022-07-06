@@ -305,3 +305,20 @@ sampleData  <- function(object) {
     } else x <- x[i]
     x
 }
+
+#' @export
+#'
+#' @rdname MsExperiment
+qdata <- function(object) {
+    stopifnot(inherits(object, "MsExperiment"))
+    object@assay
+}
+
+#' @export
+#'
+#' @rdname MsExperiment
+"qdata<-" <- function(object, value) {
+    stopifnot(inherits(object, "MsExperiment"))
+    object@assay <- value
+    object
+}

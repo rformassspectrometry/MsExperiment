@@ -61,3 +61,35 @@ test_that("[,LinkedMsExperiment works", {
     res <- tmp[, c(TRUE, FALSE)]
     expect_equal(sampleData(res), sampleData(tmp)[1, ])
 })
+
+test_that("MsExperiment works", {
+    m <- MsExperiment()
+    expect_s4_class(m, "MsExperiment")
+})
+
+test_that("show,MsExperiment works", {
+    expect_output(show(MsExperiment()), "MsExperiment")
+    expect_output(show(mse), "Experiment data")
+})
+
+test_that("metadata<-,metadata,MsExperiment works", {
+    m <- MsExperiment()
+    metadata(m) <- list(version = "1.2", data = "1900")
+    res <- metadata(m)
+    expect_equal(res$version, "1.2")
+    expect_equal(res$data, "1900")
+})
+
+test_that("spectra<-,spectra,MsExperiment works", {
+    m <- MsExperiment()
+    expect_null(spectra(m))
+
+    res <- spectra(mse)
+    expect_s4_class(res, "Spectra")
+    expect_true(length(res) > 0)
+
+    spectra(m) <- res
+    expect_equal(spectra(m), res)
+
+    expect_error(spectra(m) <- "b")
+})

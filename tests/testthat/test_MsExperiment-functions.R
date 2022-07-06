@@ -182,6 +182,45 @@ test_that(".extractSamples works", {
     expect_equal(res@assay$sample, c("QC1", "QC1"))
 })
 
+test_that("experimentFiles works", {
+    expect_error(experimentFiles(4))
+    res <- experimentFiles(MsExperiment())
+    expect_true(length(res) == 0)
+
+    res <- experimentFiles(mse)
+    expect_s4_class(res, "MsExperimentFiles")
+    expect_true(length(res) == 2)
+})
+
+test_that("experimentFiles<- works", {
+    expect_error(experimentFiles(4) <- 4)
+    m <- MsExperiment()
+    expect_error(experimentFiles(m) <- c(a = "b"))
+    mf <- MsExperimentFiles(a = "b")
+    experimentFiles(m) <- mf
+    expect_equal(experimentFiles(m), mf)
+})
+
+test_that("sampleData works", {
+    expect_error(sampleData(4))
+    res <- sampleData(MsExperiment())
+    expect_s4_class(res, "DataFrame")
+    expect_true(nrow(res) == 0)
+
+    res <- sampleData(mse)
+    expect_s4_class(res, "DataFrame")
+    expect_true(nrow(res) > 0)
+})
+
+test_that("sampleData<- works", {
+    expect_error(sampleData(4) <- DataFrame())
+    m <- MsExperiment()
+    expect_error(sampleData(m) <- 4)
+    df <- DataFrame(a = 1:3, b = 3:1)
+    sampleData(m) <- df
+    expect_equal(sampleData(m), df)
+})
+
 test_that(".nelements works", {
     expect_equal(.nelements(1:10), 10)
     expect_equal(.nelements(matrix(nrow = 3, ncol = 2)), 3)
@@ -195,4 +234,16 @@ test_that(".subset_dim works", {
     expect_equal(res, cbind(2:3, 12:13))
     res <- .subset_dim(cbind(1:10, 11:20), 2, subsetBy = 2)
     expect_equal(res, matrix(11:20, ncol = 1))
+})
+
+test_that("qdata, qdata<- works", {
+    expect_error(qdata(3), "MsExperiment")
+
+    expect_equal(qdata(mse), NULL)
+
+    tmp <- MsExperiment()
+    se <- SummarizedExperiment::SummarizedExperiment(matrix(nrow = 3, ncol = 4))
+    expect_error(qdata(se) <- 4, "MsExperiment")
+    qdata(tmp) <- se
+    expect_equal(qdata(tmp), se)
 })

@@ -1,8 +1,15 @@
 Package: MsExperiment
 Title: Infrastructure for Mass Spectrometry Experiments
-Version: 0.6.1
+Version: 0.99.0
 Description: Infrastructure to store and manage all aspects related to
-   a complete proteomics or metabolomics mass spectrometry experiment.
+   a complete proteomics or metabolomics mass spectrometry (MS) experiment. The
+   MsExperiment package provides light-weight and flexible containers for MS
+   experiments building on the new MS infrastructure provided by the Spectra,
+   QFeatures and related packages. Along with raw data representations, links
+   to original data files and sample annotations, additional metadata or
+   annotations can also be stored within the MsExperiment container. To
+   guarantee maximum flexibility only minimal constraints are put on the type
+   and content of the data within the containers.
 Authors@R: c(person(given = "Laurent", family = "Gatto",
                     comment = c(ORCID = "0000-0002-1520-2268"),
                     email = "laurent.gatto@uclouvain.be",
@@ -16,7 +23,7 @@ Authors@R: c(person(given = "Laurent", family = "Gatto",
                     email = "mail@sebastiangibb.de",
                     role = "aut"))
 Depends:
-    R (>= 3.5.0),
+    R (>= 4.2),
     ProtGenerics (>= 1.9.1),
 Imports:
     methods,
@@ -39,8 +46,8 @@ LazyData: no
 VignetteBuilder: knitr
 BugReports: https://github.com/RforMassSpectrometry/MsExperiment/issues
 URL: https://github.com/RforMassSpectrometry/MsExperiment
-biocViews: Infrastructure, Proteomics, MassSpectrometry, Metabolomics
-RoxygenNote: 7.1.2
+biocViews: Infrastructure, Proteomics, MassSpectrometry, Metabolomics, ExperimentalDesign, DataImport
+RoxygenNote: 7.2.0
 Roxygen: list(markdown=TRUE)
 Collate:
     'MsExperiment-functions.R'

@@ -11,7 +11,7 @@ existMsExperimentFiles <- function(object) {
         object <- experimentFiles(object)
     stopifnot(inherits(object, "MsExperimentFiles"))
     res <- LogicalList(lapply(object, file.exists))
-    message(paste0(names(res), ": ", sapply(res, sum),
+    message(paste0(names(res), ": ", vapply(res, sum, integer(1)),
                    " out of ", lengths(res), " exist(s)\n"))
     invisible(res)
 }
