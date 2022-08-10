@@ -40,14 +40,14 @@ additional files and data, such as annotations, within the object.
 In this vignette, we will describe how to create a `MsExperiment` object and
 populate it with various types of data.
 
-```{r}
+```{r load_pkg}
 library("MsExperiment")
 ```
 
 We will also use the `r Biocpkg("Spectra")` package to import MS data and thus
 load it here too.
 
-```{r}
+```{r load_spectra}
 library("Spectra")
 ```
 
@@ -75,7 +75,7 @@ from the PRIDE repository, and download files of interest. Note that
 these will automatically be cached in the `rpx` packages' cache
 directory.
 
-```{r, eval = TRUE}
+```{r px, eval = TRUE}
 library("rpx")
 px <- PXDataset("PXD022816")
 px
@@ -92,7 +92,7 @@ you can safelfy answer *yes*. The files will then be downloaded. Next
 time you want to get the same files, they will be loaded automatically
 from cache.
 
-```{r, eval = TRUE}
+```{r fls, eval = TRUE}
 (i <- grep(".+0[12].+mzML$", pxfiles(px), value = TRUE))
 fls <- pxget(px, i)
 fls
@@ -104,7 +104,7 @@ Let's start by creating an empty `MsExperiment` object that we will
 populate with different pieces of data as we proceed with the analysis
 of our data.
 
-```{r, eval = TRUE}
+```{r make_exp, eval = TRUE}
 msexp <- MsExperiment()
 msexp
 ```
@@ -117,7 +117,7 @@ to the mzML files, let's also assume we have the human proteomics
 fasta file ready. Later, when loading the raw data into R, we will
 refer directly to the files in this `MsExperimentFiles` object.
 
-```{r, eval = TRUE}
+```{r make_exp_fls, eval = TRUE}
 msfls <- MsExperimentFiles(mzmls = fls,
                            fasta = "homo_sapiens.fasta")
 msfls
@@ -125,7 +125,7 @@ msfls
 
 Let's add these files to the main experiment management object:
 
-```{r, eval = TRUE}
+```{r add_exp_fls, eval = TRUE}
 experimentFiles(msexp) <- msfls
 msexp
 ```
@@ -141,7 +141,7 @@ one-to-many, in labelled multiplexed approaches.
 Here, we are simply going to use the `colData` slot to match the files
 to their respective fractions:
 
-```{r, eval = TRUE}
+```{r add_sample_data, eval = TRUE}
 sampleData(msexp) <- DataFrame(mzmls = basename(experimentFiles(msexp)[["mzmls"]]),
                                fractions = 1:2)
 sampleData(msexp)
@@ -154,14 +154,14 @@ the mzML files. If you are not familiar with the `Spectra` object,
 please refer to the [package
 vignettes](https://rformassspectrometry.github.io/Spectra/articles/Spectra.html).
 
-```{r, eval = TRUE}
+```{r sp, eval = TRUE}
 sp <- Spectra(experimentFiles(msexp)[["mzmls"]])
 sp
 ```
 
 We can now add this object to the main experiment management object:
 
-```{r, eval = TRUE}
+```{r add_sp, eval = TRUE}
 spectra(msexp) <- sp
 msexp
 ```
@@ -189,7 +189,7 @@ java -jar /path/to/MSGFPlus.jar \
 
 We can easily build such a command for each of our input file:
 
-```{r, eval = TRUE}
+```{r make_cmd, eval = TRUE}
 mzids <- sub("mzML", "mzid", basename(experimentFiles(msexp)[["mzmls"]]))
 paste0("java -jar /path/to/MSGFPlus.jar",
        " -s ", experimentFiles(msexp)[["mzmls"]],
@@ -205,7 +205,7 @@ MSGF+, but a simple shell script that will generate mzid files in a
 temporary R directory.
 
 
-```{r, eval = TRUE}
+```{r touch, eval = TRUE}
 (output <- file.path(tempdir(), mzids))
 cmd <- paste("touch", output)
 cmd
@@ -215,13 +215,13 @@ The `cmd` variable holds the two commands to be run on the command
 line that will generate the new files. We can run each of these
 commands with the `system()` function.
 
-```{r, eval = TRUE}
+```{r system, eval = TRUE}
 sapply(cmd, system)
 ```
 
 Below, we add the names of the newly created files to our experiment:
 
-```{r, eval = TRUE}
+```{r add_mzids, eval = TRUE}
 experimentFiles(msexp)[["mzids"]] <- mzids
 experimentFiles(msexp)
 msexp
@@ -232,7 +232,7 @@ the mzid files in the experiment's metadata slot. Here, we use the
 convention to name that metadata item `"mzmls_to_mzids"` to document
 to input and output of these commands.
 
-```{r, eval = TRUE}
+```{r add_cmd, eval = TRUE}
 metadata(msexp)[["mzmls_to_mzids"]] <- cmd
 metadata(msexp)
 ```
@@ -241,7 +241,7 @@ Finally, the `existMsExperimentFiles()` can be used at any time to
 check which of files that are associated with an experiment actually
 exist:
 
-```{r, eval = TRUE}
+```{r exp_exists, eval = TRUE}
 existMsExperimentFiles(msexp)
 ```
 
@@ -252,12 +252,12 @@ pertaining to a mass spectrometry experiment. It is now possible to
 save that object and reload it later to recover all data and metadata.
 
 
-```{r, eval = TRUE}
+```{r save_exp, eval = TRUE}
 saveRDS(msexp, "msexp.rda")
 rm(list = ls())
 ```
 
-```{r, eval = TRUE}
+```{r read_exp, eval = TRUE}
 msexp <- readRDS("msexp.rda")
 msexp
 experimentFiles(msexp)
@@ -267,7 +267,7 @@ We can access the raw data as long as the mzML files that were used to
 generate it still exist in their original location, which is the case
 here as they were saved in the `rpx` cache directory.
 
-```{r, eval = TRUE}
+```{r plot_sp, eval = TRUE}
 sp <- spectra(msexp)
 sp
 plotSpectra(sp[1000])
@@ -285,7 +285,7 @@ variables or conditions.
 Below we generate an `MsExperiment` object for a simple experiment consisting of
 a single sample measured in two different injections to the same LC-MS setup.
 
-```{r}
+```{r make_exp2}
 lmse <- MsExperiment()
 sd <- DataFrame(sample_id = c("QC1", "QC2"),
                 sample_name = c("QC Pool", "QC Pool"),
@@ -299,7 +299,7 @@ are available within the `msdata` R package. We add also an additional
 e.g. a file with m/z and retention times of internal standards added to the
 sample (note that such files don't necessarily have to exist).
 
-```{r}
+```{r add_fls2}
 fls <- dir(system.file("sciex", package = "msdata"), full.names = TRUE)
 basename(fls)
 
@@ -312,7 +312,7 @@ Next we load the MS data from the mzML files as a `Spectra` object and add them
 to the experiment (see the vignette of the `r BiocStyle::Biocpkg("Spectra")` for
 details on import and representation of MS data).
 
-```{r}
+```{r add_sp2}
 sps <- Spectra(fls, backend = MsBackendMzR())
 spectra(lmse) <- sps
 lmse
@@ -325,7 +325,7 @@ to the samples: we want to link the first mzML file in the element called
 `"mzML_file"` in the object's `experimentFiles` to the first row in `sampleData`
 and the second file to the second row.
 
-```{r}
+```{r link_sample_data}
 lmse <- linkSampleData(lmse, with = "experimentFiles.mzML_file",
                         sampleIndex = c(1, 2), withIndex = c(1, 2))
 ```
@@ -360,7 +360,7 @@ knitr::include_graphics("imgs/Links_01.png")
 We next establish a second link between each sample and the *annotation*
 file `"internal_standards.txt"` in `experimentFiles(lmse)$standards`:
 
-```{r}
+```{r link_sample_data2}
 lmse <- linkSampleData(lmse, with = "experimentFiles.annotations",
                         sampleIndex = c(1, 2), withIndex = c(1, 1))
 ```
@@ -388,7 +388,7 @@ can now add links between spectra and samples by matching this raw file name to
 the original file name from which the spectra were imported (which is available
 in the `"dataOrigin"` spectra variable).
 
-```{r}
+```{r link_sample_data3}
 sampleData(lmse)$raw_file <- normalizePath(fls)
 lmse <- linkSampleData(
     lmse, with = "sampleData.raw_file = spectra.dataOrigin")
@@ -397,7 +397,7 @@ lmse <- linkSampleData(
 The link was thus established between matching values in
 `sampleData(lmse)$raw_file` and `spectra(lmse)$dataOrigin`.
 
-```{r}
+```{r show_link}
 sampleData(lmse)$raw_file
 head(spectra(lmse)$dataOrigin)
 ```
@@ -410,7 +410,7 @@ the `MsExperiment`.
 knitr::include_graphics("imgs/Links_03.png")
 ```
 
-```{r}
+```{r show_exp2}
 lmse
 ```
 
@@ -421,7 +421,7 @@ such quantified feature values and add that to our experiment. To show that
 `SummarizedExperiment` that contains values for an additional sample which is
 not present in our `sampleData`. Also, we add samples in an arbitrary order.
 
-```{r, message = FALSE}
+```{r add_se, message = FALSE}
 library(SummarizedExperiment)
 sd <- DataFrame(sample = c("QC2", "QC1", "QC3"), idx = c(3, 1, 5))
 se <- SummarizedExperiment(colData = sd, assay = cbind(1:10, 11:20, 21:30))
@@ -434,7 +434,7 @@ Next we link the samples in this `SummarizedExperiment` to the samples to in the
 object's `sampleData` and the column `"sample"` in the `SummarizedExperiment`'s
 `"sample"` variable.
 
-```{r}
+```{r link_sample_data4}
 sampleData(lmse)$sample_id
 qdata(lmse)$sample
 
@@ -446,7 +446,7 @@ The main advantage of all these links is that any subsetting of the experiment
 by sample will keep the (linked) data consistent. To illustrate this we subset
 below the experiment to the second sample.
 
-```{r}
+```{r subset_exp2}
 b <- lmse[, 2]
 b
 ```
@@ -456,7 +456,7 @@ second sample. Accessing the `assay` of the `SummarizedExperiment` in
 `assay` will thus return only the quantified feature abundances for this
 second sample.
 
-```{r}
+```{r extract_exp2}
 assay(qdata(b))
 ```
 
@@ -464,7 +464,7 @@ But what happens for data elements that are not linked to any sample? Below we
 add a `data.frame` as a `metadata` to the experiment and subset the object
 again.
 
-```{r}
+```{r add_metadata}
 metadata(lmse)$other <- data.frame(sample_name = c("study_1", "POOL", "study_2"),
                                   index = 1:3)
 b <- lmse[, 2]
@@ -475,7 +475,7 @@ By default, any element which is **not** linked to a sample is retained. We next
 link each sample to the second row in this data frame and subset the data again
 to the second sample.
 
-```{r}
+```{r link_sample_data5}
 lmse <- linkSampleData(lmse, with = "metadata.other",
                       sampleIndex = 1:2, withIndex = c(2, 2))
 b <- lmse[, 2]
@@ -486,7 +486,7 @@ Subsetting thus retained only the row in the data frame for the linked
 sample. Obviously it is also possible to subset to multiple samples, in
 arbitrary order. Below we re-order our experiment.
 
-```{r}
+```{r show_subset_exp2}
 lmse <- lmse[, c(2, 1)]
 sampleData(lmse)
 ```
@@ -494,14 +494,14 @@ sampleData(lmse)
 The sample order is thus reversed and also all other linked elements are
 re-ordered accordingly, such as `"mzML_file"` in the object's `experimentFiles`.
 
-```{r}
+```{r show_expfls2_msml}
 experimentFiles(lmse)$mzML_file
 ```
 
 It is however important to note, that subsetting will also *duplicate* elements
 that are associated with multiple samples:
 
-```{r}
+```{r show_explfs2_annot}
 experimentFiles(lmse)$annotations
 ```
 
