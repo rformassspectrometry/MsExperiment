@@ -322,3 +322,12 @@ qdata <- function(object) {
     object@qdata <- value
     object
 }
+
+.ms_experiment_is_empty <- function(object) {
+    if (length(object@experimentFiles)) return(FALSE)
+    if (length(object@spectra)) return(FALSE)
+    if (length(object@qdata)) return(FALSE)
+    if (length(object@otherData)) return(FALSE)
+    if (length(object@sampleData)) return(FALSE)
+    TRUE
+}

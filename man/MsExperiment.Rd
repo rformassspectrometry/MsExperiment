@@ -11,6 +11,7 @@
 \alias{MsExperiment}
 \alias{MsExperiment-class}
 \alias{show,MsExperiment-method}
+\alias{length,MsExperiment-method}
 \alias{spectra,MsExperiment-method}
 \alias{spectra<-}
 \alias{linkSampleData}
@@ -33,6 +34,8 @@ MsExperiment()
 
 \S4method{show}{MsExperiment}(object)
 
+\S4method{length}{MsExperiment}(x)
+
 \S4method{spectra}{MsExperiment}(object)
 
 spectra(object) <- value
@@ -53,6 +56,8 @@ linkSampleData(
 \item{value}{An object of the appropriate class for the slot to be
 populated.}
 
+\item{x}{an \code{MsExperiment}.}
+
 \item{with}{for \code{linkSampleData}: \code{character(1)} defining the data to which
 samples should be linked. See section \emph{Linking sample data to other
 experimental data} for details.}
@@ -68,8 +73,6 @@ should be linked to.}
 dimension on which the subsetting will occurr on the linked data.
 Defaults to \code{subsetBy = 1L} thus subsetting will happen on the first
 dimension (rows or elements).}
-
-\item{x}{an \code{MsExperiment}.}
 
 \item{i}{for \code{[}: not supported.}
 
@@ -149,6 +152,8 @@ Data from an \code{MsExperiment} object can be accessed with the dedicated
 accessor functions:
 \itemize{
 \item \code{experimentFiles}, \verb{experimentFiles<-}: gets or sets experiment files.
+\item \code{length}: get the \emph{length} of the object which represents the number of
+samples availble in the object's \code{sampleData}.
 \item \code{metadata}, \verb{metadata<-}: gets or sets the object's metadata.
 \item \code{sampleData}, \code{sampleData}: gets or sets the object's sample data (i.e. a
 \code{DataFrame} containing sample descriptions).

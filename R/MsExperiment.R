@@ -53,6 +53,9 @@
 #'
 #' - `experimentFiles`, `experimentFiles<-`: gets or sets experiment files.
 #'
+#' - `length`: get the *length* of the object which represents the number of
+#'   samples availble in the object's `sampleData`.
+#'
 #' - `metadata`, `metadata<-`: gets or sets the object's metadata.
 #'
 #' - `sampleData`, `sampleData`: gets or sets the object's sample data (i.e. a
@@ -298,7 +301,10 @@ MsExperiment <- function()
 #'
 #' @exportMethod show
 setMethod("show", "MsExperiment", function(object) {
-    cat("Object of class", class(object), "\n")
+    mess <- "Object of class"
+    if (.ms_experiment_is_empty(object))
+        mess <- "Empty object of class"
+    cat(mess, class(object), "\n")
     if (!is.null(experimentFiles(object)))
         cat(" Files:", paste(names(experimentFiles(object)),
                              collapse = ", "), "\n")
@@ -323,6 +329,13 @@ setMethod("show", "MsExperiment", function(object) {
                 sep = "")
         }
     }
+})
+
+#' @rdname MsExperiment
+#'
+#' @exportMethod length
+setMethod("length", "MsExperiment", function(x) {
+    nrow(sampleData(x))
 })
 
 ## ------------------------------##

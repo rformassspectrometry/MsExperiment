@@ -70,6 +70,7 @@ test_that("MsExperiment works", {
 test_that("show,MsExperiment works", {
     expect_output(show(MsExperiment()), "MsExperiment")
     expect_output(show(mse), "Experiment data")
+    expect_output(show(MsExperiment()), "Empty object")
 })
 
 test_that("metadata<-,metadata,MsExperiment works", {

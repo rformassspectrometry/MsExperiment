@@ -247,3 +247,8 @@ test_that("qdata, qdata<- works", {
     qdata(tmp) <- se
     expect_equal(qdata(tmp), se)
 })
+
+test_that(".ms_experiment_is_empty works", {
+    expect_true(.ms_experiment_is_empty(MsExperiment()))
+    expect_false(.ms_experiment_is_empty(mse))
+})
