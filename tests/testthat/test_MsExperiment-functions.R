@@ -99,7 +99,7 @@ test_that(".link_matrix works", {
 
 test_that(".extractSamples works", {
     tmp <- mse
-    res <- .extractSamples(tmp, j = 2)
+    res <- .extractSamples(tmp, i = 2)
     expect_equal(spectra(res), spectra(tmp))
     expect_equal(sampleData(res), sampleData(tmp)[2, ])
 
@@ -128,7 +128,7 @@ test_that(".extractSamples works", {
     metadata(tmp)$not_linked <- "not linked"
 
     ## Extract a single sample
-    res <- .extractSamples(tmp, j = 2)
+    res <- .extractSamples(tmp, i = 2)
     expect_equal(sampleData(res), sampleData(tmp)[2, ])
     expect_equal(experimentFiles(res)$other_file, "other_file.txt")
     expect_equal(experimentFiles(res)$mzML_file, experimentFiles(tmp)$mzML_file[2])
@@ -138,7 +138,7 @@ test_that(".extractSamples works", {
     expect_equal(metadata(res)$not_linked, "not linked")
 
     ## Re-ordering of samples
-    res <- .extractSamples(tmp, j = c(2, 1))
+    res <- .extractSamples(tmp, i = c(2, 1))
     expect_equal(sampleData(res), sampleData(tmp)[2:1, ])
     ## ! n:1 mapping gets duplicated!
     expect_equal(experimentFiles(res)$other_file, rep("other_file.txt", 2))
@@ -152,7 +152,7 @@ test_that(".extractSamples works", {
     expect_equal(metadata(res)$multivals, c("AB", "B", "AB", "A"))
 
     ## Duplication of samples
-    res <- .extractSamples(tmp, j = c(2, 2))
+    res <- .extractSamples(tmp, i = c(2, 2))
     expect_equal(sampleData(res), sampleData(tmp)[c(2, 2), ])
     expect_equal(experimentFiles(res)$other_file, rep("other_file.txt", 2))
     expect_equal(experimentFiles(res)$mzML_file,
@@ -172,13 +172,13 @@ test_that(".extractSamples works", {
     tmp <- linkSampleData(tmp, with = "sampleData.sample = qdata.sample")
     expect_equal(mcols(tmp@sampleDataLinks["qdata"])$subsetBy, 2L)
 
-    res <- .extractSamples(tmp, j = 2)
+    res <- .extractSamples(tmp, i = 2)
     expect_equal(sampleData(res), sampleData(tmp)[2, ])
     expect_equal(res@qdata$sample, "QC2")
     expect_equal(assay(res@qdata),
                  matrix(1:10, ncol = 1, dimnames = list(character(), "QC2")))
 
-    res <- .extractSamples(tmp, j = c(1, 1))
+    res <- .extractSamples(tmp, i = c(1, 1))
     expect_equal(res@qdata$sample, c("QC1", "QC1"))
 })
 

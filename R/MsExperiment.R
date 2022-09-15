@@ -8,9 +8,10 @@
 #'
 #' The `MsExperiment` class allows the storage and management of all
 #' aspects related to a complete proteomics or metabolomics mass
-#' spectrometry experiment. This includes experimantal design, raw
-#' mass spectromtry data as spectra and chromatograms, quantitative
-#' features, and identification data or any other relevant data files.
+#' spectrometry experiment. This includes experimantal design (i.e. a table
+#' with samples), raw mass spectromtry data as spectra and chromatograms,
+#' quantitative features, and identification data or any other relevant data
+#' files.
 #'
 #' For details, see https://rformassspectrometry.github.io/MsExperiment
 #'
@@ -45,6 +46,13 @@
 #'   identification data (i.e peptide-spectrum matches defined as
 #'   `PSM()` objects) can be added as elements to the list stored in
 #'   the `otherData` slot.
+#'
+#' The *length* of a `MsExperiment` is defined by the number of samples (i.e.
+#' the number of rows of the object's `sampleData`). A `MsExperiment` with two
+#' samples will thus have a length of two, independently of the number of files
+#' or length of raw data in the object. This also defines the subsetting of the
+#' object using the `[` function which will always subset by samples. See the
+#' section for filtering and subsetting below for more information.
 #'
 #' @section Accessing data:
 #'
@@ -128,8 +136,8 @@
 #'
 #' @section Subsetting and filtering:
 #'
-#' - `[`: `MsExperiment` objects can be subsetted **by samples** with `[, j]`
-#'   where `j` is the index or a logical defining to which samples the data
+#' - `[`: `MsExperiment` objects can be subsetted **by samples** with `[i]`
+#'   where `i` is the index or a logical defining to which samples the data
 #'   should be subsetted. Subsetting by sample will (correctly) subset all
 #'   linked data to the respective samples. Not linked data (slots) will be
 #'   returned as they are. Subsetting in arbitrary order is supported.
@@ -139,10 +147,10 @@
 #'
 #' @param drop for `[`: ignored.
 #'
-#' @param i for `[`: not supported.
-#'
-#' @param j for `[`: an `integer`, `character` or `logical` referring to the
+#' @param i for `[`: an `integer`, `character` or `logical` referring to the
 #'     indices or names (rowname of `sampleData`) of the samples to subset.
+#'
+#' @param j for `[`: not supported.
 #'
 #' @param object an `MsExperiment`.
 #'
@@ -230,7 +238,7 @@
 #'
 #' ## With sampleData links present, any subsetting of the experiment by sample
 #' ## will ensure that all linked elements are subsetted accordingly
-#' b <- mse[, 2]
+#' b <- mse[2]
 #' b
 #' sampleData(b)
 #' experimentFiles(b)$mzML_files
@@ -410,21 +418,21 @@ linkSampleData <- function(object, with = character(),
 #'
 #' @export
 setMethod("[", "MsExperiment", function(x, i, j, ..., drop = FALSE) {
-    if (!missing(i))
-        stop("Only subsetting with '[, j]' is supported.")
-    lj <- length(j)
-    if (is.character(j)) {
-        j <- match(j, rownames(sampleData(x)))
-        if (any(is.na(j)))
-            warning(sum(is.na(j)), " of ", lj, " values could not be ",
+    if (!missing(j))
+        stop("Only subsetting with '[i]' is supported.")
+    li <- length(i)
+    if (is.character(i)) {
+        i <- match(i, rownames(sampleData(x)))
+        if (any(is.na(i)))
+            warning(sum(is.na(i)), " of ", li, " values could not be ",
                     "matched to rownames of 'sampleData(x)'")
-        j <- j[!is.na(j)]
+        i <- i[!is.na(i)]
     }
-    if (is.logical(j)) {
-        if (lj != nrow(sampleData(x)))
-            stop("if 'j' is logical its length has to match the number of ",
+    if (is.logical(i)) {
+        if (li != nrow(sampleData(x)))
+            stop("if 'i' is logical its length has to match the number of ",
                  "samples in 'x'.")
-        j <- which(j)
+        i <- which(i)
     }
-    .extractSamples(x, j, newx = x)
+    .extractSamples(x, i, newx = x)
 })

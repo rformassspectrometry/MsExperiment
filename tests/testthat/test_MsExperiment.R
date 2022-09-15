@@ -53,13 +53,17 @@ test_that("linkSampleData,MsExperiment works", {
 
 test_that("[,LinkedMsExperiment works", {
     tmp <- mse
-    expect_error(res <- tmp[, 4], "out-of-bound")
+    expect_error(res <- tmp[4], "out-of-bound")
     expect_error(res <- tmp[1, 2], "is supported")
-    expect_error(res <- tmp[, c(TRUE, FALSE, TRUE)], "number of")
-    expect_warning(tmp[, c("b")], "rownames")
+    expect_error(res <- tmp[c(TRUE, FALSE, TRUE)], "number of")
+    expect_warning(tmp[c("b")], "rownames")
 
-    res <- tmp[, c(TRUE, FALSE)]
+    res <- tmp[c(TRUE, FALSE)]
     expect_equal(sampleData(res), sampleData(tmp)[1, ])
+
+    ## TODO:
+    ## - subsetting and equality.
+    ## - subset including qdata.
 })
 
 test_that("MsExperiment works", {

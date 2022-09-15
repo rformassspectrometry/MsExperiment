@@ -200,7 +200,7 @@
 #'
 #' @param x `LinkedMsExperiment`.
 #'
-#' @param j `integer`
+#' @param i `integer`
 #'
 #' @param newx `LinkedMsExperiment`. Result objects. Might help avoiding
 #'     repeatedly copying the object if `.extractSamples` is called within
@@ -212,15 +212,15 @@
 #' @importFrom methods slot<- callNextMethod
 #'
 #' @noRd
-.extractSamples <- function(x, j, newx = x) {
+.extractSamples <- function(x, i, newx = x) {
     if (!nrow(sampleData(x)))
         return(x)
-    slot(newx, "sampleData", check = FALSE) <- x@sampleData[j, , drop = FALSE]
+    slot(newx, "sampleData", check = FALSE) <- x@sampleData[i, , drop = FALSE]
     for (link in names(slot(x, "sampleDataLinks"))) {
         lmat <- slot(x, "sampleDataLinks")[[link]]
         subsetBy <- mcols(slot(x, "sampleDataLinks"))[link, "subsetBy"]
         idxs <- split(lmat[, 2], as.factor(lmat[, 1]))
-        idxs <- idxs[as.character(j)]
+        idxs <- idxs[as.character(i)]
         ls <- lengths(idxs)
         idxs <- unlist(idxs, use.names = FALSE)
         element <- .get_element(x, link)

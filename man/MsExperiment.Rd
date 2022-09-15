@@ -74,10 +74,10 @@ dimension on which the subsetting will occurr on the linked data.
 Defaults to \code{subsetBy = 1L} thus subsetting will happen on the first
 dimension (rows or elements).}
 
-\item{i}{for \code{[}: not supported.}
-
-\item{j}{for \code{[}: an \code{integer}, \code{character} or \code{logical} referring to the
+\item{i}{for \code{[}: an \code{integer}, \code{character} or \code{logical} referring to the
 indices or names (rowname of \code{sampleData}) of the samples to subset.}
+
+\item{j}{for \code{[}: not supported.}
 
 \item{...}{optional additional parameters.}
 
@@ -89,9 +89,10 @@ See help of the individual functions.
 \description{
 The \code{MsExperiment} class allows the storage and management of all
 aspects related to a complete proteomics or metabolomics mass
-spectrometry experiment. This includes experimantal design, raw
-mass spectromtry data as spectra and chromatograms, quantitative
-features, and identification data or any other relevant data files.
+spectrometry experiment. This includes experimantal design (i.e. a table
+with samples), raw mass spectromtry data as spectra and chromatograms,
+quantitative features, and identification data or any other relevant data
+files.
 
 For details, see https://rformassspectrometry.github.io/MsExperiment
 
@@ -143,6 +144,13 @@ identification data (i.e peptide-spectrum matches defined as
 \code{PSM()} objects) can be added as elements to the list stored in
 the \code{otherData} slot.
 }
+
+The \emph{length} of a \code{MsExperiment} is defined by the number of samples (i.e.
+the number of rows of the object's \code{sampleData}). A \code{MsExperiment} with two
+samples will thus have a length of two, independently of the number of files
+or length of raw data in the object. This also defines the subsetting of the
+object using the \code{[} function which will always subset by samples. See the
+section for filtering and subsetting below for more information.
 }
 
 \section{Accessing data}{
@@ -228,8 +236,8 @@ same data element.
 \section{Subsetting and filtering}{
 
 \itemize{
-\item \code{[}: \code{MsExperiment} objects can be subsetted \strong{by samples} with \verb{[, j]}
-where \code{j} is the index or a logical defining to which samples the data
+\item \code{[}: \code{MsExperiment} objects can be subsetted \strong{by samples} with \verb{[i]}
+where \code{i} is the index or a logical defining to which samples the data
 should be subsetted. Subsetting by sample will (correctly) subset all
 linked data to the respective samples. Not linked data (slots) will be
 returned as they are. Subsetting in arbitrary order is supported.
@@ -293,7 +301,7 @@ mse
 
 ## With sampleData links present, any subsetting of the experiment by sample
 ## will ensure that all linked elements are subsetted accordingly
-b <- mse[, 2]
+b <- mse[2]
 b
 sampleData(b)
 experimentFiles(b)$mzML_files
