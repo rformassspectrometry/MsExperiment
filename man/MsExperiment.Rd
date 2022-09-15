@@ -10,12 +10,9 @@
 \alias{qdata<-}
 \alias{MsExperiment}
 \alias{MsExperiment-class}
-\alias{metadata,MsExperiment}
 \alias{show,MsExperiment-method}
 \alias{spectra,MsExperiment-method}
 \alias{spectra<-}
-\alias{metadata,MsExperiment-method}
-\alias{metadata<-,MsExperiment-method}
 \alias{linkSampleData}
 \alias{[,MsExperiment,ANY,ANY,ANY-method}
 \title{Managing Mass Spectrometry Experiments}
@@ -40,10 +37,6 @@ MsExperiment()
 
 spectra(object) <- value
 
-\S4method{metadata}{MsExperiment}(x)
-
-\S4method{metadata}{MsExperiment}(x) <- value
-
 linkSampleData(
   object,
   with = character(),
@@ -57,9 +50,8 @@ linkSampleData(
 \arguments{
 \item{object}{An instance of class \code{MsExperiment}.}
 
-\item{value}{A \code{list()} to replace the \code{MsExperiment}'s metadata.}
-
-\item{x}{An instance of \code{MsExperiment}.}
+\item{value}{An object of the appropriate class for the slot to be
+populated.}
 
 \item{with}{for \code{linkSampleData}: \code{character(1)} defining the data to which
 samples should be linked. See section \emph{Linking sample data to other
@@ -76,6 +68,8 @@ should be linked to.}
 dimension on which the subsetting will occurr on the linked data.
 Defaults to \code{subsetBy = 1L} thus subsetting will happen on the first
 dimension (rows or elements).}
+
+\item{x}{an \code{MsExperiment}.}
 
 \item{i}{for \code{[}: not supported.}
 
@@ -108,7 +102,7 @@ https://www.rformassspectrometry.org/
 
 \item{\code{spectra}}{An instance of class \code{Spectra} or \code{NULL}.}
 
-\item{\code{assay}}{An instance of class \code{QFeatures}, \code{SummarizedExperiment} or
+\item{\code{qdata}}{An instance of class \code{QFeatures}, \code{SummarizedExperiment} or
 \code{NULL}.}
 
 \item{\code{otherData}}{A \code{List} to store any additional data objects.}
@@ -139,7 +133,7 @@ an \code{Spectra()} object in the \code{spectra} slot. Chromatographic data
 is not yet supported but will be stored as a \code{Chromatograms()}
 object in the \code{chromatorgrams} slot.
 \item Quantification data is stored as \code{QFeatures} or
-\code{SummarizedExperiment} objects in the \code{assay} slot and can be accessed or
+\code{SummarizedExperiment} objects in the \code{qdata} slot and can be accessed or
 replaced with the \code{qdata} or \verb{qdata<-} functions, respectively.
 \item Any additional data, be it other spectra data, or proteomics
 identification data (i.e peptide-spectrum matches defined as

@@ -28,14 +28,15 @@ library(BiocStyle)
 
 # Introduction
 
-The goal of the `MsExperiment` package is to provide a container for all data
-related to a mass spectrometry (MS) experiment. Also other Bioconductor packages
-allow to represent MS experiment data (such as the `r Biocpkg("MSnbase")`
-package). The `MsExperiment` however aims at being very light-weight and
-flexible to accommodate all possible types of MS experiments (proteomics,
-metabolomics, ...) and all types of MS data representations (chromatographic and
-spectral data, quantified features etc). In addition, it allows to bundle
-additional files and data, such as annotations, within the object.
+The goal of the `r Biocpkg("MsExperiment")` package is to provide a container
+for all data related to a mass spectrometry (MS) experiment. Also other
+Bioconductor packages allow to represent MS experiment data (such as the
+`r Biocpkg("MSnbase")` package). The `MsExperiment` however aims at being very
+light-weight and flexible to accommodate all possible types of MS experiments
+(proteomics, metabolomics, ...) and all types of MS data representations
+(chromatographic and spectral data, quantified features etc). In addition, it
+allows to bundle additional files and data, such as annotations, within the
+object.
 
 In this vignette, we will describe how to create a `MsExperiment` object and
 populate it with various types of data.
@@ -54,10 +55,10 @@ library("Spectra")
 
 # Installation
 
-The package can be installed with the `BiocManager` package. To
+The package can be installed with the `r Biocpkg("BiocManager")` package. To
 install `BiocManager` use `install.packages("BiocManager")` and, after that,
-`BiocManager::install("MsExperiment")` to install `MsExperiment` which will
-install the package including all required dependencies.
+`BiocManager::install("MsExperiment")` to install `r Biocpkg("MsExperiment")`
+which will install the package including all required dependencies.
 
 
 # Getting data
@@ -132,20 +133,23 @@ msexp
 
 ## Experimental design
 
-The `colData` slot is used to describe the overall experimental design
+The `sampleData` slot is used to describe the overall experimental design
 of the experiment. It can be used to link samples to the files that
 are part of the experiment. There can be a one-to-one link between a
 sample and a file, such as for example in label-free approaches, or
 one-to-many, in labelled multiplexed approaches.
 
-Here, we are simply going to use the `colData` slot to match the files
-to their respective fractions:
+Here, we create a simple data frame with sample annotations that include the
+original file names and the respective fractions.
 
 ```{r add_sample_data, eval = TRUE}
 sampleData(msexp) <- DataFrame(mzmls = basename(experimentFiles(msexp)[["mzmls"]]),
                                fractions = 1:2)
 sampleData(msexp)
 ```
+
+**TODO**: describe what that means: could have any arbitrary columns/annotations
+for samples.
 
 ## Raw data
 
@@ -431,14 +435,15 @@ qdata(lmse) <- se
 
 Next we link the samples in this `SummarizedExperiment` to the samples to in the
 `MsExperiment` using matching values between the `"sample_id"` column in the
-object's `sampleData` and the column `"sample"` in the `SummarizedExperiment`'s
-`"sample"` variable.
+object's `sampleData` data frame and the column `"sample"` in the
+`SummarizedExperiment`'s `colData` which is stored in the `@qdata` slot. The
+naming convention to define such columns is `<slot name>.<column name>`.
 
 ```{r link_sample_data4}
 sampleData(lmse)$sample_id
 qdata(lmse)$sample
 
-lmse <- linkSampleData(lmse, with = "sampleData.sample_id = assay.sample")
+lmse <- linkSampleData(lmse, with = "sampleData.sample_id = qdata.sample")
 lmse
 ```
 
@@ -453,7 +458,7 @@ b
 
 The subsetted object contains now all data elements that are linked to this
 second sample. Accessing the `assay` of the `SummarizedExperiment` in
-`assay` will thus return only the quantified feature abundances for this
+`qdata` will thus return only the quantified feature abundances for this
 second sample.
 
 ```{r extract_exp2}

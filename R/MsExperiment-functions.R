@@ -311,7 +311,7 @@ sampleData  <- function(object) {
 #' @rdname MsExperiment
 qdata <- function(object) {
     stopifnot(inherits(object, "MsExperiment"))
-    object@assay
+    object@qdata
 }
 
 #' @export
@@ -319,6 +319,6 @@ qdata <- function(object) {
 #' @rdname MsExperiment
 "qdata<-" <- function(object, value) {
     stopifnot(inherits(object, "MsExperiment"))
-    object@assay <- value
+    object@qdata <- value
     object
 }

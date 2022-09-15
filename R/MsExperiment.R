@@ -1,24 +1,8 @@
 #' @include MsExperimentFiles.R
 
-#' @importClassesFrom Spectra Spectra
-#'
-#' @importClassesFrom QFeatures QFeatures
-#'
-#' @importClassesFrom SummarizedExperiment SummarizedExperiment
-#'
-#' @noRd
-setClassUnion("MsExperimentFilesOrNull", c("NULL", "MsExperimentFiles"))
-setClassUnion("SpectraOrNull", c("NULL", "Spectra"))
-
-setClassUnion("QFeaturesOrSummarizedExperiment",
-              c("SummarizedExperiment", "QFeatures"))
-setClassUnion("QFeaturesOrSummarizedExperimentOrNull",
-              c("NULL", "QFeaturesOrSummarizedExperiment"))
-
-
 #' @title Managing Mass Spectrometry Experiments
 #'
-#' @aliases MsExperiment-class MsExperiment metadata,MsExperiment
+#' @aliases MsExperiment-class MsExperiment
 #'
 #' @description
 #'
@@ -54,7 +38,7 @@ setClassUnion("QFeaturesOrSummarizedExperimentOrNull",
 #'   object in the `chromatorgrams` slot.
 #'
 #' - Quantification data is stored as `QFeatures` or
-#'   `SummarizedExperiment` objects in the `assay` slot and can be accessed or
+#'   `SummarizedExperiment` objects in the `qdata` slot and can be accessed or
 #'   replaced with the `qdata` or `qdata<-` functions, respectively.
 #'
 #' - Any additional data, be it other spectra data, or proteomics
@@ -181,13 +165,9 @@ setClassUnion("QFeaturesOrSummarizedExperimentOrNull",
 #'
 #' @name MsExperiment
 #'
-#' @import methods
-#'
 #' @importFrom S4Vectors List DataFrame
 #'
 #' @importClassesFrom S4Vectors List
-#'
-#' @import ProtGenerics
 #'
 #' @author Laurent Gatto, Johannes Rainer
 #'
@@ -263,7 +243,7 @@ NULL
 #'
 #' @slot spectra An instance of class `Spectra` or `NULL`.
 #'
-#' @slot assay An instance of class `QFeatures`, `SummarizedExperiment` or
+#' @slot qdata An instance of class `QFeatures`, `SummarizedExperiment` or
 #'     `NULL`.
 #'
 #' @slot otherData A `List` to store any additional data objects.
@@ -279,27 +259,29 @@ NULL
 #'
 #' @importClassesFrom S4Vectors SimpleList
 #'
+#' @importClassesFrom S4Vectors Annotated
+#'
 #' @importFrom S4Vectors DataFrame
 setClass("MsExperiment",
+         contains = "Annotated",
          slots = c(
-             experimentFiles = "MsExperimentFilesOrNull",
-             spectra = "SpectraOrNull",
-             assay = "QFeaturesOrSummarizedExperimentOrNull",
+             experimentFiles = "MsExperimentFiles_OR_Null",
+             spectra = "Spectra_OR_Null",
+             qdata = "QFeatures_OR_SummarizedExperiment_OR_Null",
              ## chromatograms = "Chromatograms",
              otherData = "List",
              sampleData = "DataFrame",
-             sampleDataLinks = "List",
-             metadata = "list"),
+             sampleDataLinks = "List"),
          prototype = prototype(
              experimentFiles = NULL,
              spectra = NULL,
-             assay = NULL,
+             qdata = NULL,
              otherData = List(),
              sampleData = DataFrame(),
+
              sampleDataLinks = new(
                  "SimpleList", elementMetadata =
-                                   DataFrame(subsetBy = integer())),
-             metadata = list())
+                                   DataFrame(subsetBy = integer())))
          )
 
 #' @rdname MsExperiment
@@ -364,32 +346,6 @@ setMethod("spectra", "MsExperiment", function(object) object@spectra)
     object
 }
 
-#' @export
-#'
-#' @importFrom S4Vectors metadata
-#'
-#' @param x An instance of `MsExperiment`.
-#'
-#' @rdname MsExperiment
-setMethod("metadata", "MsExperiment", function(x) x@metadata)
-
-#' @export
-#'
-#' @importFrom S4Vectors metadata<-
-#'
-#' @param value A `list()` to replace the `MsExperiment`'s metadata.
-#'
-#' @rdname MsExperiment
-setReplaceMethod("metadata", "MsExperiment",
-                 function(x, value) {
-                     if (!is.list(value))
-                         stop("replacement 'metadata' value must be a list")
-                     if (!length(value))
-                         names(value) <- NULL
-                     x@metadata <- value
-                     x
-                 })
-
 #' @rdname MsExperiment
 #'
 #' @export
@@ -426,9 +382,9 @@ linkSampleData <- function(object, with = character(),
         link <- cbind(sampleIndex, withIndex)
     }
     withl <- unlist(strsplit(with, split = ".", fixed = TRUE))
-    if (withl[1L] %in% c("spectra", "assay")) {
+    if (withl[1L] %in% c("spectra", "qdata")) {
         with <- withl[1L]
-        if (with == "assay")
+        if (with == "qdata")
             subsetBy <- 2L
     } else if (length(withl) < 2)
         stop("'with' should be a 'character' with the name of the slot and",
