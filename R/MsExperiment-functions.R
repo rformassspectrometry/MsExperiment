@@ -56,7 +56,7 @@
     .valid_link(link, nfrom, nto)
     if (any(names(.sample_data_links(x)) == with))
         warning("Overwriting previously present link '", with, "'")
-    x@sampleDataLinks[[with]] <- link
+    x@sampleDataLinks[[with]] <- unname(link)
     mcols(x@sampleDataLinks)[with, "subsetBy"] <- subsetBy
     x
 }

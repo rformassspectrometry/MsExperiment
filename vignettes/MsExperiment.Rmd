@@ -455,7 +455,7 @@ b <- lmse[2]
 b
 ```
 
-The subsetted object contains now all data elements that are linked to this
+The subset object contains now all data elements that are linked to this
 second sample. Accessing the `assay` of the `SummarizedExperiment` in
 `qdata` will thus return only the quantified feature abundances for this
 second sample.
@@ -476,7 +476,7 @@ metadata(b)
 ```
 
 By default, any element which is **not** linked to a sample is retained in the
-filtered/subsetted object.
+filtered/subset object.
 
 We next link each sample to the second row in this data frame and subset the
 data again to the second sample.

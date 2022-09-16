@@ -236,11 +236,15 @@ same data element.
 \section{Subsetting and filtering}{
 
 \itemize{
-\item \code{[}: \code{MsExperiment} objects can be subsetted \strong{by samples} with \verb{[i]}
+\item \code{[}: \code{MsExperiment} objects can be subset \strong{by samples} with \verb{[i]}
 where \code{i} is the index or a logical defining to which samples the data
-should be subsetted. Subsetting by sample will (correctly) subset all
-linked data to the respective samples. Not linked data (slots) will be
-returned as they are. Subsetting in arbitrary order is supported.
+should be subset. Subsetting by sample will (correctly) subset all
+linked data to the respective samples. If multiple samples are linked to
+the same data element, subsetting might duplicate that data element. This
+duplication of \emph{n:m} relationships between samples to elements does however
+not affect data consistency (see examples below for more information).
+Not linked data (slots) will be returned as they are. Subsetting in
+arbitrary order is supported.
 See the vignette for details and examples.
 }
 }
@@ -300,11 +304,26 @@ mse <- linkSampleData(mse, with = "sampleData.raw_file = spectra.dataOrigin")
 mse
 
 ## With sampleData links present, any subsetting of the experiment by sample
-## will ensure that all linked elements are subsetted accordingly
+## will ensure that all linked elements are subset accordingly
 b <- mse[2]
 b
 sampleData(b)
 experimentFiles(b)$mzML_files
+
+## Subsetting with duplication of n:m sample to data relationships
+##
+## Both samples were assigned above to one "annotation" file in
+## `experimentFiles`:
+experimentFiles(mse[1])[["annotations"]]
+experimentFiles(mse[2])[["annotations"]]
+
+## Subsetting will always keep the relationship between samples and linked
+## data elements. Subsetting will however eventually duplicate data elements
+## that are shared among samples. Thus, while in the original object the
+## element "annotations" has a single entry, subsetting with [1:2] will
+## result in an MsExperiment with duplicated entries in "annotations"
+experimentFiles(mse)[["annotations"]]
+experimentFiles(mse[1:2])[["annotations"]]
 }
 \author{
 Laurent Gatto, Johannes Rainer
