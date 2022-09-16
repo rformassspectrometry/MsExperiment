@@ -60,7 +60,6 @@ setClass("MsExperimentFiles",
 #' @importClassesFrom SummarizedExperiment SummarizedExperiment
 #'
 #' @noRd
-setClassUnion("MsExperimentFiles_OR_Null", c("NULL", "MsExperimentFiles"))
 setClassUnion("Spectra_OR_Null", c("NULL", "Spectra"))
 
 setClassUnion("QFeatures_OR_SummarizedExperiment",

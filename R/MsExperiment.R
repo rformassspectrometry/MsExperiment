@@ -276,7 +276,7 @@ NULL
 setClass("MsExperiment",
          contains = "Annotated",
          slots = c(
-             experimentFiles = "MsExperimentFiles_OR_Null",
+             experimentFiles = "MsExperimentFiles",
              spectra = "Spectra_OR_Null",
              qdata = "QFeatures_OR_SummarizedExperiment_OR_Null",
              ## chromatograms = "Chromatograms",
