@@ -28,36 +28,37 @@ library(BiocStyle)
 
 # Introduction
 
-The goal of the `MsExperiment` package is to provide a container for all data
-related to a mass spectrometry (MS) experiment. Also other Bioconductor packages
-allow to represent MS experiment data (such as the `r Biocpkg("MSnbase")`
-package). The `MsExperiment` however aims at being very light-weight and
-flexible to accommodate all possible types of MS experiments (proteomics,
-metabolomics, ...) and all types of MS data representations (chromatographic and
-spectral data, quantified features etc). In addition, it allows to bundle
-additional files and data, such as annotations, within the object.
+The goal of the `r Biocpkg("MsExperiment")` package is to provide a container
+for all data related to a mass spectrometry (MS) experiment. Also other
+Bioconductor packages allow to represent MS experiment data (such as the
+`r Biocpkg("MSnbase")` package). The `MsExperiment` however aims at being very
+light-weight and flexible to accommodate all possible types of MS experiments
+(proteomics, metabolomics, ...) and all types of MS data representations
+(chromatographic and spectral data, quantified features etc). In addition, it
+allows to bundle additional files and data, such as annotations, within the
+object.
 
 In this vignette, we will describe how to create a `MsExperiment` object and
 populate it with various types of data.
 
-```{r load_pkg}
+```{r load_pkg, message = FALSE}
 library("MsExperiment")
 ```
 
 We will also use the `r Biocpkg("Spectra")` package to import MS data and thus
 load it here too.
 
-```{r load_spectra}
+```{r load_spectra, message = FALSE}
 library("Spectra")
 ```
 
 
 # Installation
 
-The package can be installed with the `BiocManager` package. To
+The package can be installed with the `r Biocpkg("BiocManager")` package. To
 install `BiocManager` use `install.packages("BiocManager")` and, after that,
-`BiocManager::install("MsExperiment")` to install `MsExperiment` which will
-install the package including all required dependencies.
+`BiocManager::install("MsExperiment")` to install `r Biocpkg("MsExperiment")`
+which will install the package including all required dependencies.
 
 
 # Getting data
@@ -132,18 +133,19 @@ msexp
 
 ## Experimental design
 
-The `colData` slot is used to describe the overall experimental design
-of the experiment. It can be used to link samples to the files that
-are part of the experiment. There can be a one-to-one link between a
-sample and a file, such as for example in label-free approaches, or
-one-to-many, in labelled multiplexed approaches.
+The `sampleData` slot is used to describe the overall experimental design of the
+experiment. It can be used to specify the samples of the experiment and to
+relate them to the files that are part of the experiment. There can be a
+one-to-one link between a sample and a file, such as for example in label-free
+approaches, or one-to-many, in labelled multiplexed approaches.
 
-Here, we are simply going to use the `colData` slot to match the files
-to their respective fractions:
+Here, we create a simple data frame with sample annotations that include the
+original file names and the respective fractions.
 
 ```{r add_sample_data, eval = TRUE}
-sampleData(msexp) <- DataFrame(mzmls = basename(experimentFiles(msexp)[["mzmls"]]),
-                               fractions = 1:2)
+sampleData(msexp) <- DataFrame(
+    mzmls = basename(experimentFiles(msexp)[["mzmls"]]),
+    fractions = 1:2)
 sampleData(msexp)
 ```
 
@@ -251,14 +253,13 @@ The `MsExperiment` object has been used to store files and data
 pertaining to a mass spectrometry experiment. It is now possible to
 save that object and reload it later to recover all data and metadata.
 
-
 ```{r save_exp, eval = TRUE}
-saveRDS(msexp, "msexp.rda")
+saveRDS(msexp, "msexp.rds")
 rm(list = ls())
 ```
 
 ```{r read_exp, eval = TRUE}
-msexp <- readRDS("msexp.rda")
+msexp <- readRDS("msexp.rds")
 msexp
 experimentFiles(msexp)
 ```
@@ -319,7 +320,9 @@ lmse
 ```
 
 At this stage we have thus sample annotations and MS data in our object, but no
-explicit relationships between them. We next use the `linkSpectraData` function
+explicit relationships between them. Without such linking between files and
+samples any subsetting would only subset the `sampleData` but not any of the
+potentially associated files. We next use the `linkSpectraData` function
 to establish and define such relationships. First we link the experimental files
 to the samples: we want to link the first mzML file in the element called
 `"mzML_file"` in the object's `experimentFiles` to the first row in `sampleData`
@@ -431,14 +434,15 @@ qdata(lmse) <- se
 
 Next we link the samples in this `SummarizedExperiment` to the samples to in the
 `MsExperiment` using matching values between the `"sample_id"` column in the
-object's `sampleData` and the column `"sample"` in the `SummarizedExperiment`'s
-`"sample"` variable.
+object's `sampleData` data frame and the column `"sample"` in the
+`SummarizedExperiment`'s `colData` which is stored in the `@qdata` slot. The
+naming convention to define such columns is `<slot name>.<column name>`.
 
 ```{r link_sample_data4}
 sampleData(lmse)$sample_id
 qdata(lmse)$sample
 
-lmse <- linkSampleData(lmse, with = "sampleData.sample_id = assay.sample")
+lmse <- linkSampleData(lmse, with = "sampleData.sample_id = qdata.sample")
 lmse
 ```
 
@@ -447,13 +451,13 @@ by sample will keep the (linked) data consistent. To illustrate this we subset
 below the experiment to the second sample.
 
 ```{r subset_exp2}
-b <- lmse[, 2]
+b <- lmse[2]
 b
 ```
 
-The subsetted object contains now all data elements that are linked to this
+The subset object contains now all data elements that are linked to this
 second sample. Accessing the `assay` of the `SummarizedExperiment` in
-`assay` will thus return only the quantified feature abundances for this
+`qdata` will thus return only the quantified feature abundances for this
 second sample.
 
 ```{r extract_exp2}
@@ -467,18 +471,20 @@ again.
 ```{r add_metadata}
 metadata(lmse)$other <- data.frame(sample_name = c("study_1", "POOL", "study_2"),
                                   index = 1:3)
-b <- lmse[, 2]
+b <- lmse[2]
 metadata(b)
 ```
 
-By default, any element which is **not** linked to a sample is retained. We next
-link each sample to the second row in this data frame and subset the data again
-to the second sample.
+By default, any element which is **not** linked to a sample is retained in the
+filtered/subset object.
+
+We next link each sample to the second row in this data frame and subset the
+data again to the second sample.
 
 ```{r link_sample_data5}
 lmse <- linkSampleData(lmse, with = "metadata.other",
                       sampleIndex = 1:2, withIndex = c(2, 2))
-b <- lmse[, 2]
+b <- lmse[2]
 metadata(b)
 ```
 
@@ -487,7 +493,7 @@ sample. Obviously it is also possible to subset to multiple samples, in
 arbitrary order. Below we re-order our experiment.
 
 ```{r show_subset_exp2}
-lmse <- lmse[, c(2, 1)]
+lmse <- lmse[c(2, 1)]
 sampleData(lmse)
 ```
 

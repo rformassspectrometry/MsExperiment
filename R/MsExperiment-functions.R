@@ -56,7 +56,7 @@
     .valid_link(link, nfrom, nto)
     if (any(names(.sample_data_links(x)) == with))
         warning("Overwriting previously present link '", with, "'")
-    x@sampleDataLinks[[with]] <- link
+    x@sampleDataLinks[[with]] <- unname(link)
     mcols(x@sampleDataLinks)[with, "subsetBy"] <- subsetBy
     x
 }
@@ -200,7 +200,7 @@
 #'
 #' @param x `LinkedMsExperiment`.
 #'
-#' @param j `integer`
+#' @param i `integer`
 #'
 #' @param newx `LinkedMsExperiment`. Result objects. Might help avoiding
 #'     repeatedly copying the object if `.extractSamples` is called within
@@ -212,15 +212,15 @@
 #' @importFrom methods slot<- callNextMethod
 #'
 #' @noRd
-.extractSamples <- function(x, j, newx = x) {
+.extractSamples <- function(x, i, newx = x) {
     if (!nrow(sampleData(x)))
         return(x)
-    slot(newx, "sampleData", check = FALSE) <- x@sampleData[j, , drop = FALSE]
+    slot(newx, "sampleData", check = FALSE) <- x@sampleData[i, , drop = FALSE]
     for (link in names(slot(x, "sampleDataLinks"))) {
         lmat <- slot(x, "sampleDataLinks")[[link]]
         subsetBy <- mcols(slot(x, "sampleDataLinks"))[link, "subsetBy"]
         idxs <- split(lmat[, 2], as.factor(lmat[, 1]))
-        idxs <- idxs[as.character(j)]
+        idxs <- idxs[as.character(i)]
         ls <- lengths(idxs)
         idxs <- unlist(idxs, use.names = FALSE)
         element <- .get_element(x, link)
@@ -311,7 +311,7 @@ sampleData  <- function(object) {
 #' @rdname MsExperiment
 qdata <- function(object) {
     stopifnot(inherits(object, "MsExperiment"))
-    object@assay
+    object@qdata
 }
 
 #' @export
@@ -319,6 +319,15 @@ qdata <- function(object) {
 #' @rdname MsExperiment
 "qdata<-" <- function(object, value) {
     stopifnot(inherits(object, "MsExperiment"))
-    object@assay <- value
+    object@qdata <- value
     object
+}
+
+.ms_experiment_is_empty <- function(object) {
+    if (length(object@experimentFiles)) return(FALSE)
+    if (length(object@spectra)) return(FALSE)
+    if (length(object@qdata)) return(FALSE)
+    if (length(object@otherData)) return(FALSE)
+    if (length(object@sampleData)) return(FALSE)
+    TRUE
 }

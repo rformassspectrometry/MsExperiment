@@ -1,32 +1,17 @@
 #' @include MsExperimentFiles.R
 
-#' @importClassesFrom Spectra Spectra
-#'
-#' @importClassesFrom QFeatures QFeatures
-#'
-#' @importClassesFrom SummarizedExperiment SummarizedExperiment
-#'
-#' @noRd
-setClassUnion("MsExperimentFilesOrNull", c("NULL", "MsExperimentFiles"))
-setClassUnion("SpectraOrNull", c("NULL", "Spectra"))
-
-setClassUnion("QFeaturesOrSummarizedExperiment",
-              c("SummarizedExperiment", "QFeatures"))
-setClassUnion("QFeaturesOrSummarizedExperimentOrNull",
-              c("NULL", "QFeaturesOrSummarizedExperiment"))
-
-
 #' @title Managing Mass Spectrometry Experiments
 #'
-#' @aliases MsExperiment-class MsExperiment metadata,MsExperiment
+#' @aliases MsExperiment-class MsExperiment
 #'
 #' @description
 #'
 #' The `MsExperiment` class allows the storage and management of all
 #' aspects related to a complete proteomics or metabolomics mass
-#' spectrometry experiment. This includes experimantal design, raw
-#' mass spectromtry data as spectra and chromatograms, quantitative
-#' features, and identification data or any other relevant data files.
+#' spectrometry experiment. This includes experimantal design (i.e. a table
+#' with samples), raw mass spectromtry data as spectra and chromatograms,
+#' quantitative features, and identification data or any other relevant data
+#' files.
 #'
 #' For details, see https://rformassspectrometry.github.io/MsExperiment
 #'
@@ -54,7 +39,7 @@ setClassUnion("QFeaturesOrSummarizedExperimentOrNull",
 #'   object in the `chromatorgrams` slot.
 #'
 #' - Quantification data is stored as `QFeatures` or
-#'   `SummarizedExperiment` objects in the `assay` slot and can be accessed or
+#'   `SummarizedExperiment` objects in the `qdata` slot and can be accessed or
 #'   replaced with the `qdata` or `qdata<-` functions, respectively.
 #'
 #' - Any additional data, be it other spectra data, or proteomics
@@ -62,12 +47,22 @@ setClassUnion("QFeaturesOrSummarizedExperimentOrNull",
 #'   `PSM()` objects) can be added as elements to the list stored in
 #'   the `otherData` slot.
 #'
+#' The *length* of a `MsExperiment` is defined by the number of samples (i.e.
+#' the number of rows of the object's `sampleData`). A `MsExperiment` with two
+#' samples will thus have a length of two, independently of the number of files
+#' or length of raw data in the object. This also defines the subsetting of the
+#' object using the `[` function which will always subset by samples. See the
+#' section for filtering and subsetting below for more information.
+#'
 #' @section Accessing data:
 #'
 #' Data from an `MsExperiment` object can be accessed with the dedicated
 #' accessor functions:
 #'
 #' - `experimentFiles`, `experimentFiles<-`: gets or sets experiment files.
+#'
+#' - `length`: get the *length* of the object which represents the number of
+#'   samples availble in the object's `sampleData`.
 #'
 #' - `metadata`, `metadata<-`: gets or sets the object's metadata.
 #'
@@ -141,21 +136,25 @@ setClassUnion("QFeaturesOrSummarizedExperimentOrNull",
 #'
 #' @section Subsetting and filtering:
 #'
-#' - `[`: `MsExperiment` objects can be subsetted **by samples** with `[, j]`
-#'   where `j` is the index or a logical defining to which samples the data
-#'   should be subsetted. Subsetting by sample will (correctly) subset all
-#'   linked data to the respective samples. Not linked data (slots) will be
-#'   returned as they are. Subsetting in arbitrary order is supported.
+#' - `[`: `MsExperiment` objects can be subset **by samples** with `[i]`
+#'   where `i` is the index or a logical defining to which samples the data
+#'   should be subset. Subsetting by sample will (correctly) subset all
+#'   linked data to the respective samples. If multiple samples are linked to
+#'   the same data element, subsetting might duplicate that data element. This
+#'   duplication of *n:m* relationships between samples to elements does however
+#'   not affect data consistency (see examples below for more information).
+#'   Not linked data (slots) will be returned as they are. Subsetting in
+#'   arbitrary order is supported.
 #'   See the vignette for details and examples.
 #'
 #' @return See help of the individual functions.
 #'
 #' @param drop for `[`: ignored.
 #'
-#' @param i for `[`: not supported.
-#'
-#' @param j for `[`: an `integer`, `character` or `logical` referring to the
+#' @param i for `[`: an `integer`, `character` or `logical` referring to the
 #'     indices or names (rowname of `sampleData`) of the samples to subset.
+#'
+#' @param j for `[`: not supported.
 #'
 #' @param object an `MsExperiment`.
 #'
@@ -181,13 +180,9 @@ setClassUnion("QFeaturesOrSummarizedExperimentOrNull",
 #'
 #' @name MsExperiment
 #'
-#' @import methods
-#'
 #' @importFrom S4Vectors List DataFrame
 #'
 #' @importClassesFrom S4Vectors List
-#'
-#' @import ProtGenerics
 #'
 #' @author Laurent Gatto, Johannes Rainer
 #'
@@ -246,11 +241,26 @@ setClassUnion("QFeaturesOrSummarizedExperimentOrNull",
 #' mse
 #'
 #' ## With sampleData links present, any subsetting of the experiment by sample
-#' ## will ensure that all linked elements are subsetted accordingly
-#' b <- mse[, 2]
+#' ## will ensure that all linked elements are subset accordingly
+#' b <- mse[2]
 #' b
 #' sampleData(b)
 #' experimentFiles(b)$mzML_files
+#'
+#' ## Subsetting with duplication of n:m sample to data relationships
+#' ##
+#' ## Both samples were assigned above to one "annotation" file in
+#' ## `experimentFiles`:
+#' experimentFiles(mse[1])[["annotations"]]
+#' experimentFiles(mse[2])[["annotations"]]
+#'
+#' ## Subsetting will always keep the relationship between samples and linked
+#' ## data elements. Subsetting will however eventually duplicate data elements
+#' ## that are shared among samples. Thus, while in the original object the
+#' ## element "annotations" has a single entry, subsetting with [1:2] will
+#' ## result in an MsExperiment with duplicated entries in "annotations"
+#' experimentFiles(mse)[["annotations"]]
+#' experimentFiles(mse[1:2])[["annotations"]]
 NULL
 
 #' @name MsExperiment-class
@@ -263,7 +273,7 @@ NULL
 #'
 #' @slot spectra An instance of class `Spectra` or `NULL`.
 #'
-#' @slot assay An instance of class `QFeatures`, `SummarizedExperiment` or
+#' @slot qdata An instance of class `QFeatures`, `SummarizedExperiment` or
 #'     `NULL`.
 #'
 #' @slot otherData A `List` to store any additional data objects.
@@ -279,27 +289,29 @@ NULL
 #'
 #' @importClassesFrom S4Vectors SimpleList
 #'
+#' @importClassesFrom S4Vectors Annotated
+#'
 #' @importFrom S4Vectors DataFrame
 setClass("MsExperiment",
+         contains = "Annotated",
          slots = c(
-             experimentFiles = "MsExperimentFilesOrNull",
-             spectra = "SpectraOrNull",
-             assay = "QFeaturesOrSummarizedExperimentOrNull",
+             experimentFiles = "MsExperimentFiles",
+             spectra = "Spectra_OR_Null",
+             qdata = "QFeatures_OR_SummarizedExperiment_OR_Null",
              ## chromatograms = "Chromatograms",
              otherData = "List",
              sampleData = "DataFrame",
-             sampleDataLinks = "List",
-             metadata = "list"),
+             sampleDataLinks = "List"),
          prototype = prototype(
              experimentFiles = NULL,
              spectra = NULL,
-             assay = NULL,
+             qdata = NULL,
              otherData = List(),
              sampleData = DataFrame(),
+
              sampleDataLinks = new(
                  "SimpleList", elementMetadata =
-                                   DataFrame(subsetBy = integer())),
-             metadata = list())
+                                   DataFrame(subsetBy = integer())))
          )
 
 #' @rdname MsExperiment
@@ -316,7 +328,10 @@ MsExperiment <- function()
 #'
 #' @exportMethod show
 setMethod("show", "MsExperiment", function(object) {
-    cat("Object of class", class(object), "\n")
+    mess <- "Object of class"
+    if (.ms_experiment_is_empty(object))
+        mess <- "Empty object of class"
+    cat(mess, class(object), "\n")
     if (!is.null(experimentFiles(object)))
         cat(" Files:", paste(names(experimentFiles(object)),
                              collapse = ", "), "\n")
@@ -343,6 +358,13 @@ setMethod("show", "MsExperiment", function(object) {
     }
 })
 
+#' @rdname MsExperiment
+#'
+#' @exportMethod length
+setMethod("length", "MsExperiment", function(x) {
+    nrow(sampleData(x))
+})
+
 ## ------------------------------##
 ##     Getters and setters       ##
 ## ------------------------------##
@@ -363,32 +385,6 @@ setMethod("spectra", "MsExperiment", function(object) object@spectra)
     object@spectra <- value
     object
 }
-
-#' @export
-#'
-#' @importFrom S4Vectors metadata
-#'
-#' @param x An instance of `MsExperiment`.
-#'
-#' @rdname MsExperiment
-setMethod("metadata", "MsExperiment", function(x) x@metadata)
-
-#' @export
-#'
-#' @importFrom S4Vectors metadata<-
-#'
-#' @param value A `list()` to replace the `MsExperiment`'s metadata.
-#'
-#' @rdname MsExperiment
-setReplaceMethod("metadata", "MsExperiment",
-                 function(x, value) {
-                     if (!is.list(value))
-                         stop("replacement 'metadata' value must be a list")
-                     if (!length(value))
-                         names(value) <- NULL
-                     x@metadata <- value
-                     x
-                 })
 
 #' @rdname MsExperiment
 #'
@@ -426,9 +422,9 @@ linkSampleData <- function(object, with = character(),
         link <- cbind(sampleIndex, withIndex)
     }
     withl <- unlist(strsplit(with, split = ".", fixed = TRUE))
-    if (withl[1L] %in% c("spectra", "assay")) {
+    if (withl[1L] %in% c("spectra", "qdata")) {
         with <- withl[1L]
-        if (with == "assay")
+        if (with == "qdata")
             subsetBy <- 2L
     } else if (length(withl) < 2)
         stop("'with' should be a 'character' with the name of the slot and",
@@ -441,21 +437,21 @@ linkSampleData <- function(object, with = character(),
 #'
 #' @export
 setMethod("[", "MsExperiment", function(x, i, j, ..., drop = FALSE) {
-    if (!missing(i))
-        stop("Only subsetting with '[, j]' is supported.")
-    lj <- length(j)
-    if (is.character(j)) {
-        j <- match(j, rownames(sampleData(x)))
-        if (any(is.na(j)))
-            warning(sum(is.na(j)), " of ", lj, " values could not be ",
+    if (!missing(j))
+        stop("Only subsetting with '[i]' is supported.")
+    li <- length(i)
+    if (is.character(i)) {
+        i <- match(i, rownames(sampleData(x)))
+        if (any(is.na(i)))
+            warning(sum(is.na(i)), " of ", li, " values could not be ",
                     "matched to rownames of 'sampleData(x)'")
-        j <- j[!is.na(j)]
+        i <- i[!is.na(i)]
     }
-    if (is.logical(j)) {
-        if (lj != nrow(sampleData(x)))
-            stop("if 'j' is logical its length has to match the number of ",
+    if (is.logical(i)) {
+        if (li != nrow(sampleData(x)))
+            stop("if 'i' is logical its length has to match the number of ",
                  "samples in 'x'.")
-        j <- which(j)
+        i <- which(i)
     }
-    .extractSamples(x, j, newx = x)
+    .extractSamples(x, i, newx = x)
 })

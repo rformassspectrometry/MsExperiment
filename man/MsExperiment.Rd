@@ -10,12 +10,10 @@
 \alias{qdata<-}
 \alias{MsExperiment}
 \alias{MsExperiment-class}
-\alias{metadata,MsExperiment}
 \alias{show,MsExperiment-method}
+\alias{length,MsExperiment-method}
 \alias{spectra,MsExperiment-method}
 \alias{spectra<-}
-\alias{metadata,MsExperiment-method}
-\alias{metadata<-,MsExperiment-method}
 \alias{linkSampleData}
 \alias{[,MsExperiment,ANY,ANY,ANY-method}
 \title{Managing Mass Spectrometry Experiments}
@@ -36,13 +34,11 @@ MsExperiment()
 
 \S4method{show}{MsExperiment}(object)
 
+\S4method{length}{MsExperiment}(x)
+
 \S4method{spectra}{MsExperiment}(object)
 
 spectra(object) <- value
-
-\S4method{metadata}{MsExperiment}(x)
-
-\S4method{metadata}{MsExperiment}(x) <- value
 
 linkSampleData(
   object,
@@ -57,9 +53,10 @@ linkSampleData(
 \arguments{
 \item{object}{An instance of class \code{MsExperiment}.}
 
-\item{value}{A \code{list()} to replace the \code{MsExperiment}'s metadata.}
+\item{value}{An object of the appropriate class for the slot to be
+populated.}
 
-\item{x}{An instance of \code{MsExperiment}.}
+\item{x}{an \code{MsExperiment}.}
 
 \item{with}{for \code{linkSampleData}: \code{character(1)} defining the data to which
 samples should be linked. See section \emph{Linking sample data to other
@@ -77,10 +74,10 @@ dimension on which the subsetting will occurr on the linked data.
 Defaults to \code{subsetBy = 1L} thus subsetting will happen on the first
 dimension (rows or elements).}
 
-\item{i}{for \code{[}: not supported.}
-
-\item{j}{for \code{[}: an \code{integer}, \code{character} or \code{logical} referring to the
+\item{i}{for \code{[}: an \code{integer}, \code{character} or \code{logical} referring to the
 indices or names (rowname of \code{sampleData}) of the samples to subset.}
+
+\item{j}{for \code{[}: not supported.}
 
 \item{...}{optional additional parameters.}
 
@@ -92,9 +89,10 @@ See help of the individual functions.
 \description{
 The \code{MsExperiment} class allows the storage and management of all
 aspects related to a complete proteomics or metabolomics mass
-spectrometry experiment. This includes experimantal design, raw
-mass spectromtry data as spectra and chromatograms, quantitative
-features, and identification data or any other relevant data files.
+spectrometry experiment. This includes experimantal design (i.e. a table
+with samples), raw mass spectromtry data as spectra and chromatograms,
+quantitative features, and identification data or any other relevant data
+files.
 
 For details, see https://rformassspectrometry.github.io/MsExperiment
 
@@ -108,7 +106,7 @@ https://www.rformassspectrometry.org/
 
 \item{\code{spectra}}{An instance of class \code{Spectra} or \code{NULL}.}
 
-\item{\code{assay}}{An instance of class \code{QFeatures}, \code{SummarizedExperiment} or
+\item{\code{qdata}}{An instance of class \code{QFeatures}, \code{SummarizedExperiment} or
 \code{NULL}.}
 
 \item{\code{otherData}}{A \code{List} to store any additional data objects.}
@@ -139,13 +137,20 @@ an \code{Spectra()} object in the \code{spectra} slot. Chromatographic data
 is not yet supported but will be stored as a \code{Chromatograms()}
 object in the \code{chromatorgrams} slot.
 \item Quantification data is stored as \code{QFeatures} or
-\code{SummarizedExperiment} objects in the \code{assay} slot and can be accessed or
+\code{SummarizedExperiment} objects in the \code{qdata} slot and can be accessed or
 replaced with the \code{qdata} or \verb{qdata<-} functions, respectively.
 \item Any additional data, be it other spectra data, or proteomics
 identification data (i.e peptide-spectrum matches defined as
 \code{PSM()} objects) can be added as elements to the list stored in
 the \code{otherData} slot.
 }
+
+The \emph{length} of a \code{MsExperiment} is defined by the number of samples (i.e.
+the number of rows of the object's \code{sampleData}). A \code{MsExperiment} with two
+samples will thus have a length of two, independently of the number of files
+or length of raw data in the object. This also defines the subsetting of the
+object using the \code{[} function which will always subset by samples. See the
+section for filtering and subsetting below for more information.
 }
 
 \section{Accessing data}{
@@ -155,6 +160,8 @@ Data from an \code{MsExperiment} object can be accessed with the dedicated
 accessor functions:
 \itemize{
 \item \code{experimentFiles}, \verb{experimentFiles<-}: gets or sets experiment files.
+\item \code{length}: get the \emph{length} of the object which represents the number of
+samples availble in the object's \code{sampleData}.
 \item \code{metadata}, \verb{metadata<-}: gets or sets the object's metadata.
 \item \code{sampleData}, \code{sampleData}: gets or sets the object's sample data (i.e. a
 \code{DataFrame} containing sample descriptions).
@@ -229,11 +236,15 @@ same data element.
 \section{Subsetting and filtering}{
 
 \itemize{
-\item \code{[}: \code{MsExperiment} objects can be subsetted \strong{by samples} with \verb{[, j]}
-where \code{j} is the index or a logical defining to which samples the data
-should be subsetted. Subsetting by sample will (correctly) subset all
-linked data to the respective samples. Not linked data (slots) will be
-returned as they are. Subsetting in arbitrary order is supported.
+\item \code{[}: \code{MsExperiment} objects can be subset \strong{by samples} with \verb{[i]}
+where \code{i} is the index or a logical defining to which samples the data
+should be subset. Subsetting by sample will (correctly) subset all
+linked data to the respective samples. If multiple samples are linked to
+the same data element, subsetting might duplicate that data element. This
+duplication of \emph{n:m} relationships between samples to elements does however
+not affect data consistency (see examples below for more information).
+Not linked data (slots) will be returned as they are. Subsetting in
+arbitrary order is supported.
 See the vignette for details and examples.
 }
 }
@@ -293,11 +304,26 @@ mse <- linkSampleData(mse, with = "sampleData.raw_file = spectra.dataOrigin")
 mse
 
 ## With sampleData links present, any subsetting of the experiment by sample
-## will ensure that all linked elements are subsetted accordingly
-b <- mse[, 2]
+## will ensure that all linked elements are subset accordingly
+b <- mse[2]
 b
 sampleData(b)
 experimentFiles(b)$mzML_files
+
+## Subsetting with duplication of n:m sample to data relationships
+##
+## Both samples were assigned above to one "annotation" file in
+## `experimentFiles`:
+experimentFiles(mse[1])[["annotations"]]
+experimentFiles(mse[2])[["annotations"]]
+
+## Subsetting will always keep the relationship between samples and linked
+## data elements. Subsetting will however eventually duplicate data elements
+## that are shared among samples. Thus, while in the original object the
+## element "annotations" has a single entry, subsetting with [1:2] will
+## result in an MsExperiment with duplicated entries in "annotations"
+experimentFiles(mse)[["annotations"]]
+experimentFiles(mse[1:2])[["annotations"]]
 }
 \author{
 Laurent Gatto, Johannes Rainer

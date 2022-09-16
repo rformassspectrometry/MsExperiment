@@ -53,13 +53,28 @@ NULL
 setClass("MsExperimentFiles",
          contains = "SimpleCharacterList")
 
+#' @importClassesFrom Spectra Spectra
+#'
+#' @importClassesFrom QFeatures QFeatures
+#'
+#' @importClassesFrom SummarizedExperiment SummarizedExperiment
+#'
+#' @noRd
+setClassUnion("Spectra_OR_Null", c("NULL", "Spectra"))
+
+setClassUnion("QFeatures_OR_SummarizedExperiment",
+              c("SummarizedExperiment", "QFeatures"))
+setClassUnion("QFeatures_OR_SummarizedExperiment_OR_Null",
+              c("NULL", "QFeatures_OR_SummarizedExperiment"))
+
+
 #' @export
 #'
 #' @rdname MsExperimentFiles
 #'
 #' @importFrom IRanges CharacterList
 #'
-#' @importFrom S4Vectors metadata metadata<-
+#' @importMethodsFrom S4Vectors metadata metadata<-
 #'
 #' @importFrom methods new as validObject
 #'
