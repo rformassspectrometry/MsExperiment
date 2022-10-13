@@ -303,7 +303,7 @@ setClass("MsExperiment",
              sampleData = "DataFrame",
              sampleDataLinks = "List"),
          prototype = prototype(
-             experimentFiles = NULL,
+             experimentFiles = MsExperimentFiles(),
              spectra = NULL,
              qdata = NULL,
              otherData = List(),

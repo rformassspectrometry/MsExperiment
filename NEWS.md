@@ -1,5 +1,9 @@
 # MsExperiment 0.99
 
+## MsExperiment 0.99.3
+
+- Fix assignment of default value for `@experimentFiles` slot.
+
 ## MsExperiment 0.99.2
 
 - Fix imports.
