@@ -1,5 +1,9 @@
 # MsExperiment 0.99
 
+## MsExperiment 0.99.4
+
+- Import `spectra<-` from `ProtGenerics`.
+
 ## MsExperiment 0.99.3
 
 - Fix assignment of default value for `@experimentFiles` slot.

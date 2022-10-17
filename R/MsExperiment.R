@@ -376,15 +376,17 @@ setMethod("length", "MsExperiment", function(x) {
 #' @rdname MsExperiment
 setMethod("spectra", "MsExperiment", function(object) object@spectra)
 
+#' @importMethodsFrom ProtGenerics spectra<-
+#'
 #' @export
 #'
 #' @rdname MsExperiment
-"spectra<-" <- function(object, value) {
+setReplaceMethod("spectra", "MsExperiment", function(object, value) {
     stopifnot(inherits(value, "Spectra"))
     stopifnot(inherits(object, "MsExperiment"))
     object@spectra <- value
     object
-}
+})
 
 #' @rdname MsExperiment
 #'

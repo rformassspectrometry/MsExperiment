@@ -13,7 +13,7 @@
 \alias{show,MsExperiment-method}
 \alias{length,MsExperiment-method}
 \alias{spectra,MsExperiment-method}
-\alias{spectra<-}
+\alias{spectra<-,MsExperiment-method}
 \alias{linkSampleData}
 \alias{[,MsExperiment,ANY,ANY,ANY-method}
 \title{Managing Mass Spectrometry Experiments}
@@ -38,7 +38,7 @@ MsExperiment()
 
 \S4method{spectra}{MsExperiment}(object)
 
-spectra(object) <- value
+\S4method{spectra}{MsExperiment}(object) <- value
 
 linkSampleData(
   object,
