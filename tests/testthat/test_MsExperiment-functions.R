@@ -97,6 +97,15 @@ test_that(".link_matrix works", {
     expect_equal(res, cbind(c(1, 2, 3, 5), c(2, 2, 3, 3)))
 })
 
+test_that(".link_matrix2 works", {
+    res <- .link_matrix2()
+    expect_true(is.matrix(res))
+    expect_true(nrow(res) == 0)
+
+    res <- .link_matrix2(c("a", "a", "b", "d", "b", "c"), c("g", "a", "b", "e"))
+    expect_equal(res, cbind(c(1, 2, 3, 5), c(2, 2, 3, 3)))
+})
+
 test_that(".extractSamples works", {
     tmp <- mse
     res <- .extractSamples(tmp, i = 2)

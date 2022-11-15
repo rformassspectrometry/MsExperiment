@@ -1,3 +1,15 @@
+# MsExperiment 1.1
+
+## MsExperiment 1.1.1
+
+- Use `grr::matches` in `linkSampleData` which improves performance,
+  especially for larger data sets.
+
+## MsExperiment 1.1.0
+
+- Bioconductor release 3.17 (devel).
+
+
 # MsExperiment 0.99
 
 ## MsExperiment 0.99.4
