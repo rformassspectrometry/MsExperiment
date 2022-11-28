@@ -31,8 +31,7 @@ Imports:
     IRanges,
     Spectra,
     SummarizedExperiment,
-    QFeatures,
-    grr
+    QFeatures
 Suggests:
     testthat,
     knitr (>= 1.1.0),

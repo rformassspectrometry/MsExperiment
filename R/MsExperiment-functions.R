@@ -178,17 +178,12 @@
     cbind(rep(seq_along(from), ls), unlist(res, use.names = FALSE))
 }
 
-#' Faster version for matching especially for large data sets. Note that we're
-#' in fact not calling `grr::matches` but the internal C++ function to avoid
-#' unnecessary conversions and copying done in `matches`.
-#'
-#' @importFrom grr matches
+#' @importFrom S4Vectors findMatches
 #'
 #' @noRd
 .link_matrix2 <- function(from = integer(), to = integer()) {
-    res <- do.call(cbind, .Call("matches", from, to, PACKAGE = "grr"))
-    res <- res[res[, 1] <= length(from) & res[, 2] <= length(to), , drop = FALSE]
-    res[order(res[, 1], res[, 2]), , drop = FALSE]
+    res <- findMatches(from, to)
+    cbind(from(res), to(res))
 }
 
 #' @description
