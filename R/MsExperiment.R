@@ -410,8 +410,8 @@ linkSampleData <- function(object, with = character(),
             to_slot <- link_string[1L]
             with <- paste0(link_string[c(1, 2)], collapse = ".")
         } else stop("one of the slot names has to be 'sampleData'.")
-        link <- .link_matrix2(.get_element(object, from),
-                              .get_element(object, with))
+        link <- .link_matrix(.get_element(object, from),
+                             .get_element(object, with))
         if (nrow(link) == 0)
             warning("no matches found for '", with, "'")
     } else {

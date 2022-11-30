@@ -166,6 +166,8 @@
 #'
 #' @author Johannes Rainer
 #'
+#' @importFrom S4Vectors findMatches
+#'
 #' @noRd
 #'
 #' @examples
@@ -173,15 +175,6 @@
 #' .link_matrix(1:3, 2:20)
 #' .link_matrix(c("a", "a", "b", "d", "b", "c"), c("g", "a", "b", "e"))
 .link_matrix <- function(from = integer(), to = integer()) {
-    res <- lapply(from, function(x) which(to == x))
-    ls <- lengths(res)
-    cbind(rep(seq_along(from), ls), unlist(res, use.names = FALSE))
-}
-
-#' @importFrom S4Vectors findMatches
-#'
-#' @noRd
-.link_matrix2 <- function(from = integer(), to = integer()) {
     res <- findMatches(from, to)
     cbind(from(res), to(res))
 }

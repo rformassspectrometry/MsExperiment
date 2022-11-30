@@ -95,26 +95,17 @@ test_that(".link_matrix works", {
 
     res <- .link_matrix(c("a", "a", "b", "d", "b", "c"), c("g", "a", "b", "e"))
     expect_equal(res, cbind(c(1, 2, 3, 5), c(2, 2, 3, 3)))
-})
-
-test_that(".link_matrix2 works", {
-    res <- .link_matrix2()
-    expect_true(is.matrix(res))
-    expect_true(nrow(res) == 0)
-
-    res <- .link_matrix2(c("a", "a", "b", "d", "b", "c"), c("g", "a", "b", "e"))
-    expect_equal(res, cbind(c(1, 2, 3, 5), c(2, 2, 3, 3)))
 
     a <- c("d", "a", "a", "b", "e", "b", "d", "d")
     b <- c("b", "a", "a", "c", "d", "a")
     exp <- cbind(c(1, 2, 2, 2, 3, 3, 3, 4, 6, 7, 8),
                  c(5, 2, 3, 6, 2, 3, 6, 1, 1, 5, 5))
-    res <- .link_matrix2(a, b)
+    res <- .link_matrix(a, b)
     expect_equal(res, exp)
 
     exp <- cbind(c(1, 1, 2, 2, 3, 3, 5, 5, 5, 6, 6),
                  c(4, 6, 2, 3, 2, 3, 1, 7, 8, 2, 3))
-    res <- .link_matrix2(b, a)
+    res <- .link_matrix(b, a)
     expect_equal(res, exp)
 })
 
