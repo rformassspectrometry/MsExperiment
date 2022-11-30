@@ -2,7 +2,7 @@
 
 ## MsExperiment 1.1.1
 
-- Use `grr::matches` in `linkSampleData` which improves performance,
+- Use `S4Vectors::findMatches` in `linkSampleData` which improves performance,
   especially for larger data sets.
 
 ## MsExperiment 1.1.0
