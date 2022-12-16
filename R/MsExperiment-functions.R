@@ -166,7 +166,7 @@
 #'
 #' @author Johannes Rainer
 #'
-#' @importFrom S4Vectors findMatches
+#' @importFrom S4Vectors findMatches from to
 #'
 #' @noRd
 #'
@@ -331,4 +331,73 @@ qdata <- function(object) {
     if (length(object@otherData)) return(FALSE)
     if (length(object@sampleData)) return(FALSE)
     TRUE
+}
+
+#' @title Import MS spectra data of an experiment
+#'
+#' @description
+#'
+#' Read/import MS spectra data of an experiment from the respective (raw)
+#' data files into an [MsExperiment()] object. The provided files are
+#' imported as a `Spectra` object and each file is automatically *linked*
+#' to rows (samples) of a `sampleData` data frame (if provided).
+#'
+#' @param files `character` with the (absolute) file names of the MS data
+#'     files.
+#'
+#' @param sampleData `data.frame` or `DataFrame` with the sample annotations.
+#'     Each row is expected to contain annotations for one file (sample). The
+#'     order of the data frame's rows is expected to match the order of the
+#'     provided files.
+#'
+#' @param ... additional parameters for the [Spectra()] call to import the
+#'     data.
+#'
+#' @return `MsExperiment`.
+#'
+#' @author Johannes Rainer
+#'
+#' @importMethodsFrom Spectra Spectra
+#'
+#' @export
+#'
+#' @examples
+#'
+#' ## Define the files of the experiment to import
+#' fls <- c(system.file("microtofq/MM14.mzML", package = "msdata"),
+#'          system.file("microtofq/MM8.mzML", package = "msdata"))
+#'
+#' ## Define a data frame with some sample annotations
+#' ann <- data.frame(
+#'     injection_index = 1:2,
+#'     sample_id = c("MM14", "MM8"))
+#'
+#' ## Import the data
+#' library(MsExperiment)
+#' mse <- readMsExperiment(fls, ann)
+#' mse
+#'
+#' ## Access the spectra data
+#' spectra(mse)
+#'
+#' ## Access the sample annotations
+#' sampleData(mse)
+#'
+#' ## Import the data reading all MS spectra directly into memory
+#' mse <- readMsExperiment(fls, ann, backend = Spectra::MsBackendMemory())
+#' mse
+readMsExperiment <- function(files = character(),
+                             sampleData = data.frame(), ...) {
+    files <- normalizePath(files)
+    if (!nrow(sampleData))
+        sampleData <- data.frame(sample_index = seq_along(files))
+    if (nrow(sampleData) != length(files))
+        stop("Number of rows in 'sampleData' have to match the number of files")
+    sampleData$spectraOrigin <- files
+    if (!inherits(sampleData, "DataFrame"))
+        sampleData <- DataFrame(sampleData)
+    x <- MsExperiment()
+    sampleData(x) <- sampleData
+    spectra(x) <- Spectra(files, ...)
+    linkSampleData(x, with = "sampleData.spectraOrigin = spectra.dataOrigin")
 }

@@ -264,3 +264,23 @@ test_that(".ms_experiment_is_empty works", {
     expect_true(.ms_experiment_is_empty(MsExperiment()))
     expect_false(.ms_experiment_is_empty(mse))
 })
+
+test_that("readMsExperiment works", {
+    expect_error(a <- readMsExperiment(), "'files'")
+    expect_error(a <- readMsExperiment("a"), "not found")
+    fls <- c(system.file("microtofq/MM14.mzML", package = "msdata"),
+             system.file("microtofq/MM8.mzML", package = "msdata"))
+
+    a <- readMsExperiment(fls)
+    expect_s4_class(a, "MsExperiment")
+    expect_true(length(a) == 2)
+    expect_true(nrow(sampleData(a)) == 2)
+
+    df <- data.frame(sidx = 1:3, other_ann = c("a", "b", "c"))
+    expect_error(readMsExperiment(fls, df), "of files")
+    a <- readMsExperiment(fls[1:2], df[1:2, ])
+    expect_s4_class(a, "MsExperiment")
+    expect_true(length(a) == 2)
+    expect_true(nrow(sampleData(a)) == 2)
+    expect_equal(sampleData(a)$other_ann, c("a", "b"))
+})

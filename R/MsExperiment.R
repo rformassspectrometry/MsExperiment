@@ -54,6 +54,12 @@
 #' object using the `[` function which will always subset by samples. See the
 #' section for filtering and subsetting below for more information.
 #'
+#' `MsExperiment` objects can be created using the `MsExperiment()` function
+#' and by subsequently adding data and information to it (see examples
+#' below or the package vignette for more information), or using the
+#' [readMsExperiment()] function that creates a `MsExperiment` by importing
+#' directly MS spectra data from provided data files.
+#'
 #' @section Accessing data:
 #'
 #' Data from an `MsExperiment` object can be accessed with the dedicated

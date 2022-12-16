@@ -151,6 +151,12 @@ samples will thus have a length of two, independently of the number of files
 or length of raw data in the object. This also defines the subsetting of the
 object using the \code{[} function which will always subset by samples. See the
 section for filtering and subsetting below for more information.
+
+\code{MsExperiment} objects can be created using the \code{MsExperiment()} function
+and by subsequently adding data and information to it (see examples
+below or the package vignette for more information), or using the
+\code{\link[=readMsExperiment]{readMsExperiment()}} function that creates a \code{MsExperiment} by importing
+directly MS spectra data from provided data files.
 }
 
 \section{Accessing data}{
