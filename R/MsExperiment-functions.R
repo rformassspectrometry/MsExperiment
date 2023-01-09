@@ -338,17 +338,18 @@ qdata <- function(object) {
 #' @description
 #'
 #' Read/import MS spectra data of an experiment from the respective (raw)
-#' data files into an [MsExperiment()] object. The provided files are
-#' imported as a `Spectra` object and each file is automatically *linked*
-#' to rows (samples) of a `sampleData` data frame (if provided).
+#' data files into an [MsExperiment()] object. Files provided with the
+#' `spectraFiles` parameter are imported as a `Spectra` object and each
+#' file is automatically *linked* to rows (samples) of a `sampleData`
+#' data frame (if provided).
 #'
-#' @param files `character` with the (absolute) file names of the MS data
-#'     files.
+#' @param spectraFiles `character` with the (absolute) file names of the MS
+#'     data files that should be imported as a [Spectra()] object.
 #'
 #' @param sampleData `data.frame` or `DataFrame` with the sample annotations.
 #'     Each row is expected to contain annotations for one file (sample). The
 #'     order of the data frame's rows is expected to match the order of the
-#'     provided files.
+#'     provided files (with parameter `spectraFiles`).
 #'
 #' @param ... additional parameters for the [Spectra()] call to import the
 #'     data.
@@ -374,7 +375,7 @@ qdata <- function(object) {
 #'
 #' ## Import the data
 #' library(MsExperiment)
-#' mse <- readMsExperiment(fls, ann)
+#' mse <- readMsExperiment(spectraFiles = fls, ann)
 #' mse
 #'
 #' ## Access the spectra data
@@ -384,20 +385,22 @@ qdata <- function(object) {
 #' sampleData(mse)
 #'
 #' ## Import the data reading all MS spectra directly into memory
-#' mse <- readMsExperiment(fls, ann, backend = Spectra::MsBackendMemory())
+#' mse <- readMsExperiment(spectraFiles = fls, ann,
+#'     backend = Spectra::MsBackendMemory())
 #' mse
-readMsExperiment <- function(files = character(),
+readMsExperiment <- function(spectraFiles = character(),
                              sampleData = data.frame(), ...) {
-    files <- normalizePath(files)
+    spectraFiles <- normalizePath(spectraFiles)
     if (!nrow(sampleData))
-        sampleData <- data.frame(sample_index = seq_along(files))
-    if (nrow(sampleData) != length(files))
-        stop("Number of rows in 'sampleData' have to match the number of files")
-    sampleData$spectraOrigin <- files
+        sampleData <- data.frame(sample_index = seq_along(spectraFiles))
+    if (nrow(sampleData) != length(spectraFiles))
+        stop("Number of rows in 'sampleData' have to match the number of ",
+             "files in parameter 'spectraFiles'")
+    sampleData$spectraOrigin <- spectraFiles
     if (!inherits(sampleData, "DataFrame"))
         sampleData <- DataFrame(sampleData)
     x <- MsExperiment()
     sampleData(x) <- sampleData
-    spectra(x) <- Spectra(files, ...)
+    spectra(x) <- Spectra(spectraFiles, ...)
     linkSampleData(x, with = "sampleData.spectraOrigin = spectra.dataOrigin")
 }

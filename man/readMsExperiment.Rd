@@ -4,16 +4,16 @@
 \alias{readMsExperiment}
 \title{Import MS spectra data of an experiment}
 \usage{
-readMsExperiment(files = character(), sampleData = data.frame(), ...)
+readMsExperiment(spectraFiles = character(), sampleData = data.frame(), ...)
 }
 \arguments{
-\item{files}{\code{character} with the (absolute) file names of the MS data
-files.}
+\item{spectraFiles}{\code{character} with the (absolute) file names of the MS
+data files that should be imported as a \code{\link[=Spectra]{Spectra()}} object.}
 
 \item{sampleData}{\code{data.frame} or \code{DataFrame} with the sample annotations.
 Each row is expected to contain annotations for one file (sample). The
 order of the data frame's rows is expected to match the order of the
-provided files.}
+provided files (with parameter \code{spectraFiles}).}
 
 \item{...}{additional parameters for the \code{\link[=Spectra]{Spectra()}} call to import the
 data.}
@@ -23,9 +23,10 @@ data.}
 }
 \description{
 Read/import MS spectra data of an experiment from the respective (raw)
-data files into an \code{\link[=MsExperiment]{MsExperiment()}} object. The provided files are
-imported as a \code{Spectra} object and each file is automatically \emph{linked}
-to rows (samples) of a \code{sampleData} data frame (if provided).
+data files into an \code{\link[=MsExperiment]{MsExperiment()}} object. Files provided with the
+\code{spectraFiles} parameter are imported as a \code{Spectra} object and each
+file is automatically \emph{linked} to rows (samples) of a \code{sampleData}
+data frame (if provided).
 }
 \examples{
 
@@ -40,7 +41,7 @@ ann <- data.frame(
 
 ## Import the data
 library(MsExperiment)
-mse <- readMsExperiment(fls, ann)
+mse <- readMsExperiment(spectraFiles = fls, ann)
 mse
 
 ## Access the spectra data
@@ -50,7 +51,8 @@ spectra(mse)
 sampleData(mse)
 
 ## Import the data reading all MS spectra directly into memory
-mse <- readMsExperiment(fls, ann, backend = Spectra::MsBackendMemory())
+mse <- readMsExperiment(spectraFiles = fls, ann,
+    backend = Spectra::MsBackendMemory())
 mse
 }
 \author{
