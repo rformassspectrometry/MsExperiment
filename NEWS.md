@@ -2,8 +2,7 @@
 
 ## MsExperiment 1.1.2
 
-- Add `readMsExperiment` function ([issue
-  #32](https://github.com/rformassspectrometry/MsExperiment/issues/32)).
+- Add `readMsExperiment` function ([issue #32](https://github.com/rformassspectrometry/MsExperiment/issues/32)).
 
 ## MsExperiment 1.1.1
 
