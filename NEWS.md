@@ -1,5 +1,9 @@
 # MsExperiment 1.1
 
+## MsExperiment 1.1.2
+
+- Add `readMsExperiment` function ([issue #32](https://github.com/rformassspectrometry/MsExperiment/issues/32)).
+
 ## MsExperiment 1.1.1
 
 - Use `S4Vectors::findMatches` in `linkSampleData` which improves performance,
