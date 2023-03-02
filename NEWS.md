@@ -1,5 +1,9 @@
 # MsExperiment 1.1
 
+## MsExperiment 1.1.3
+
+- Fix problem in unit test.
+
 ## MsExperiment 1.1.2
 
 - Add `readMsExperiment` function ([issue #32](https://github.com/rformassspectrometry/MsExperiment/issues/32)).
