@@ -266,7 +266,10 @@ test_that(".ms_experiment_is_empty works", {
 })
 
 test_that("readMsExperiment works", {
-    expect_error(a <- readMsExperiment(), "'files'")
+    expect_warning(a <- readMsExperiment(), "no")
+    expect_s4_class(a, "MsExperiment")
+    expect_true(length(a) == 0)
+    expect_true(length(spectra(a)) == 0)
     expect_error(a <- readMsExperiment("a"), "not found")
     fls <- c(system.file("microtofq/MM14.mzML", package = "msdata"),
              system.file("microtofq/MM8.mzML", package = "msdata"))
