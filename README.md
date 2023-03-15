@@ -2,8 +2,12 @@
 
 [![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![R-CMD-check-bioc](https://github.com/RforMassSpectrometry/MsExperiment/workflows/R-CMD-check-bioc/badge.svg)](https://github.com/RforMassSpectrometry/MsExperiment/actions?query=workflow%3AR-CMD-check-bioc)
-[![codecov.io](https://codecov.io/github/rformassspectrometry/MsExperiment/coverage.svg?branch=devel)](https://codecov.io/github/rformassspectrometry/MsExperiment?branch=devel)
+
 [![license](https://img.shields.io/badge/license-Artistic--2.0-brightgreen.svg)](https://opensource.org/licenses/Artistic-2.0)
+[![years in bioc](http://bioconductor.org/shields/years-in-bioc/MsExperiment.svg)](https://bioconductor.org/packages/release/bioc/html/MsExperiment.html)
+[![Ranking by downloads](http://bioconductor.org/shields/downloads/release/MsExperiment.svg)](https://bioconductor.org/packages/stats/bioc/MsExperiment/)
+[![build release](http://bioconductor.org/shields/build/release/bioc/MsExperiment.svg)](https://bioconductor.org/checkResults/release/bioc-LATEST/MsExperiment/)
+[![build devel](http://bioconductor.org/shields/build/devel/bioc/MsExperiment.svg)](https://bioconductor.org/checkResults/devel/bioc-LATEST/MsExperiment/)
 
 
 The `MsExperiment` package provides the `MsExperiment` class that can
