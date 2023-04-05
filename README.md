@@ -2,7 +2,7 @@
 
 [![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![R-CMD-check-bioc](https://github.com/RforMassSpectrometry/MsExperiment/workflows/R-CMD-check-bioc/badge.svg)](https://github.com/RforMassSpectrometry/MsExperiment/actions?query=workflow%3AR-CMD-check-bioc)
-
+[![codecov](https://codecov.io/gh/rformassspectrometry/MsExperiment/branch/devel/graph/badge.svg?token=IEBQZJAJVI)](https://codecov.io/gh/rformassspectrometry/MsExperiment)
 [![license](https://img.shields.io/badge/license-Artistic--2.0-brightgreen.svg)](https://opensource.org/licenses/Artistic-2.0)
 [![years in bioc](http://bioconductor.org/shields/years-in-bioc/MsExperiment.svg)](https://bioconductor.org/packages/release/bioc/html/MsExperiment.html)
 [![Ranking by downloads](http://bioconductor.org/shields/downloads/release/MsExperiment.svg)](https://bioconductor.org/packages/stats/bioc/MsExperiment/)
@@ -30,6 +30,10 @@ for more information.
 This package is part of the RforMassSpectrometry initiative:
 https://www.rformassspectrometry.org/
 
-## Contributions
 
-Please see the *R for Mass Spectrometry* [code of conduct](https://rformassspectrometry.github.io/RforMassSpectrometry/articles/RforMassSpectrometry.html#code-of-conduct) and [contribution guidelines](https://rformassspectrometry.github.io/RforMassSpectrometry/articles/RforMassSpectrometry.html#contributions).
+# Contributions
+
+Contributions are highly welcome and should follow the [contribution
+guidelines](https://rformassspectrometry.github.io/RforMassSpectrometry/articles/RforMassSpectrometry.html#contributions).
+Also, please check the coding style guidelines in the [RforMassSpectrometry
+vignette](https://rformassspectrometry.github.io/RforMassSpectrometry/articles/RforMassSpectrometry.html).
