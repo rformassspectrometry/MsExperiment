@@ -82,6 +82,9 @@
 #' - `qdata`, `qdata<-`: gets or sets the quantification data, which can be a
 #'   `QFeatures` or `SummarizedExperiment`.
 #'
+#' - `otherData` , `otherData<-`: gets or sets the addition data
+#'   types, stored as a `List` in the object's `otherData` slot.
+#'
 #' @section Linking sample data to other experimental data:
 #'
 #' To start with, an `MsExperiment` is just a loose collection of files and data
@@ -338,14 +341,33 @@ setMethod("show", "MsExperiment", function(object) {
     if (.ms_experiment_is_empty(object))
         mess <- "Empty object of class"
     cat(mess, class(object), "\n")
-    if (!is.null(experimentFiles(object)))
+    ## Show experiment files
+    if (length(experimentFiles(object)))
         cat(" Files:", paste(names(experimentFiles(object)),
                              collapse = ", "), "\n")
+    ## Show spectra
     if (!is.null(object@spectra)) {
         mstab <- table(msLevel(object@spectra))
         cat(" Spectra:", paste0("MS", names(mstab), " (", mstab, ")"),
             "\n")
     }
+    ## Show quantitative data
+    if (!is.null(object@qdata)) {
+        if (inherits(object@qdata, "SummarizedExperiment"))
+            cat( " SummarizedExperiment:",
+                nrow(object@qdata), "feature(s)\n")
+        else ## QFeatures
+            cat( " QFeatures:",
+                length(object@qdata), "assay(s)\n")
+
+    }
+    ## Show other data
+    if (length(object@otherData)) {
+        cat(" Other data:",
+            paste(names(object@otherData), collapse = ", "),
+            "\n")
+    }
+    ## Show experiment/sample data
     if (nrow(object@sampleData)) {
         cat(" Experiment data:",
             nrow(object@sampleData), "sample(s)\n")
@@ -393,6 +415,24 @@ setReplaceMethod("spectra", "MsExperiment", function(object, value) {
     object@spectra <- value
     object
 })
+
+
+#' @rdname MsExperiment
+#'
+#' @export
+otherData <- function(object) {
+    stopifnot(inherits(object, "MsExperiment"))
+    object@otherData
+
+}
+
+#' @rdname MsExperiment
+#'
+#' @export
+`otherData<-` <- function(object, value) {
+    object@otherData <- value
+    object
+}
 
 #' @rdname MsExperiment
 #'
