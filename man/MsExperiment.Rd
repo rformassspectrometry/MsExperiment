@@ -14,6 +14,8 @@
 \alias{length,MsExperiment-method}
 \alias{spectra,MsExperiment-method}
 \alias{spectra<-,MsExperiment-method}
+\alias{otherData}
+\alias{otherData<-}
 \alias{linkSampleData}
 \alias{[,MsExperiment,ANY,ANY,ANY-method}
 \title{Managing Mass Spectrometry Experiments}
@@ -39,6 +41,10 @@ MsExperiment()
 \S4method{spectra}{MsExperiment}(object)
 
 \S4method{spectra}{MsExperiment}(object) <- value
+
+otherData(object)
+
+otherData(object) <- value
 
 linkSampleData(
   object,
@@ -176,6 +182,8 @@ samples availble in the object's \code{sampleData}.
 the updated \code{MsExperiment}.
 \item \code{qdata}, \verb{qdata<-}: gets or sets the quantification data, which can be a
 \code{QFeatures} or \code{SummarizedExperiment}.
+\item \code{otherData} , \verb{otherData<-}: gets or sets the addition data
+types, stored as a \code{List} in the object's \code{otherData} slot.
 }
 }
 

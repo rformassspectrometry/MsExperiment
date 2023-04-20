@@ -1,5 +1,10 @@
 # MsExperiment 1.1
 
+## MsExperiment 1.1.4
+
+- Fix and improve show,MSnExperiment.
+- New `otherData` setter and getter functions.
+
 ## MsExperiment 1.1.3
 
 - Fix problem in unit test.

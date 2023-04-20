@@ -120,6 +120,8 @@ test_that("show,MsExperiment works", {
     expect_output(show(MsExperiment()), "MsExperiment")
     expect_output(show(mse), "Experiment data")
     expect_output(show(MsExperiment()), "Empty object")
+    otherData(mse)$X <- 1
+    expect_output(show(mse), "Other data: X")
 })
 
 test_that("metadata<-,metadata,MsExperiment works", {
@@ -142,4 +144,16 @@ test_that("spectra<-,spectra,MsExperiment works", {
     expect_equal(spectra(m), res)
 
     expect_error(spectra(m) <- "b")
+})
+
+
+test_that("otherData<-,otherData,MsExperiment works", {
+    m <- MsExperiment()
+    expect_identical(length(otherData(m)), 0L)
+    otherData(m)$NUM <- 1
+    expect_identical(length(otherData(m)), 1L)
+    expect_identical(names(otherData(m)), "NUM")
+    expect_identical(otherData(m)[["NUM"]], 1)
+    otherData(m)[["NUM"]] <- NULL
+    expect_identical(length(otherData(m)), 0L)
 })
