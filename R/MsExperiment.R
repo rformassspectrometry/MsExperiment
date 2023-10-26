@@ -501,5 +501,10 @@ setMethod("[", "MsExperiment", function(x, i, j, ..., drop = FALSE) {
                  "samples in 'x'.")
         i <- which(i)
     }
+    if (any(i < 0)) {
+        if (all(i < 0))
+            i <- seq_along(x)[i]
+        else stop("Mixing positive and negative indices is not supported.")
+    }
     .extractSamples(x, i, newx = x)
 })
