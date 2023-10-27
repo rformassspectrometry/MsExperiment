@@ -1,3 +1,9 @@
+# MsExperiment 1.5
+
+## MsExperiment 1.5.1
+
+- Fix subset with negative indices ([issue #37](https://github.com/rformassspectrometry/MsExperiment/issues/37).)
+
 # MsExperiment 1.1
 
 ## MsExperiment 1.1.4
