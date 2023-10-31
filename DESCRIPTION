@@ -45,7 +45,8 @@ Suggests:
     rpx,
     mzR,
     msdata,
-    MsBackendSql
+    MsBackendSql,
+    RSQLite
 License: Artistic-2.0
 LazyData: no
 VignetteBuilder: knitr

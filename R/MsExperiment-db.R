@@ -1,13 +1,14 @@
 #' Functionality to store/retrieve MsExperiment data to/from databases.
 #'
 #' @noRd
+NULL
 
 #' @title Write sample annotations to a MsBackendSql SQL database
 #'
 #' @description
 #'
 #' For `MsExperiment` objects with their MS data represented by a `Spectra`
-#' object that use a [MsBackendSql] backend its sample annotations can be
+#' object that use a `MsBackendSql` backend its sample annotations can be
 #' written to that SQL database with the `dbWriteSampleData` function. The
 #' content of the object's `[sampleData()]` (as well as eventually present
 #' *linking* between samples and spectra) will be stored in two database
@@ -15,7 +16,7 @@
 #' that contains all the MS data of the experiment.
 #'
 #' This requires that the MS data of the experiment is *represented* by a
-#' [MsBackendSql] backend (see [createMsBackendSqlDatabase()] or the
+#' `MsBackendSql` backend (see help on the `createMsBackendSqlDatabase` or the
 #' *MsBackendSql* package vignette for more information on how to create or
 #' use such SQL databases).
 #'
