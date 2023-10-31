@@ -143,6 +143,44 @@ test_that("[,LinkedMsExperiment works", {
 test_that("MsExperiment works", {
     m <- MsExperiment()
     expect_s4_class(m, "MsExperiment")
+
+    sdata <- data.frame(sample_name = c("A", "B"), sample_index = c(4, 12),
+                        sample_file = basename(fls))
+    s <- Spectra(fls)
+    s$file <- basename(dataOrigin(s))
+
+    m <- MsExperiment(spectra = s)
+    expect_equal(spectra(m), s)
+
+    m <- MsExperiment(spectra = s, sampleData = sdata)
+    expect_equal(spectra(m), s)
+    expect_equal(sampleData(m), DataFrame(sdata))
+
+    s_sql <- tempfile()
+    s <- setBackend(s, MsBackendOfflineSql(), drv = RSQLite::SQLite(),
+                    dbname = s_sql, BPPARAM = SerialParam())
+
+    m <- MsExperiment(spectra = s)
+    expect_equal(spectra(m), s)
+    expect_equal(sampleData(m), DataFrame())
+
+    m <- MsExperiment(spectra = s, sampleData = sdata)
+    dbWriteSampleData(m)
+
+    ## Read sample data from database
+    m <- MsExperiment(spectra = s)
+    expect_equal(spectra(m), s)
+    expect_equal(sampleData(m)[, 1:3], DataFrame(sdata))
+
+    m <- MsExperiment(spectra = s, sampleData = sdata)
+    expect_equal(sampleData(m), DataFrame(sdata))
+
+    m <- linkSampleData(m, with = "sampleData.sample_file = spectra.file")
+    dbWriteSampleData(m)
+    m2 <- MsExperiment(spectra = s)
+    expect_equal(sampleData(m2)[, 1:3], DataFrame(sdata))
+    expect_equal(m@sampleDataLinks[["spectra"]],
+                 m2@sampleDataLinks[["spectra"]])
 })
 
 test_that("show,MsExperiment works", {

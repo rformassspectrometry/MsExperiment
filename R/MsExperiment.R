@@ -326,8 +326,26 @@ setClass("MsExperiment",
 #' @rdname MsExperiment
 #'
 #' @export
-MsExperiment <- function()
-    new("MsExperiment")
+MsExperiment <- function(experimentFiles = MsExperimentFiles(),
+                         otherData = List(),
+                         qdata = NULL,
+                         sampleData = DataFrame(),
+                         spectra = NULL) {
+    if (!length(sampleData) && length(spectra) &&
+        inherits(spectra, "Spectra") &&
+        inherits(spectra@backend, "MsBackendSql")) {
+        sampleData <- .db_get_sample_data(spectra)
+        slink <- .db_get_sample_spectra_link(spectra)
+    } else slink <- matrix(ncol = 2, nrow = 0)
+    res <- new("MsExperiment", experimentFiles = experimentFiles,
+               otherData = otherData, qdata = qdata,
+               sampleData = DataFrame(sampleData), spectra = spectra)
+    if (length(slink)) {
+        res@sampleDataLinks[["spectra"]] <- slink
+        mcols(res@sampleDataLinks)["spectra", "subsetBy"] <- 1L
+    }
+    res
+}
 
 #' @rdname MsExperiment
 #'

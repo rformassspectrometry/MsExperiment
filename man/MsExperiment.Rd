@@ -32,7 +32,13 @@ qdata(object)
 
 qdata(object) <- value
 
-MsExperiment()
+MsExperiment(
+  experimentFiles = MsExperimentFiles(),
+  otherData = List(),
+  qdata = NULL,
+  sampleData = DataFrame(),
+  spectra = NULL
+)
 
 \S4method{show}{MsExperiment}(object)
 
