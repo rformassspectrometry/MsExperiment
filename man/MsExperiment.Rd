@@ -183,9 +183,9 @@ section for filtering and subsetting below for more information.
 providing the data with the parameters listed below. If the \code{\link[=Spectra]{Spectra()}}
 object provided with the \code{spectra} param uses a \code{MsBackendSql} backend,
 sample data could be retrieved from the associated SQL database (see
-section *Usage of \code{MsExperiment} with \code{MsBackendSql} in the vignette for
+section \emph{Using \code{MsExperiment} with \code{MsBackendSql}} in the vignette for
 details). Alternatively, it is also possible to subsequently add data and
-information to a \code{MsExperiment}.
+information to an existing \code{MsExperiment}.
 Finally, with the \code{\link[=readMsExperiment]{readMsExperiment()}} function it is possible to create
 a \code{MsExperiment} by importing MS spectra data directly from provided data
 files. See examples below or the package vignette for more information.

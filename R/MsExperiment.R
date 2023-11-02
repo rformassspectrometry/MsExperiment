@@ -58,9 +58,9 @@
 #' providing the data with the parameters listed below. If the [Spectra()]
 #' object provided with the `spectra` param uses a `MsBackendSql` backend,
 #' sample data could be retrieved from the associated SQL database (see
-#' section *Usage of `MsExperiment` with `MsBackendSql` in the vignette for
+#' section *Using `MsExperiment` with `MsBackendSql`* in the vignette for
 #' details). Alternatively, it is also possible to subsequently add data and
-#' information to a `MsExperiment`.
+#' information to an existing `MsExperiment`.
 #' Finally, with the [readMsExperiment()] function it is possible to create
 #' a `MsExperiment` by importing MS spectra data directly from provided data
 #' files. See examples below or the package vignette for more information.

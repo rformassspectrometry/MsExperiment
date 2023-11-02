@@ -8,12 +8,12 @@ NULL
 #' @description
 #'
 #' For `MsExperiment` objects with their MS data represented by a `Spectra`
-#' object that use a `MsBackendSql` backend its sample annotations can be
-#' written to that SQL database with the `dbWriteSampleData` function. The
-#' content of the object's `[sampleData()]` (as well as eventually present
-#' *linking* between samples and spectra) will be stored in two database
-#' tables *sample_data* and *sample_to_msms_spectrum* in the same database
-#' that contains all the MS data of the experiment.
+#' object that use a `MsBackendSql` backend, its sample annotations can be
+#' written to the backend's SQL database with the `dbWriteSampleData` function.
+#' The content of the object's `[sampleData()]` (as well as eventually present
+#' *linking* between samples and spectra) will be stored in two separate
+#' database tables *sample_data* and *sample_to_msms_spectrum* in the same
+#' database.
 #'
 #' This requires that the MS data of the experiment is *represented* by a
 #' `MsBackendSql` backend (see help on the `createMsBackendSqlDatabase` or the

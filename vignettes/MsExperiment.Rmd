@@ -252,6 +252,8 @@ existMsExperimentFiles(msexp)
 The `MsExperiment` object has been used to store files and data
 pertaining to a mass spectrometry experiment. It is now possible to
 save that object and reload it later to recover all data and metadata.
+See also section *Using `MsExperiment` with `MsBackendSql`* below for an
+alternative to load/restore defined MS experiments from an SQL database.
 
 ```{r save_exp, eval = TRUE}
 saveRDS(msexp, "msexp.rds")
@@ -469,8 +471,9 @@ add a `data.frame` as a `metadata` to the experiment and subset the object
 again.
 
 ```{r add_metadata}
-metadata(lmse)$other <- data.frame(sample_name = c("study_1", "POOL", "study_2"),
-                                  index = 1:3)
+metadata(lmse)$other <- data.frame(
+                  sample_name = c("study_1", "POOL", "study_2"),
+                  index = 1:3)
 b <- lmse[2]
 metadata(b)
 ```
@@ -516,6 +519,211 @@ Thus, while we added a single *annotation* file to the data element
 identical files. This duplication of *n:m* relationships between
 samples to elements does however not affect data consistency. A sample will
 always be linked to the correct value/element.
+
+
+# Using `MsExperiment` with `MsBackendSql`
+
+The `r Biocpkg("MsBackendSql")` provides functionality to store mass
+spectrometry data in a SQL database and to *represent* such data as a `Spectra`
+object (through its `MsBackendSql` or `MsBackendOfflineSql` backends). Next to
+the MS data, it is also possible to store sample data in such SQL databases
+hence allowing to create self-contained databases for MS experiments. This
+simplifies the process to load pre-defined MS experiment or to share experiment
+data across analyses or with a collaborator. In this section we show how MS data
+and sample information from an experiment can be stored into a SQL database and
+how that data can then be loaded again as a `MsExperiment`.
+
+Below we first define the raw data files of the experiment. In our example we
+use two small test files provided with the `r Biocpkg("msdata")` package.
+
+```{r}
+fls <- c(system.file("microtofq", "MM14.mzML", package = "msdata"),
+         system.file("microtofq", "MM8.mzML", package = "msdata"))
+```
+
+We can then use the `createMsBackendSqlDatabase` function from the
+`r Biocpkg("MsBackendSql")` package to write the data into a SQLite
+database. SQLite databases are particularly easy to create, use and also to
+share, but for large experiments it is suggested to use more powerful database
+engines, such as for example *MariaDB* (see also the documentation and vignette
+of the `r Biocpkg("MsBackendSql")` package for parameters and settings for such
+large databases).
+
+Also, in our example we store the SQLite database into a data temporary file,
+but for a real use case we would want to use a *real* file.
+
+```{r}
+library(MsBackendSql)
+library(RSQLite)
+
+#' Create the SQLite database where to store the data. For our
+#' example we create the database in a temporary file.
+sql_file <- tempfile()
+con <- dbConnect(SQLite(), dbname = sql_file)
+
+#' Write the MS data to the.
+createMsBackendSqlDatabase(dbcon = con, fls)
+```
+
+We can now create a `Spectra` object representing the MS data in that database
+using either a `MsBackendSql` or `MsBackendOfflineSql` backend.
+
+```{r}
+#' Load the database as a Spectra object
+sps <- Spectra(sql_file, source = MsBackendOfflineSql(), drv = SQLite())
+sps
+```
+
+Next we define sample annotations for the two files and create a `MsExperiment`
+with the MS data and the related sample annotations.
+
+```{r}
+#' Define sample annotations. Ideally all experiment-relavant information
+#' should be specified.
+sdata <- data.frame(file_name = basename(fls),
+                    sample_name = c("MM14", "MM8"),
+                    sample_group = c("ctrl", "ctrl"))
+
+#' To simplify subsequent linking between samples and data files we
+#' define a new spectra variable with the file names of the raw data files.
+sps$file_name <- basename(dataOrigin(sps))
+
+#' Create the MsExperiment for that data
+mse <- MsExperiment(sampleData = sdata, spectra = sps)
+```
+
+Finally we *link* the MS spectra to the individual samples using the file names
+of the original data files.
+
+```{r}
+#' Establish the mapping between spectra and samples
+mse <- linkSampleData(mse, with = "sampleData.file_name = spectra.file_name")
+mse
+```
+
+With sample annotations and the mapping between samples and spectra defined, we
+can next write this information to the SQL database containing already the MS
+data of our experiment: the `dbWriteSampleData` function writes, for
+`MsExperiment` objects that use a `Spectra` with a `MsBackendSql` (or
+`MsBackendOfflineSql`) backend the available sample data to additional database
+tables in the database.
+
+```{r}
+#' Write sample data (and mapping between samples and spectra) to the
+#' database
+dbWriteSampleData(mse)
+```
+
+The SQL database does now contain the MS data, the sample annotations and the
+mapping between samples and spectra. Creation of such a database needs to be
+performed only once for an experiment. The associated SQLite database file could
+now be shared with a collaborator or used across different analyses without the
+need to share or copy also the raw data files or sample annotations (which would
+usually needed to be provided as a separate file).
+
+To load the MS experiment data again into R, we first need to create a `Spectra`
+object with a `MsBackendSql` or `MsBackendOfflineSql` backend for that SQL
+database.
+
+```{r}
+#' Create a Spectra object for the MS data of that database
+sps <- Spectra(sql_file, source = MsBackendOfflineSql(), drv = SQLite())
+```
+
+We then pass this `Spectra` object with parameter `spectra` to the
+`MsExperiment` constructor call. The function will then read also sample data
+from the database (if available) as well as the mapping between samples and
+spectra to restore our MS experiment.
+
+```{r}
+#' Create the MsExperiment reading MS data and sample data from
+#' the database
+mse <- MsExperiment(spectra = sps)
+mse
+```
+
+We have thus now the full MS experiment data available.
+
+For smaller experiments, such SQL databases could also be created with an
+alternative, eventually simpler, approach. For that we first use the
+`readMsExperiment` function to create an `MsExperiment` from the file names of
+the raw MS data files and a `data.frame` with the associated sample
+annotations. We re-use here the variables `fls` with the data file names and
+`sdata` with the sample data.
+
+```{r}
+#' Create an MsExperiment with data from two (raw) data files
+#' and associated sample annotations.
+mse <- readMsExperiment(spectraFiles = fls, sampleData = sdata)
+mse
+```
+
+The MS data in that `MsExperiment` is represented by a `Spectra` object using
+the `MsBackendMzR`:
+
+```{r}
+#' Show the Spectra from the experiment
+spectra(mse)
+```
+
+We next change the backend of this `Spectra` object using the `setBackend`
+function to a `MsBackendOfflineSql`. We choose again a SQLite database format
+and store the data to a temporary file. Note that we need to disable eventual
+parallel processing with `BPPARAM = SerialParam()` because parallel
+writing/importing data to a SQLite database is not supported.
+
+```{r}
+#' Define the SQLite database file
+sql_file2 <- tempfile()
+
+#' Change the backend of the Spectra data
+spectra(mse) <- setBackend(spectra(mse), MsBackendOfflineSql(),
+                           dbname = sql_file2, drv = SQLite(),
+                           BPPARAM = SerialParam())
+
+spectra(mse)
+```
+
+All MS data is now stored in the SQLite database and the `Spectra` object of our
+experiment uses the `MsBackendOfflineSql` to represent/interface this data. To
+store also the sample data to the database we can use the `dbWriteSampleData` as
+before.
+
+```{r}
+#' Store also sample data to the database
+dbWriteSampleData(mse)
+```
+
+In addition to create self-contained SQL databases for an experiment, this code
+could also be used within an analysis workflow to serialize/de-serialize
+results, always with the advantage of keeping the full experiment data in a
+single place (file) in a language-agnostic format.
+
+We can for example use basic functions from the *DBI*/*RSQLite* packages (or
+simple SQL commands) to access the data in the database. Below we connect to the
+database and list the available tables.
+
+```{r}
+#' Connect to the database
+con <- dbConnect(SQLite(), dbname = sql_file2)
+
+#' List the available database tables
+dbListTables(con)
+```
+
+The *msms_spectrum* table contains general metadata for the individual MS
+spectra, *msms_spectrum_peak_blob* the actual peak data (*m/z* and intensity
+values), *sample_data* the sample annotations and *sample_to_msms_spectrum* the
+link between samples and spectra. Below we retrieve the content of the
+*sample_data* table.
+
+```{r}
+#' Get the content of the sample_data table
+dbGetQuery(con, "select * from sample_data")
+
+#' Close the connection to the database
+dbDisconnect(con)
+```
 
 
 # Session information

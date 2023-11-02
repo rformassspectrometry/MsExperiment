@@ -12,12 +12,12 @@ to the database.}
 }
 \description{
 For \code{MsExperiment} objects with their MS data represented by a \code{Spectra}
-object that use a \code{MsBackendSql} backend its sample annotations can be
-written to that SQL database with the \code{dbWriteSampleData} function. The
-content of the object's \verb{[sampleData()]} (as well as eventually present
-\emph{linking} between samples and spectra) will be stored in two database
-tables \emph{sample_data} and \emph{sample_to_msms_spectrum} in the same database
-that contains all the MS data of the experiment.
+object that use a \code{MsBackendSql} backend, its sample annotations can be
+written to the backend's SQL database with the \code{dbWriteSampleData} function.
+The content of the object's \verb{[sampleData()]} (as well as eventually present
+\emph{linking} between samples and spectra) will be stored in two separate
+database tables \emph{sample_data} and \emph{sample_to_msms_spectrum} in the same
+database.
 
 This requires that the MS data of the experiment is \emph{represented} by a
 \code{MsBackendSql} backend (see help on the \code{createMsBackendSqlDatabase} or the
