@@ -45,7 +45,7 @@ Suggests:
     rpx,
     mzR,
     msdata,
-    MsBackendSql,
+    MsBackendSql (>= 1.3.2),
     RSQLite
 License: Artistic-2.0
 LazyData: no

@@ -668,9 +668,7 @@ spectra(mse)
 
 We next change the backend of this `Spectra` object using the `setBackend`
 function to a `MsBackendOfflineSql`. We choose again a SQLite database format
-and store the data to a temporary file. Note that we need to disable eventual
-parallel processing with `BPPARAM = SerialParam()` because parallel
-writing/importing data to a SQLite database is not supported.
+and store the data to a temporary file.
 
 ```{r}
 #' Define the SQLite database file
@@ -678,8 +676,7 @@ sql_file2 <- tempfile()
 
 #' Change the backend of the Spectra data
 spectra(mse) <- setBackend(spectra(mse), MsBackendOfflineSql(),
-                           dbname = sql_file2, drv = SQLite(),
-                           BPPARAM = SerialParam())
+                           dbname = sql_file2, drv = SQLite())
 
 spectra(mse)
 ```
