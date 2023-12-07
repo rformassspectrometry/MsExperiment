@@ -192,6 +192,9 @@ jobs:
           BiocManager::install("SummarizedExperiment", ask = FALSE, update = FALSE)
           BiocManager::install("msdata")
           BiocManager::install("lgatto/rpx")
+          ## Manually install dev version(s)
+          BiocManager::install("RforMassSpectrometry/MsBackendSql")
+
           # BiocManager::install(c("devtools", "usethis", "vdiffr"), dependencies = TRUE, ask = FALSE, update = FALSE)
           ## For running the checks
           message(paste('****', Sys.time(), 'installing rcmdcheck and BiocCheck ****'))
