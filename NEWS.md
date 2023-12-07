@@ -1,5 +1,10 @@
 # MsExperiment 1.5
 
+## MsExperiment 1.5.2
+
+- Add support to read/write sample data from/to a *MsBackendSql* database
+  ([issue #39](https://github.com/rformassspectrometry/MsExperiment/issues/39)).
+
 ## MsExperiment 1.5.1
 
 - Fix subset with negative indices ([issue #37](https://github.com/rformassspectrometry/MsExperiment/issues/37).)

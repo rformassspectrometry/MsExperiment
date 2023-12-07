@@ -32,7 +32,13 @@ qdata(object)
 
 qdata(object) <- value
 
-MsExperiment()
+MsExperiment(
+  experimentFiles = MsExperimentFiles(),
+  otherData = List(),
+  qdata = NULL,
+  sampleData = DataFrame(),
+  spectra = NULL
+)
 
 \S4method{show}{MsExperiment}(object)
 
@@ -61,6 +67,21 @@ linkSampleData(
 
 \item{value}{An object of the appropriate class for the slot to be
 populated.}
+
+\item{experimentFiles}{\code{\link[=MsExperimentFiles]{MsExperimentFiles()}} defining (external) files
+to data or annotation.}
+
+\item{otherData}{\code{List} with arbitrary additional (\emph{other}) information or
+data.}
+
+\item{qdata}{\code{QFeatures} or \code{SummarizedExperiment} with the quantification
+data.}
+
+\item{sampleData}{\code{DataFrame} (or \code{data.frame}) with information on
+individual samples of the experiment.}
+
+\item{spectra}{\code{\link[=Spectra]{Spectra()}} object with the MS spectra data of the
+experiment.}
 
 \item{x}{an \code{MsExperiment}.}
 
@@ -139,7 +160,7 @@ all relevant information on that sample.
 \item General metadata about the experiment, stored as a \code{list} in the
 \code{metadata} slot.
 \item Mass spectrometry data. Sectra and their metadata are stored as
-an \code{Spectra()} object in the \code{spectra} slot. Chromatographic data
+an \verb{[Spectra()]} object in the \code{spectra} slot. Chromatographic data
 is not yet supported but will be stored as a \code{Chromatograms()}
 object in the \code{chromatorgrams} slot.
 \item Quantification data is stored as \code{QFeatures} or
@@ -159,10 +180,15 @@ object using the \code{[} function which will always subset by samples. See the
 section for filtering and subsetting below for more information.
 
 \code{MsExperiment} objects can be created using the \code{MsExperiment()} function
-and by subsequently adding data and information to it (see examples
-below or the package vignette for more information), or using the
-\code{\link[=readMsExperiment]{readMsExperiment()}} function that creates a \code{MsExperiment} by importing
-directly MS spectra data from provided data files.
+providing the data with the parameters listed below. If the \code{\link[=Spectra]{Spectra()}}
+object provided with the \code{spectra} param uses a \code{MsBackendSql} backend,
+sample data could be retrieved from the associated SQL database (see
+section \emph{Using \code{MsExperiment} with \code{MsBackendSql}} in the vignette for
+details). Alternatively, it is also possible to subsequently add data and
+information to an existing \code{MsExperiment}.
+Finally, with the \code{\link[=readMsExperiment]{readMsExperiment()}} function it is possible to create
+a \code{MsExperiment} by importing MS spectra data directly from provided data
+files. See examples below or the package vignette for more information.
 }
 
 \section{Accessing data}{

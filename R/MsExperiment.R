@@ -34,7 +34,7 @@
 #'   `metadata` slot.
 #'
 #' - Mass spectrometry data. Sectra and their metadata are stored as
-#'   an `Spectra()` object in the `spectra` slot. Chromatographic data
+#'   an `[Spectra()]` object in the `spectra` slot. Chromatographic data
 #'   is not yet supported but will be stored as a `Chromatograms()`
 #'   object in the `chromatorgrams` slot.
 #'
@@ -55,10 +55,15 @@
 #' section for filtering and subsetting below for more information.
 #'
 #' `MsExperiment` objects can be created using the `MsExperiment()` function
-#' and by subsequently adding data and information to it (see examples
-#' below or the package vignette for more information), or using the
-#' [readMsExperiment()] function that creates a `MsExperiment` by importing
-#' directly MS spectra data from provided data files.
+#' providing the data with the parameters listed below. If the [Spectra()]
+#' object provided with the `spectra` param uses a `MsBackendSql` backend,
+#' sample data could be retrieved from the associated SQL database (see
+#' section *Using `MsExperiment` with `MsBackendSql`* in the vignette for
+#' details). Alternatively, it is also possible to subsequently add data and
+#' information to an existing `MsExperiment`.
+#' Finally, with the [readMsExperiment()] function it is possible to create
+#' a `MsExperiment` by importing MS spectra data directly from provided data
+#' files. See examples below or the package vignette for more information.
 #'
 #' @section Accessing data:
 #'
@@ -158,7 +163,13 @@
 #'
 #' @return See help of the individual functions.
 #'
+#' @param spectra [Spectra()] object with the MS spectra data of the
+#'     experiment.
+#'
 #' @param drop for `[`: ignored.
+#'
+#' @param experimentFiles [MsExperimentFiles()] defining (external) files
+#'     to data or annotation.
 #'
 #' @param i for `[`: an `integer`, `character` or `logical` referring to the
 #'     indices or names (rowname of `sampleData`) of the samples to subset.
@@ -166,6 +177,15 @@
 #' @param j for `[`: not supported.
 #'
 #' @param object an `MsExperiment`.
+#'
+#' @param otherData `List` with arbitrary additional (*other*) information or
+#'     data.
+#'
+#' @param qdata `QFeatures` or `SummarizedExperiment` with the quantification
+#'     data.
+#'
+#' @param sampleData `DataFrame` (or `data.frame`) with information on
+#'     individual samples of the experiment.
 #'
 #' @param sampleIndex for `linkSampleData`: `integer` with the indices of the
 #'     samples in `sampleData(object)` that should be linked.
@@ -326,8 +346,26 @@ setClass("MsExperiment",
 #' @rdname MsExperiment
 #'
 #' @export
-MsExperiment <- function()
-    new("MsExperiment")
+MsExperiment <- function(experimentFiles = MsExperimentFiles(),
+                         otherData = List(),
+                         qdata = NULL,
+                         sampleData = DataFrame(),
+                         spectra = NULL) {
+    if (!length(sampleData) && length(spectra) &&
+        inherits(spectra, "Spectra") &&
+        inherits(spectra@backend, "MsBackendSql")) {
+        sampleData <- .db_get_sample_data(spectra)
+        slink <- .db_get_sample_spectra_link(spectra)
+    } else slink <- matrix(ncol = 2, nrow = 0)
+    res <- new("MsExperiment", experimentFiles = experimentFiles,
+               otherData = otherData, qdata = qdata,
+               sampleData = DataFrame(sampleData), spectra = spectra)
+    if (length(slink)) {
+        res@sampleDataLinks[["spectra"]] <- slink
+        mcols(res@sampleDataLinks)["spectra", "subsetBy"] <- 1L
+    }
+    res
+}
 
 #' @rdname MsExperiment
 #'
