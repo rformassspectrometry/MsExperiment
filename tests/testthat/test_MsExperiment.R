@@ -224,3 +224,41 @@ test_that("otherData<-,otherData,MsExperiment works", {
     otherData(m)[["NUM"]] <- NULL
     expect_identical(length(otherData(m)), 0L)
 })
+
+test_that("filterSpectra,MsExperiment,function works", {
+    ## empty object
+    res <- filterSpectra(MsExperiment(), filterMsLevel, 2L)
+    expect_s4_class(res, "MsExperiment")
+    expect_true(length(res) == 0L)
+
+    ## an object without links.
+    res <- filterSpectra(mse, filterMsLevel, 2L)
+    expect_s4_class(res, "MsExperiment")
+    expect_equal(sampleData(res), sampleData(mse))
+    expect_true(length(spectra(res)) == 0L)
+    expect_equal(res@sampleDataLinks, mse@sampleDataLinks)
+
+    ## an object with links between samples and spectra
+    tmp <- readMsExperiment(fls)
+    res <- filterSpectra(tmp, filterMsLevel, 2L)
+    expect_s4_class(res, "MsExperiment")
+    expect_equal(sampleData(res), sampleData(tmp))
+    expect_true(length(spectra(res)) == 0L)
+    expect_equal(names(res@sampleDataLinks), names(tmp@sampleDataLinks))
+    expect_true(nrow(res@sampleDataLinks[["spectra"]]) == 0L)
+
+    ## Just reducing.
+    res <- filterSpectra(tmp, filterRt, c(200, 210))
+    expect_s4_class(res, "MsExperiment")
+    expect_equal(sampleData(res), sampleData(tmp))
+    expect_true(all(rtime(spectra(res)) >= 200 & rtime(spectra(res)) <= 210))
+    ## check that sample/spectra links are valid
+    a <- spectra(res[1L])
+    ref <- filterRt(spectra(tmp[1L]), c(200, 210))
+    expect_equal(a$scanIndex, ref$scanIndex)
+    expect_equal(a$dataOrigin, ref$dataOrigin)
+    a <- spectra(res[2L])
+    ref <- filterRt(spectra(tmp[2L]), c(200, 210))
+    expect_equal(a$scanIndex, ref$scanIndex)
+    expect_equal(a$dataOrigin, ref$dataOrigin)
+})

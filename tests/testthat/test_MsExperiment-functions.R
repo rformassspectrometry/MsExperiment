@@ -287,3 +287,19 @@ test_that("readMsExperiment works", {
     expect_true(nrow(sampleData(a)) == 2)
     expect_equal(sampleData(a)$other_ann, c("a", "b"))
 })
+
+test_that(".update_sample_data_links_spectra works", {
+    a <- readMsExperiment(fls)
+    tmp <- a
+    tmp@spectra$._SPECTRA_IDX <- seq_along(tmp@spectra)
+    tmp@spectra <- tmp@spectra[c(5, 14, 1000, 2, 200)]
+    res <- .update_sample_data_links_spectra(tmp)
+    expect_equal(res@sampleDataLinks[["spectra"]][, 1L], c(1L, 1L, 1L, 1L, 2L))
+    expect_equal(res@sampleDataLinks[["spectra"]][, 2L], c(4L, 1L, 2L, 5L, 3L))
+    expect_equal(res@spectra$scanIndex,
+                 a@spectra$scanIndex[c(5, 14, 1000, 2, 200)])
+    expect_equal(res@sampleData, tmp@sampleData)
+
+    expect_true(length(spectra(res[1L])) == 4)
+    expect_true(length(spectra(res[2L])) == 1)
+})
