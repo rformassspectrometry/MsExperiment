@@ -28,7 +28,7 @@
 }
 
 #' The validity of the link matrix is evaluated only when adding the link. Also,
-#' eventually existing links between the same entities will be **overwritten**.
+#' possibly existing links between the same entities will be **overwritten**.
 #'
 #' @param x `LinkedMsExperiment`.
 #'
@@ -409,7 +409,7 @@ readMsExperiment <- function(spectraFiles = character(),
 #'
 #' @description
 #'
-#' If @spectra got filtered eventually present *links* between them and samples
+#' If @spectra got filtered possibly present *links* between them and samples
 #' will no longer be valid and need to be updated/fixed. This function
 #' consolidates these links using a spectra variable `"._SPECTRA_IDX"` in
 #' `@spectra` that needs to represent/contain the index of the spectra

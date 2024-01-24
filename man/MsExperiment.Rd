@@ -376,7 +376,7 @@ experimentFiles(mse[1])[["annotations"]]
 experimentFiles(mse[2])[["annotations"]]
 
 ## Subsetting will always keep the relationship between samples and linked
-## data elements. Subsetting will however eventually duplicate data elements
+## data elements. Subsetting will however possibly duplicate data elements
 ## that are shared among samples. Thus, while in the original object the
 ## element "annotations" has a single entry, subsetting with [1:2] will
 ## result in an MsExperiment with duplicated entries in "annotations"
