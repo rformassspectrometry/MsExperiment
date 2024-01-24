@@ -164,7 +164,7 @@
 #' - `filterSpectra`: subsets the `Spectra` within an `MsExperiment` using a
 #'   provided filter function (parameter `filter`). Parameters for the filter
 #'   function can be passed with parameter `...`. Any of the filter functions
-#'   of a [Spectra()] object can be passed with parameter `filter`. Eventually
+#'   of a [Spectra()] object can be passed with parameter `filter`. Possibly
 #'   present relationships between samples and spectra (*links*, see also
 #'   `linkSampleData`) are updated. Filtering affects only the spectra data
 #'   of the object, none of the other slots and data (e.g. `sampleData`) are
@@ -579,17 +579,13 @@ setMethod("[", "MsExperiment", function(x, i, j, ..., drop = FALSE) {
 
 #' @rdname MsExperiment
 #'
-#' @export
-setGeneric("filterSpectra", def = function(object, filter, ...)
-    standardGeneric("filterSpectra"))
-
-#' @rdname MsExperiment
-#'
 #' @importMethodsFrom Spectra selectSpectraVariables
 #'
 #' @importMethodsFrom Spectra spectraVariables
 #'
 #' @importMethodsFrom Spectra peaksVariables
+#'
+#' @importMethodsFrom ProtGenerics filterSpectra
 setMethod(
     "filterSpectra", c("MsExperiment", "function"),
     function(object, filter, ...) {

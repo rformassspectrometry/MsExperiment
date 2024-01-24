@@ -3,7 +3,7 @@
 ## MsExperiment 1.5.3
 
 - Add `filterSpectra` method to allow filtering of `Spectra` within an
-  `MsExperiment` while keeping eventually present relationships between samples
+  `MsExperiment` while keeping possibly present relationships between samples
   and spectra consistent.
 
 ## MsExperiment 1.5.2

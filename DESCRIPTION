@@ -26,7 +26,7 @@ Authors@R: c(person(given = "Laurent", family = "Gatto",
                     role = "aut"))
 Depends:
     R (>= 4.2),
-    ProtGenerics (>= 1.9.1),
+    ProtGenerics (>= 1.35.2),
 Imports:
     methods,
     S4Vectors,
@@ -53,7 +53,7 @@ VignetteBuilder: knitr
 BugReports: https://github.com/RforMassSpectrometry/MsExperiment/issues
 URL: https://github.com/RforMassSpectrometry/MsExperiment
 biocViews: Infrastructure, Proteomics, MassSpectrometry, Metabolomics, ExperimentalDesign, DataImport
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Roxygen: list(markdown=TRUE)
 Encoding: UTF-8
 Collate:

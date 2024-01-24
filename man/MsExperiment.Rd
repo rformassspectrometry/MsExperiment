@@ -18,7 +18,6 @@
 \alias{otherData<-}
 \alias{linkSampleData}
 \alias{[,MsExperiment,ANY,ANY,ANY-method}
-\alias{filterSpectra}
 \alias{filterSpectra,MsExperiment,function-method}
 \title{Managing Mass Spectrometry Experiments}
 \usage{
@@ -64,9 +63,7 @@ linkSampleData(
 
 \S4method{[}{MsExperiment,ANY,ANY,ANY}(x, i, j, ..., drop = FALSE)
 
-filterSpectra(object, filter, ...)
-
-\S4method{filterSpectra}{MsExperiment,`function`}(object, filter, ...)
+\S4method{filterSpectra}{MsExperiment,function}(object, filter, ...)
 }
 \arguments{
 \item{object}{An instance of class \code{MsExperiment}.}
@@ -301,7 +298,7 @@ See the vignette for details and examples.
 \item \code{filterSpectra}: subsets the \code{Spectra} within an \code{MsExperiment} using a
 provided filter function (parameter \code{filter}). Parameters for the filter
 function can be passed with parameter \code{...}. Any of the filter functions
-of a \code{\link[=Spectra]{Spectra()}} object can be passed with parameter \code{filter}. Eventually
+of a \code{\link[=Spectra]{Spectra()}} object can be passed with parameter \code{filter}. Possibly
 present relationships between samples and spectra (\emph{links}, see also
 \code{linkSampleData}) are updated. Filtering affects only the spectra data
 of the object, none of the other slots and data (e.g. \code{sampleData}) are
