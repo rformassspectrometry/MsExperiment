@@ -28,7 +28,7 @@
 }
 
 #' The validity of the link matrix is evaluated only when adding the link. Also,
-#' eventually existing links between the same entities will be **overwritten**.
+#' possibly existing links between the same entities will be **overwritten**.
 #'
 #' @param x `LinkedMsExperiment`.
 #'
@@ -403,4 +403,28 @@ readMsExperiment <- function(spectraFiles = character(),
     sampleData(x) <- sampleData
     spectra(x) <- Spectra(spectraFiles, ...)
     linkSampleData(x, with = "sampleData.spectraOrigin = spectra.dataOrigin")
+}
+
+#' @title Consolidate links between samples and spectra after filtering
+#'
+#' @description
+#'
+#' If @spectra got filtered possibly present *links* between them and samples
+#' will no longer be valid and need to be updated/fixed. This function
+#' consolidates these links using a spectra variable `"._SPECTRA_IDX"` in
+#' `@spectra` that needs to represent/contain the index of the spectra
+#' **before** filtering.
+#'
+#' @param x `MsExperiment`
+#'
+#' @author Johannes Rainer
+#' @noRd
+.update_sample_data_links_spectra <- function(x) {
+    sdl <- .sample_data_links(x, "spectra")[[1L]]
+    idx <- match(sdl[, 2L], x@spectra$._SPECTRA_IDX)
+    keep <- !is.na(idx)
+    sdl <- sdl[keep, , drop = FALSE]
+    sdl[, 2L] <- idx[keep]
+    x@sampleDataLinks[["spectra"]] <- sdl
+    x
 }

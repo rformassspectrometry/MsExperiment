@@ -161,6 +161,16 @@
 #'   arbitrary order is supported.
 #'   See the vignette for details and examples.
 #'
+#' - `filterSpectra`: subsets the `Spectra` within an `MsExperiment` using a
+#'   provided filter function (parameter `filter`). Parameters for the filter
+#'   function can be passed with parameter `...`. Any of the filter functions
+#'   of a [Spectra()] object can be passed with parameter `filter`. Possibly
+#'   present relationships between samples and spectra (*links*, see also
+#'   `linkSampleData`) are updated. Filtering affects only the spectra data
+#'   of the object, none of the other slots and data (e.g. `sampleData`) are
+#'   modified.
+#'   The function returns an `MsExperiment` with the filtered `Spectra` object.
+#'
 #' @return See help of the individual functions.
 #'
 #' @param spectra [Spectra()] object with the MS spectra data of the
@@ -170,6 +180,11 @@
 #'
 #' @param experimentFiles [MsExperimentFiles()] defining (external) files
 #'     to data or annotation.
+#'
+#' @param filter for `filterSpectra`: any filter function supported by
+#'     [Spectra()] to filter the spectra object (such as `filterRt` or
+#'     `filterMsLevel`). Parameters for the filter function can be passed
+#'     through `...`.
 #'
 #' @param i for `[`: an `integer`, `character` or `logical` referring to the
 #'     indices or names (rowname of `sampleData`) of the samples to subset.
@@ -205,7 +220,8 @@
 #'
 #' @param x an `MsExperiment`.
 #'
-#' @param ... optional additional parameters.
+#' @param ... optional additional parameters. For `filterSpectra`: parameters
+#'     to be passed to the filter function (parameter `filter`).
 #'
 #' @name MsExperiment
 #'
@@ -284,12 +300,26 @@
 #' experimentFiles(mse[2])[["annotations"]]
 #'
 #' ## Subsetting will always keep the relationship between samples and linked
-#' ## data elements. Subsetting will however eventually duplicate data elements
+#' ## data elements. Subsetting will however possibly duplicate data elements
 #' ## that are shared among samples. Thus, while in the original object the
 #' ## element "annotations" has a single entry, subsetting with [1:2] will
 #' ## result in an MsExperiment with duplicated entries in "annotations"
 #' experimentFiles(mse)[["annotations"]]
 #' experimentFiles(mse[1:2])[["annotations"]]
+#'
+#' ## Spectra within an MsExperiment can be filtered/subset with the
+#' ## `filterSpectra` function and any of the filter functions supported
+#' ## by `Spectra` objects. Below we restrict the spectra data to spectra
+#' ## with a retention time between 200 and 210 seconds.
+#' res <- filterSpectra(mse, filterRt, rt = c(200, 210))
+#' res
+#'
+#' ## The object contains now much less spectra. The retention times for these
+#' rtime(spectra(res))
+#'
+#' ## Relationship between samples and spectra was preserved by the filtering
+#' a <- res[1L]
+#' spectra(a)
 NULL
 
 #' @name MsExperiment-class
@@ -546,3 +576,33 @@ setMethod("[", "MsExperiment", function(x, i, j, ..., drop = FALSE) {
     }
     .extractSamples(x, i, newx = x)
 })
+
+#' @rdname MsExperiment
+#'
+#' @importMethodsFrom Spectra selectSpectraVariables
+#'
+#' @importMethodsFrom Spectra spectraVariables
+#'
+#' @importMethodsFrom Spectra peaksVariables
+#'
+#' @importMethodsFrom ProtGenerics filterSpectra
+setMethod(
+    "filterSpectra", c("MsExperiment", "function"),
+    function(object, filter, ...) {
+        ls <- length(spectra(object))
+        if (!ls)
+            return(object)
+        have_links <- length(.sample_data_links(object, "spectra")) > 0
+        if (have_links)
+            object@spectra$._SPECTRA_IDX <- seq_len(ls)
+        object@spectra <- filter(object@spectra, ...)
+        if (have_links) {
+            if (ls != length(spectra(object)))
+                object <- .update_sample_data_links_spectra(object)
+            svs <- unique(c(spectraVariables(spectra(object)),
+                            peaksVariables(spectra(object))))
+            object@spectra <- selectSpectraVariables(
+                object@spectra, svs[svs != "._SPECTRA_IDX"])
+        }
+        object
+    })

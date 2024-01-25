@@ -281,7 +281,7 @@ plotSpectra(sp[1000])
 
 For some experiments and data analyses an explicit link between data, data files
 and respective samples is required. Such links enable an easy (and error-free)
-subsetting or re-ordering of a whole experiment by sample and would also
+subset or re-ordering of a whole experiment by sample and would also
 simplify coloring and labeling of the data depending on the sample or of its
 variables or conditions.
 
@@ -519,6 +519,37 @@ Thus, while we added a single *annotation* file to the data element
 identical files. This duplication of *n:m* relationships between
 samples to elements does however not affect data consistency. A sample will
 always be linked to the correct value/element.
+
+
+# Subset and filter `MsExperiment`
+
+As already shown above, `MsExperiment` objects can be subset with `[` which will
+subset the data by sample. Depending on whether relationships (links) between
+samples and any other data within the object are present also these are
+correctly subset. In addition to this general subset operation, it is possible
+to individually filter the spectra data within an `MsExperiment` using the
+`filterSpectra` function. This function takes any filter function supported by
+`Spectra` with parameter `filter`. Parameters for this filter function can be
+passed through `...`. As an example we filter below the spectra data of our
+`MsExperiment` keeping only spectra with an retention time between 200 and 210
+seconds.
+
+```{r}
+#' Filter the Spectra using the `filterRt` function providing also the
+#' parameters for this function.
+res <- filterSpectra(lmse, filterRt, rt = c(200, 210))
+res
+```
+
+The resulting `MsExperiment` contains now much fewer spectra. `filterSpectra`
+did only filter the spectra data, but not any of the other data slots. It did
+however update and consolidate the relationships between samples and spectra
+(if present) after filtering:
+
+```{r}
+#' Extract spectra of the second sample after filtering
+spectra(res[2L])
+```
 
 
 # Using `MsExperiment` with `MsBackendSql`

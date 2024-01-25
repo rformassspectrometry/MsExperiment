@@ -1,5 +1,11 @@
 # MsExperiment 1.5
 
+## MsExperiment 1.5.3
+
+- Add `filterSpectra` method to allow filtering of `Spectra` within an
+  `MsExperiment` while keeping possibly present relationships between samples
+  and spectra consistent.
+
 ## MsExperiment 1.5.2
 
 - Add support to read/write sample data from/to a *MsBackendSql* database

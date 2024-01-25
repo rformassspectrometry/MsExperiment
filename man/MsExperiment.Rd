@@ -18,6 +18,7 @@
 \alias{otherData<-}
 \alias{linkSampleData}
 \alias{[,MsExperiment,ANY,ANY,ANY-method}
+\alias{filterSpectra,MsExperiment,function-method}
 \title{Managing Mass Spectrometry Experiments}
 \usage{
 experimentFiles(object)
@@ -61,6 +62,8 @@ linkSampleData(
 )
 
 \S4method{[}{MsExperiment,ANY,ANY,ANY}(x, i, j, ..., drop = FALSE)
+
+\S4method{filterSpectra}{MsExperiment,function}(object, filter, ...)
 }
 \arguments{
 \item{object}{An instance of class \code{MsExperiment}.}
@@ -106,9 +109,15 @@ indices or names (rowname of \code{sampleData}) of the samples to subset.}
 
 \item{j}{for \code{[}: not supported.}
 
-\item{...}{optional additional parameters.}
+\item{...}{optional additional parameters. For \code{filterSpectra}: parameters
+to be passed to the filter function (parameter \code{filter}).}
 
 \item{drop}{for \code{[}: ignored.}
+
+\item{filter}{for \code{filterSpectra}: any filter function supported by
+\code{\link[=Spectra]{Spectra()}} to filter the spectra object (such as \code{filterRt} or
+\code{filterMsLevel}). Parameters for the filter function can be passed
+through \code{...}.}
 }
 \value{
 See help of the individual functions.
@@ -286,6 +295,15 @@ not affect data consistency (see examples below for more information).
 Not linked data (slots) will be returned as they are. Subsetting in
 arbitrary order is supported.
 See the vignette for details and examples.
+\item \code{filterSpectra}: subsets the \code{Spectra} within an \code{MsExperiment} using a
+provided filter function (parameter \code{filter}). Parameters for the filter
+function can be passed with parameter \code{...}. Any of the filter functions
+of a \code{\link[=Spectra]{Spectra()}} object can be passed with parameter \code{filter}. Possibly
+present relationships between samples and spectra (\emph{links}, see also
+\code{linkSampleData}) are updated. Filtering affects only the spectra data
+of the object, none of the other slots and data (e.g. \code{sampleData}) are
+modified.
+The function returns an \code{MsExperiment} with the filtered \code{Spectra} object.
 }
 }
 
@@ -358,12 +376,26 @@ experimentFiles(mse[1])[["annotations"]]
 experimentFiles(mse[2])[["annotations"]]
 
 ## Subsetting will always keep the relationship between samples and linked
-## data elements. Subsetting will however eventually duplicate data elements
+## data elements. Subsetting will however possibly duplicate data elements
 ## that are shared among samples. Thus, while in the original object the
 ## element "annotations" has a single entry, subsetting with [1:2] will
 ## result in an MsExperiment with duplicated entries in "annotations"
 experimentFiles(mse)[["annotations"]]
 experimentFiles(mse[1:2])[["annotations"]]
+
+## Spectra within an MsExperiment can be filtered/subset with the
+## `filterSpectra` function and any of the filter functions supported
+## by `Spectra` objects. Below we restrict the spectra data to spectra
+## with a retention time between 200 and 210 seconds.
+res <- filterSpectra(mse, filterRt, rt = c(200, 210))
+res
+
+## The object contains now much less spectra. The retention times for these
+rtime(spectra(res))
+
+## Relationship between samples and spectra was preserved by the filtering
+a <- res[1L]
+spectra(a)
 }
 \author{
 Laurent Gatto, Johannes Rainer
