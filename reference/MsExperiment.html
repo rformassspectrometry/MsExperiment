@@ -26,7 +26,7 @@ https://www.rformassspectrometry.org/"><meta property="og:image" content="https:
     
     <a class="navbar-brand me-2" href="../index.html">MsExperiment</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -123,7 +123,10 @@ linkSampleData(
 )
 
 # S4 method for MsExperiment,ANY,ANY,ANY
-[(x, i, j, ..., drop = FALSE)</code></pre></div>
+[(x, i, j, ..., drop = FALSE)
+
+# S4 method for MsExperiment,function
+filterSpectra(object, filter, ...)</code></pre></div>
     </div>
 
     <div class="section level2">
@@ -200,11 +203,19 @@ indices or names (rowname of <code>sampleData</code>) of the samples to subset.<
 
 
 <dt>...</dt>
-<dd><p>optional additional parameters.</p></dd>
+<dd><p>optional additional parameters. For <code>filterSpectra</code>: parameters
+to be passed to the filter function (parameter <code>filter</code>).</p></dd>
 
 
 <dt>drop</dt>
 <dd><p>for <code>[</code>: ignored.</p></dd>
+
+
+<dt>filter</dt>
+<dd><p>for <code>filterSpectra</code>: any filter function supported by
+<code><a href="https://rdrr.io/pkg/Spectra/man/Spectra.html" class="external-link">Spectra()</a></code> to filter the spectra object (such as <code>filterRt</code> or
+<code>filterMsLevel</code>). Parameters for the filter function can be passed
+through <code>...</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -377,6 +388,15 @@ not affect data consistency (see examples below for more information).
 Not linked data (slots) will be returned as they are. Subsetting in
 arbitrary order is supported.
 See the vignette for details and examples.</p></li>
+<li><p><code>filterSpectra</code>: subsets the <code>Spectra</code> within an <code>MsExperiment</code> using a
+provided filter function (parameter <code>filter</code>). Parameters for the filter
+function can be passed with parameter <code>...</code>. Any of the filter functions
+of a <code><a href="https://rdrr.io/pkg/Spectra/man/Spectra.html" class="external-link">Spectra()</a></code> object can be passed with parameter <code>filter</code>. Possibly
+present relationships between samples and spectra (<em>links</em>, see also
+<code>linkSampleData</code>) are updated. Filtering affects only the spectra data
+of the object, none of the other slots and data (e.g. <code>sampleData</code>) are
+modified.
+The function returns an <code>MsExperiment</code> with the filtered <code>Spectra</code> object.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -544,7 +564,7 @@ See the vignette for details and examples.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "internal_standards.txt"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Subsetting will always keep the relationship between samples and linked</span></span></span>
-<span class="r-in"><span><span class="co">## data elements. Subsetting will however eventually duplicate data elements</span></span></span>
+<span class="r-in"><span><span class="co">## data elements. Subsetting will however possibly duplicate data elements</span></span></span>
 <span class="r-in"><span><span class="co">## that are shared among samples. Thus, while in the original object the</span></span></span>
 <span class="r-in"><span><span class="co">## element "annotations" has a single entry, subsetting with [1:2] will</span></span></span>
 <span class="r-in"><span><span class="co">## result in an MsExperiment with duplicated entries in "annotations"</span></span></span>
@@ -552,6 +572,56 @@ See the vignette for details and examples.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "internal_standards.txt"</span>
 <span class="r-in"><span><span class="fu">experimentFiles</span><span class="op">(</span><span class="va">mse</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">[[</span><span class="st">"annotations"</span><span class="op">]</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "internal_standards.txt" "internal_standards.txt"</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Spectra within an MsExperiment can be filtered/subset with the</span></span></span>
+<span class="r-in"><span><span class="co">## `filterSpectra` function and any of the filter functions supported</span></span></span>
+<span class="r-in"><span><span class="co">## by `Spectra` objects. Below we restrict the spectra data to spectra</span></span></span>
+<span class="r-in"><span><span class="co">## with a retention time between 200 and 210 seconds.</span></span></span>
+<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ProtGenerics/man/filterSpectra.html" class="external-link">filterSpectra</a></span><span class="op">(</span><span class="va">mse</span>, <span class="va">filterRt</span>, rt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fl">210</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">res</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Object of class MsExperiment </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Files: mzML_files, annotations </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Spectra: MS1 (72) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Experiment data: 2 sample(s)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Sample data links:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - experimentFiles.mzML_files: 2 sample(s) to 2 element(s).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - experimentFiles.annotations: 2 sample(s) to 1 element(s).</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - spectra: 2 sample(s) to 72 element(s).</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## The object contains now much less spectra. The retention times for these</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/ProtGenerics/man/protgenerics.html" class="external-link">rtime</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/ProtGenerics/man/protgenerics.html" class="external-link">spectra</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 200.049 200.328 200.607 200.886 201.165 201.444 201.723 202.002 202.281</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10] 202.560 202.839 203.118 203.397 203.676 203.955 204.234 204.513 204.792</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 205.071 205.350 205.629 205.908 206.187 206.466 206.745 207.024 207.303</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [28] 207.582 207.861 208.140 208.419 208.698 208.977 209.256 209.535 209.814</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [37] 200.044 200.323 200.602 200.881 201.160 201.439 201.718 201.997 202.276</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [46] 202.555 202.834 203.113 203.392 203.671 203.950 204.229 204.508 204.787</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [55] 205.066 205.345 205.624 205.903 206.182 206.461 206.740 207.019 207.298</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [64] 207.577 207.856 208.135 208.414 208.693 208.972 209.251 209.530 209.809</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Relationship between samples and spectra was preserved by the filtering</span></span></span>
+<span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="va">res</span><span class="op">[</span><span class="fl">1L</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/ProtGenerics/man/protgenerics.html" class="external-link">spectra</a></span><span class="op">(</span><span class="va">a</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> MSn data (Spectra) with 36 spectra in a MsBackendMzR backend:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       msLevel     rtime scanIndex</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     &lt;integer&gt; &lt;numeric&gt; &lt;integer&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1           1   200.049       717</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2           1   200.328       718</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3           1   200.607       719</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4           1   200.886       720</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5           1   201.165       721</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ...       ...       ...       ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32          1   208.698       748</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33          1   208.977       749</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34          1   209.256       750</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35          1   209.535       751</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36          1   209.814       752</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ... 33 more variables/columns.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> file(s):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20171016_POOL_POS_1_105-134.mzML</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Processing:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Filter: select retention time [200..210] on MS level(s) 1 [Thu Jan 25 09:30:13 2024] </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
