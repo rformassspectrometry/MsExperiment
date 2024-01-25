@@ -193,7 +193,7 @@ jobs:
           BiocManager::install("msdata")
           BiocManager::install("lgatto/rpx")
           ## Manually install dev version(s)
-          BiocManager::install("RforMassSpectrometry/MsBackendSql")
+          BiocManager::install("RforMassSpectrometry/ProtGenerics")
 
           # BiocManager::install(c("devtools", "usethis", "vdiffr"), dependencies = TRUE, ask = FALSE, update = FALSE)
           ## For running the checks
