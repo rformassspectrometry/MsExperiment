@@ -1,6 +1,6 @@
 Package: MsExperiment
 Title: Infrastructure for Mass Spectrometry Experiments
-Version: 1.5.3
+Version: 1.5.4
 Description: Infrastructure to store and manage all aspects related to
    a complete proteomics or metabolomics mass spectrometry (MS)
    experiment. The MsExperiment package provides light-weight and

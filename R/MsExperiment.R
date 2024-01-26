@@ -586,6 +586,8 @@ setMethod("[", "MsExperiment", function(x, i, j, ..., drop = FALSE) {
 #' @importMethodsFrom Spectra peaksVariables
 #'
 #' @importMethodsFrom ProtGenerics filterSpectra
+#'
+#' @export
 setMethod(
     "filterSpectra", c("MsExperiment", "function"),
     function(object, filter, ...) {

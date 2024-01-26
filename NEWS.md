@@ -1,5 +1,9 @@
 # MsExperiment 1.5
 
+## MsExperiment 1.5.4
+
+- Fix missing export of `filterSpectra`.
+
 ## MsExperiment 1.5.3
 
 - Add `filterSpectra` method to allow filtering of `Spectra` within an
