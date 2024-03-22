@@ -303,3 +303,23 @@ test_that(".update_sample_data_links_spectra works", {
     expect_true(length(spectra(res[1L])) == 4)
     expect_true(length(spectra(res[2L])) == 1)
 })
+
+test_that("spectraSampleIndex works", {
+    a <- MsExperiment()
+    expect_equal(spectraSampleIndex(a), integer())
+
+    a <- mse
+    expect_equal(spectraSampleIndex(a), rep(NA_integer_, length(spectra(a))))
+
+    a@sampleDataLinks[["spectra"]] <- cbind(c(1L, 2L, 1L, 1L),
+                                            c(132L, 2L, 342L, 54L))
+    res <- spectraSampleIndex(a)
+    expect_equal(length(res), length(spectra(a)))
+    expect_true(sum(!is.na(res)) == 4L)
+    expect_equal(res[!is.na(res)], c(2L, 1L, 1L, 1L))
+    expect_equal(res[c(132, 2, 342, 54)], c(1, 2, 1, 1))
+
+    a@sampleDataLinks[["spectra"]] <- cbind(c(1L, 2L, 1L, 1L, 2L),
+                                            c(132L, 2L, 342L, 54L, 2L))
+    expect_error(spectraSampleIndex(a), "One or more")
+})

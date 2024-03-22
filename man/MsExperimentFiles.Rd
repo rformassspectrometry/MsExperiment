@@ -20,7 +20,7 @@ elements are coerced to characters.}
 \item{metadata}{\code{list()} holding arbitrary R objects as
 annotations.}
 
-\item{object}{The \code{existMsExperimentFiles()} fonction works with
+\item{object}{The \code{existMsExperimentFiles()} function works with
 either an instance of \code{MsExperimentFiles} or \code{MsExperiment}.}
 }
 \value{
