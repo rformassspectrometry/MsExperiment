@@ -8,6 +8,7 @@
 \alias{sampleData<-}
 \alias{qdata}
 \alias{qdata<-}
+\alias{spectraSampleIndex}
 \alias{MsExperiment}
 \alias{MsExperiment-class}
 \alias{show,MsExperiment-method}
@@ -32,6 +33,8 @@ sampleData(object) <- value
 qdata(object)
 
 qdata(object) <- value
+
+spectraSampleIndex(x)
 
 MsExperiment(
   experimentFiles = MsExperimentFiles(),
@@ -71,6 +74,8 @@ linkSampleData(
 \item{value}{An object of the appropriate class for the slot to be
 populated.}
 
+\item{x}{an \code{MsExperiment}.}
+
 \item{experimentFiles}{\code{\link[=MsExperimentFiles]{MsExperimentFiles()}} defining (external) files
 to data or annotation.}
 
@@ -86,20 +91,18 @@ individual samples of the experiment.}
 \item{spectra}{\code{\link[=Spectra]{Spectra()}} object with the MS spectra data of the
 experiment.}
 
-\item{x}{an \code{MsExperiment}.}
-
-\item{with}{for \code{linkSampleData}: \code{character(1)} defining the data to which
+\item{with}{for \code{linkSampleData()}: \code{character(1)} defining the data to which
 samples should be linked. See section \emph{Linking sample data to other
 experimental data} for details.}
 
-\item{sampleIndex}{for \code{linkSampleData}: \code{integer} with the indices of the
+\item{sampleIndex}{for \code{linkSampleData()}: \code{integer} with the indices of the
 samples in \code{sampleData(object)} that should be linked.}
 
-\item{withIndex}{for \code{linkSampleData}: \code{integer} with the indices of the
+\item{withIndex}{for \code{linkSampleData()}: \code{integer} with the indices of the
 elements in \code{with} to which the samples (specified by \code{sampleIndex})
 should be linked to.}
 
-\item{subsetBy}{for \code{linkSampleData}: optional \code{integer(1)} defining the
+\item{subsetBy}{for \code{linkSampleData()}: optional \code{integer(1)} defining the
 dimension on which the subsetting will occurr on the linked data.
 Defaults to \code{subsetBy = 1L} thus subsetting will happen on the first
 dimension (rows or elements).}
@@ -109,12 +112,12 @@ indices or names (rowname of \code{sampleData}) of the samples to subset.}
 
 \item{j}{for \code{[}: not supported.}
 
-\item{...}{optional additional parameters. For \code{filterSpectra}: parameters
+\item{...}{optional additional parameters. For \code{filterSpectra()}: parameters
 to be passed to the filter function (parameter \code{filter}).}
 
 \item{drop}{for \code{[}: ignored.}
 
-\item{filter}{for \code{filterSpectra}: any filter function supported by
+\item{filter}{for \code{filterSpectra()}: any filter function supported by
 \code{\link[=Spectra]{Spectra()}} to filter the spectra object (such as \code{filterRt} or
 \code{filterMsLevel}). Parameters for the filter function can be passed
 through \code{...}.}
@@ -165,19 +168,19 @@ the experiment. These are stored in the \code{sampleData} slot as a
 \code{DataFrame}, each row describing a sample with columns containing
 all relevant information on that sample.
 \item Files to data or annotations. These are stored in the
-\code{experimentFiles} slot as an instance of class \code{MsExperimentFiles}.
+\verb{@experimentFiles} slot as an instance of class \code{MsExperimentFiles}.
 \item General metadata about the experiment, stored as a \code{list} in the
-\code{metadata} slot.
+\verb{@metadata} slot.
 \item Mass spectrometry data. Sectra and their metadata are stored as
 an \verb{[Spectra()]} object in the \code{spectra} slot. Chromatographic data
 is not yet supported but will be stored as a \code{Chromatograms()}
-object in the \code{chromatorgrams} slot.
+object in the \verb{@chromatorgrams} slot.
 \item Quantification data is stored as \code{QFeatures} or
-\code{SummarizedExperiment} objects in the \code{qdata} slot and can be accessed or
-replaced with the \code{qdata} or \verb{qdata<-} functions, respectively.
+\code{SummarizedExperiment} objects in the \verb{@qdata} slot and can be accessed or
+replaced with the \code{qdata()} or \verb{qdata<-} functions, respectively.
 \item Any additional data, be it other spectra data, or proteomics
 identification data (i.e peptide-spectrum matches defined as
-\code{PSM()} objects) can be added as elements to the list stored in
+\code{PSM} objects) can be added as elements to the list stored in
 the \code{otherData} slot.
 }
 
@@ -206,18 +209,24 @@ files. See examples below or the package vignette for more information.
 Data from an \code{MsExperiment} object can be accessed with the dedicated
 accessor functions:
 \itemize{
-\item \code{experimentFiles}, \verb{experimentFiles<-}: gets or sets experiment files.
-\item \code{length}: get the \emph{length} of the object which represents the number of
+\item \code{experimentFiles()}, \verb{experimentFiles<-}: gets or sets experiment files.
+\item \code{length()}: get the \emph{length} of the object which represents the number of
 samples availble in the object's \code{sampleData}.
-\item \code{metadata}, \verb{metadata<-}: gets or sets the object's metadata.
-\item \code{sampleData}, \code{sampleData}: gets or sets the object's sample data (i.e. a
-\code{DataFrame} containing sample descriptions).
-\item \code{spectra}, \verb{spectra<-}: gets or sets spectra data. \code{spectra} returns a
+\item \code{metadata()}, \verb{metadata<-}: gets or sets the object's metadata.
+\item \code{sampleData()}, \verb{sampleData<-}: gets or sets the object's sample data
+(i.e. a \code{DataFrame} containing sample descriptions).
+\item \code{spectra()}, \verb{spectra<-}: gets or sets spectra data. \code{spectra()} returns a
 \code{\link[=Spectra]{Spectra()}} object, \verb{spectra<-} takes a \code{Spectra} data as input and returns
 the updated \code{MsExperiment}.
-\item \code{qdata}, \verb{qdata<-}: gets or sets the quantification data, which can be a
+\item \code{spectraSampleIndex()}: returns an \code{integer} vector of length equal to
+the number of spectra within the object with the indices of
+the sample (in \code{sampleData()}) a spectrum is assigned to.
+\code{NA_integer_} is returned for spectra that are not assigned to a sample
+(using \code{linkSampleData()}). The function will throw an error if one of
+the spectra is assigned to more than one sample.
+\item \code{qdata()}, \verb{qdata<-}: gets or sets the quantification data, which can be a
 \code{QFeatures} or \code{SummarizedExperiment}.
-\item \code{otherData} , \verb{otherData<-}: gets or sets the addition data
+\item \code{otherData()} , \verb{otherData<-}: gets or sets the addition data
 types, stored as a \code{List} in the object's \code{otherData} slot.
 }
 }
@@ -250,12 +259,14 @@ spectra variable called \code{msLevel} within the \code{Spectra} stored in the
 \code{spectra} slot.
 
 Links between sample data rows and any other data element are stored as
-\code{integer} matrices within the \code{sampleDataLinks} slot of the object (see also
-the vignette for examples and illustrations). Such links can be defined/added
-with the \code{linkSampleData} function which adds a relationship between rows in
-\code{sampleData} to elements in any other data within the \code{MsExperiment} that
-are specified with parameter \code{with}. \code{linkSampleData} supports two different
-ways to define the link:
+\code{integer} matrices within the \verb{@sampleDataLinks} slot of the object (see also
+the vignette for examples and illustrations). The first column of a matrix
+is always the index of the sample, and the second column the index of the
+element that is linked to that sample, with one row per element.
+Links can be defined/added with the \code{linkSampleData()} function which adds
+a relationship between rows in \code{sampleData} to elements in any other data
+within the \code{MsExperiment} that are specified with parameter \code{with}.
+\code{linkSampleData()} supports two different ways to define the link:
 \itemize{
 \item Parameter \code{with} defines the data to which the link should be established.
 To link samples to raw data files that would for example be available as a
@@ -295,12 +306,12 @@ not affect data consistency (see examples below for more information).
 Not linked data (slots) will be returned as they are. Subsetting in
 arbitrary order is supported.
 See the vignette for details and examples.
-\item \code{filterSpectra}: subsets the \code{Spectra} within an \code{MsExperiment} using a
+\item \code{filterSpectra()}: subsets the \code{Spectra} within an \code{MsExperiment} using a
 provided filter function (parameter \code{filter}). Parameters for the filter
 function can be passed with parameter \code{...}. Any of the filter functions
 of a \code{\link[=Spectra]{Spectra()}} object can be passed with parameter \code{filter}. Possibly
 present relationships between samples and spectra (\emph{links}, see also
-\code{linkSampleData}) are updated. Filtering affects only the spectra data
+\code{linkSampleData()}) are updated. Filtering affects only the spectra data
 of the object, none of the other slots and data (e.g. \code{sampleData}) are
 modified.
 The function returns an \code{MsExperiment} with the filtered \code{Spectra} object.
@@ -367,6 +378,10 @@ b <- mse[2]
 b
 sampleData(b)
 experimentFiles(b)$mzML_files
+
+## The `spectraSampleIndex()` function returns, for each spectrum, the
+## index in the object's `sampleData` to which it is linked/assigned
+spectraSampleIndex(mse)
 
 ## Subsetting with duplication of n:m sample to data relationships
 ##

@@ -1,5 +1,9 @@
 # MsExperiment 1.5
 
+## MsExperiment 1.5.5
+
+- Add `spectraSampleIndex()` function.
+
 ## MsExperiment 1.5.4
 
 - Fix missing export of `filterSpectra`.

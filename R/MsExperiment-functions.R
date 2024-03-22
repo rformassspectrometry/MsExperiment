@@ -428,3 +428,18 @@ readMsExperiment <- function(spectraFiles = character(),
     x@sampleDataLinks[["spectra"]] <- sdl
     x
 }
+
+#' @export
+#'
+#' @rdname MsExperiment
+spectraSampleIndex <- function(x) {
+    res <- rep(NA_integer_, length(x@spectra))
+    if (length(x@sampleDataLinks[["spectra"]])) {
+        if (anyDuplicated(x@sampleDataLinks[["spectra"]][, 2L]))
+            stop("Can not return a single index for each spectrum. One or ",
+                 "more spectra are linked to more than one sample")
+        res[x@sampleDataLinks[["spectra"]][, 2L]] <-
+            x@sampleDataLinks[["spectra"]][, 1L]
+    }
+    res
+}
