@@ -34,7 +34,7 @@ qdata(object)
 
 qdata(object) <- value
 
-spectraSampleIndex(x)
+spectraSampleIndex(x, duplicates = c("first", "keep"))
 
 MsExperiment(
   experimentFiles = MsExperimentFiles(),
@@ -218,12 +218,21 @@ samples availble in the object's \code{sampleData}.
 \item \code{spectra()}, \verb{spectra<-}: gets or sets spectra data. \code{spectra()} returns a
 \code{\link[=Spectra]{Spectra()}} object, \verb{spectra<-} takes a \code{Spectra} data as input and returns
 the updated \code{MsExperiment}.
-\item \code{spectraSampleIndex()}: returns an \code{integer} vector of length equal to
-the number of spectra within the object with the indices of
-the sample (in \code{sampleData()}) a spectrum is assigned to.
-\code{NA_integer_} is returned for spectra that are not assigned to a sample
-(using \code{linkSampleData()}). The function will throw an error if one of
-the spectra is assigned to more than one sample.
+\item \code{spectraSampleIndex()}: depending on parameter \code{duplicates} it returns
+either an \code{integer} (\code{duplicates = "first"}, the default) or a \code{list}
+(\code{duplicates = "keep"}) of length equal to the number of spectra within
+the object with the indices of the sample(s) (in \code{sampleData()}) a
+spectrum is assigned to. With \code{duplicates = "first"}, an \code{integer} with
+the index is returned for each spectrum. If a spectrum was assigned to
+more than one sample a warning is shown and only the first sample index
+is returned for that spectrum. For \code{duplicates = "keep"}, assignments are
+returned as a \code{list} of \code{integer} vectors, each element being the
+index(es) of the sample(s) a spectrum is assigned to. For spectra that are
+not linked to any sample an \code{NA_integer_} is returned as index for
+\code{duplicates = "first"} and an empty integer (\code{integer()}) for
+\code{duplicates = "keep"}.
+Note that the default \code{duplicates = "first"} will work in almost all use
+cases, as generally, a spectrum will be assigned to a single sample.
 \item \code{qdata()}, \verb{qdata<-}: gets or sets the quantification data, which can be a
 \code{QFeatures} or \code{SummarizedExperiment}.
 \item \code{otherData()} , \verb{otherData<-}: gets or sets the addition data
@@ -291,6 +300,11 @@ element to which the link should be established contain matching values.
 
 Note that \code{linkSampleData} will \strong{replace} a previously existing link to the
 same data element.
+\itemize{
+\item \code{spectraSampleIndex()} is a convenience function that extracts for each
+spectrum in the object's \code{spectra()} the index of the sample it is
+associated with (see function's help above for more information).
+}
 }
 
 \section{Subsetting and filtering}{

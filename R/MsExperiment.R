@@ -84,12 +84,21 @@
 #'   [Spectra()] object, `spectra<-` takes a `Spectra` data as input and returns
 #'   the updated `MsExperiment`.
 #'
-#' - `spectraSampleIndex()`: returns an `integer` vector of length equal to
-#'   the number of spectra within the object with the indices of
-#'   the sample (in `sampleData()`) a spectrum is assigned to.
-#'   `NA_integer_` is returned for spectra that are not assigned to a sample
-#'   (using `linkSampleData()`). The function will throw an error if one of
-#'   the spectra is assigned to more than one sample.
+#' - `spectraSampleIndex()`: depending on parameter `duplicates` it returns
+#'   either an `integer` (`duplicates = "first"`, the default) or a `list`
+#'   (`duplicates = "keep"`) of length equal to the number of spectra within
+#'   the object with the indices of the sample(s) (in `sampleData()`) a
+#'   spectrum is assigned to. With `duplicates = "first"`, an `integer` with
+#'   the index is returned for each spectrum. If a spectrum was assigned to
+#'   more than one sample a warning is shown and only the first sample index
+#'   is returned for that spectrum. For `duplicates = "keep"`, assignments are
+#'   returned as a `list` of `integer` vectors, each element being the
+#'   index(es) of the sample(s) a spectrum is assigned to. For spectra that are
+#'   not linked to any sample an `NA_integer_` is returned as index for
+#'   `duplicates = "first"` and an empty integer (`integer()`) for
+#'   `duplicates = "keep"`.
+#'   Note that the default `duplicates = "first"` will work in almost all use
+#'   cases, as generally, a spectrum will be assigned to a single sample.
 #'
 #' - `qdata()`, `qdata<-`: gets or sets the quantification data, which can be a
 #'   `QFeatures` or `SummarizedExperiment`.
@@ -156,6 +165,10 @@
 #'
 #' Note that `linkSampleData` will **replace** a previously existing link to the
 #' same data element.
+#'
+#' - `spectraSampleIndex()` is a convenience function that extracts for each
+#'   spectrum in the object's `spectra()` the index of the sample it is
+#'   associated with (see function's help above for more information).
 #'
 #' @section Subsetting and filtering:
 #'
