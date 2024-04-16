@@ -1,4 +1,4 @@
-#' @param object The `existMsExperimentFiles()` fonction works with
+#' @param object The `existMsExperimentFiles()` function works with
 #'     either an instance of `MsExperimentFiles` or `MsExperiment`.
 #'
 #' @export

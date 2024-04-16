@@ -303,3 +303,68 @@ test_that(".update_sample_data_links_spectra works", {
     expect_true(length(spectra(res[1L])) == 4)
     expect_true(length(spectra(res[2L])) == 1)
 })
+
+test_that(".spectra_sample_index_first works", {
+    res <- .spectra_sample_index_first(matrix(nrow = 0, ncol = 2), 100)
+    expect_equal(length(res), 100)
+    expect_equal(res, rep(NA_integer_, 100))
+
+    a <- cbind(c(1, 1, 1, 1, 2, 2, 2, 2), 4:11)
+    res <- .spectra_sample_index_first(a, 20)
+    expect_equal(length(res), 20)
+    expect_equal(res[4:11], c(1, 1, 1, 1, 2, 2, 2, 2))
+    expect_true(all(is.na(res[12:20])))
+
+    a <- cbind(c(1, 1, 1, 1, 2, 2, 2, 2), c(4:10, 5))
+    expect_warning(res <- .spectra_sample_index_first(a, 20), "Found at least")
+    expect_equal(length(res), 20)
+    expect_equal(res[4:10], c(1, 1, 1, 1, 2, 2, 2))
+    expect_true(all(is.na(res[11:20])))
+})
+
+test_that(".spectra_sample_index_all works", {
+    res <- .spectra_sample_index_all(matrix(nrow = 0, ncol = 2), 100)
+    expect_equal(length(res), 100)
+    expect_true(is.list(res))
+    expect_true(all(lengths(res) == 0))
+    expect_equal(res, replicate(100, integer()))
+
+    a <- cbind(c(1, 1, 1, 1, 2, 2, 2, 2), 4:11)
+    res <- .spectra_sample_index_all(a, 20)
+    expect_equal(length(res), 20)
+    expect_equal(res[4:11], list(1L, 1L, 1L, 1L, 2L, 2L, 2L, 2L))
+    expect_true(all(lengths(res[12:20]) == 0))
+
+    a <- cbind(c(1, 1, 1, 1, 2, 2, 2, 2), c(4:10, 5))
+    res <- .spectra_sample_index_all(a, 20)
+    expect_equal(length(res), 20)
+    expect_equal(res[4:10], list(1L, c(1L, 2L), 1L, 1L, 2L, 2L, 2L))
+    expect_true(all(lengths(res[11:20]) == 0))
+})
+
+test_that("spectraSampleIndex works", {
+    a <- MsExperiment()
+    expect_equal(spectraSampleIndex(a), integer())
+
+    a <- mse
+    expect_equal(spectraSampleIndex(a), rep(NA_integer_, length(spectra(a))))
+
+    a@sampleDataLinks[["spectra"]] <- cbind(c(1L, 2L, 1L, 1L),
+                                            c(132L, 2L, 342L, 54L))
+    res <- spectraSampleIndex(a)
+    expect_equal(length(res), length(spectra(a)))
+    expect_true(sum(!is.na(res)) == 4L)
+    expect_equal(res[!is.na(res)], c(2L, 1L, 1L, 1L))
+    expect_equal(res[c(132, 2, 342, 54)], c(1, 2, 1, 1))
+
+    res <- spectraSampleIndex(a, duplicates = "keep")
+    expect_equal(res[c(132, 2, 342, 54)], list(1L, 2L, 1L, 1L))
+
+    a@sampleDataLinks[["spectra"]] <- cbind(c(1L, 2L, 1L, 1L, 2L),
+                                            c(132L, 2L, 342L, 54L, 2L))
+    expect_warning(res <- spectraSampleIndex(a), "Found at least")
+    expect_equal(res[c(132, 2, 342, 54)], c(1L, 2L, 1L, 1L))
+
+    res <- spectraSampleIndex(a, duplicates = "keep")
+    expect_equal(res[c(132, 2, 342, 54)], list(1L, c(2L, 2L), 1L, 1L))
+})

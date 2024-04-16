@@ -28,23 +28,23 @@
 #'   all relevant information on that sample.
 #'
 #' - Files to data or annotations. These are stored in the
-#'   `experimentFiles` slot as an instance of class `MsExperimentFiles`.
+#'   `@experimentFiles` slot as an instance of class `MsExperimentFiles`.
 #'
 #' - General metadata about the experiment, stored as a `list` in the
-#'   `metadata` slot.
+#'   `@metadata` slot.
 #'
 #' - Mass spectrometry data. Sectra and their metadata are stored as
 #'   an `[Spectra()]` object in the `spectra` slot. Chromatographic data
 #'   is not yet supported but will be stored as a `Chromatograms()`
-#'   object in the `chromatorgrams` slot.
+#'   object in the `@chromatorgrams` slot.
 #'
 #' - Quantification data is stored as `QFeatures` or
-#'   `SummarizedExperiment` objects in the `qdata` slot and can be accessed or
-#'   replaced with the `qdata` or `qdata<-` functions, respectively.
+#'   `SummarizedExperiment` objects in the `@qdata` slot and can be accessed or
+#'   replaced with the `qdata()` or `qdata<-` functions, respectively.
 #'
 #' - Any additional data, be it other spectra data, or proteomics
 #'   identification data (i.e peptide-spectrum matches defined as
-#'   `PSM()` objects) can be added as elements to the list stored in
+#'   `PSM` objects) can be added as elements to the list stored in
 #'   the `otherData` slot.
 #'
 #' The *length* of a `MsExperiment` is defined by the number of samples (i.e.
@@ -70,24 +70,40 @@
 #' Data from an `MsExperiment` object can be accessed with the dedicated
 #' accessor functions:
 #'
-#' - `experimentFiles`, `experimentFiles<-`: gets or sets experiment files.
+#' - `experimentFiles()`, `experimentFiles<-`: gets or sets experiment files.
 #'
-#' - `length`: get the *length* of the object which represents the number of
+#' - `length()`: get the *length* of the object which represents the number of
 #'   samples availble in the object's `sampleData`.
 #'
-#' - `metadata`, `metadata<-`: gets or sets the object's metadata.
+#' - `metadata()`, `metadata<-`: gets or sets the object's metadata.
 #'
-#' - `sampleData`, `sampleData`: gets or sets the object's sample data (i.e. a
-#'   `DataFrame` containing sample descriptions).
+#' - `sampleData()`, `sampleData<-`: gets or sets the object's sample data
+#'   (i.e. a `DataFrame` containing sample descriptions).
 #'
-#' - `spectra`, `spectra<-`: gets or sets spectra data. `spectra` returns a
+#' - `spectra()`, `spectra<-`: gets or sets spectra data. `spectra()` returns a
 #'   [Spectra()] object, `spectra<-` takes a `Spectra` data as input and returns
 #'   the updated `MsExperiment`.
 #'
-#' - `qdata`, `qdata<-`: gets or sets the quantification data, which can be a
+#' - `spectraSampleIndex()`: depending on parameter `duplicates` it returns
+#'   either an `integer` (`duplicates = "first"`, the default) or a `list`
+#'   (`duplicates = "keep"`) of length equal to the number of spectra within
+#'   the object with the indices of the sample(s) (in `sampleData()`) a
+#'   spectrum is assigned to. With `duplicates = "first"`, an `integer` with
+#'   the index is returned for each spectrum. If a spectrum was assigned to
+#'   more than one sample a warning is shown and only the first sample index
+#'   is returned for that spectrum. For `duplicates = "keep"`, assignments are
+#'   returned as a `list` of `integer` vectors, each element being the
+#'   index(es) of the sample(s) a spectrum is assigned to. For spectra that are
+#'   not linked to any sample an `NA_integer_` is returned as index for
+#'   `duplicates = "first"` and an empty integer (`integer()`) for
+#'   `duplicates = "keep"`.
+#'   Note that the default `duplicates = "first"` will work in almost all use
+#'   cases, as generally, a spectrum will be assigned to a single sample.
+#'
+#' - `qdata()`, `qdata<-`: gets or sets the quantification data, which can be a
 #'   `QFeatures` or `SummarizedExperiment`.
 #'
-#' - `otherData` , `otherData<-`: gets or sets the addition data
+#' - `otherData()` , `otherData<-`: gets or sets the addition data
 #'   types, stored as a `List` in the object's `otherData` slot.
 #'
 #' @section Linking sample data to other experimental data:
@@ -117,12 +133,14 @@
 #' `spectra` slot.
 #'
 #' Links between sample data rows and any other data element are stored as
-#' `integer` matrices within the `sampleDataLinks` slot of the object (see also
-#' the vignette for examples and illustrations). Such links can be defined/added
-#' with the `linkSampleData` function which adds a relationship between rows in
-#' `sampleData` to elements in any other data within the `MsExperiment` that
-#' are specified with parameter `with`. `linkSampleData` supports two different
-#' ways to define the link:
+#' `integer` matrices within the `@sampleDataLinks` slot of the object (see also
+#' the vignette for examples and illustrations). The first column of a matrix
+#' is always the index of the sample, and the second column the index of the
+#' element that is linked to that sample, with one row per element.
+#' Links can be defined/added with the `linkSampleData()` function which adds
+#' a relationship between rows in `sampleData` to elements in any other data
+#' within the `MsExperiment` that are specified with parameter `with`.
+#' `linkSampleData()` supports two different ways to define the link:
 #'
 #' - Parameter `with` defines the data to which the link should be established.
 #'   To link samples to raw data files that would for example be available as a
@@ -148,6 +166,10 @@
 #' Note that `linkSampleData` will **replace** a previously existing link to the
 #' same data element.
 #'
+#' - `spectraSampleIndex()` is a convenience function that extracts for each
+#'   spectrum in the object's `spectra()` the index of the sample it is
+#'   associated with (see function's help above for more information).
+#'
 #' @section Subsetting and filtering:
 #'
 #' - `[`: `MsExperiment` objects can be subset **by samples** with `[i]`
@@ -161,12 +183,12 @@
 #'   arbitrary order is supported.
 #'   See the vignette for details and examples.
 #'
-#' - `filterSpectra`: subsets the `Spectra` within an `MsExperiment` using a
+#' - `filterSpectra()`: subsets the `Spectra` within an `MsExperiment` using a
 #'   provided filter function (parameter `filter`). Parameters for the filter
 #'   function can be passed with parameter `...`. Any of the filter functions
 #'   of a [Spectra()] object can be passed with parameter `filter`. Possibly
 #'   present relationships between samples and spectra (*links*, see also
-#'   `linkSampleData`) are updated. Filtering affects only the spectra data
+#'   `linkSampleData()`) are updated. Filtering affects only the spectra data
 #'   of the object, none of the other slots and data (e.g. `sampleData`) are
 #'   modified.
 #'   The function returns an `MsExperiment` with the filtered `Spectra` object.
@@ -181,7 +203,7 @@
 #' @param experimentFiles [MsExperimentFiles()] defining (external) files
 #'     to data or annotation.
 #'
-#' @param filter for `filterSpectra`: any filter function supported by
+#' @param filter for `filterSpectra()`: any filter function supported by
 #'     [Spectra()] to filter the spectra object (such as `filterRt` or
 #'     `filterMsLevel`). Parameters for the filter function can be passed
 #'     through `...`.
@@ -202,25 +224,25 @@
 #' @param sampleData `DataFrame` (or `data.frame`) with information on
 #'     individual samples of the experiment.
 #'
-#' @param sampleIndex for `linkSampleData`: `integer` with the indices of the
+#' @param sampleIndex for `linkSampleData()`: `integer` with the indices of the
 #'     samples in `sampleData(object)` that should be linked.
 #'
-#' @param subsetBy for `linkSampleData`: optional `integer(1)` defining the
+#' @param subsetBy for `linkSampleData()`: optional `integer(1)` defining the
 #'     dimension on which the subsetting will occurr on the linked data.
 #'     Defaults to `subsetBy = 1L` thus subsetting will happen on the first
 #'     dimension (rows or elements).
 #'
-#' @param with for `linkSampleData`: `character(1)` defining the data to which
+#' @param with for `linkSampleData()`: `character(1)` defining the data to which
 #'     samples should be linked. See section *Linking sample data to other
 #'     experimental data* for details.
 #'
-#' @param withIndex for `linkSampleData`: `integer` with the indices of the
+#' @param withIndex for `linkSampleData()`: `integer` with the indices of the
 #'     elements in `with` to which the samples (specified by `sampleIndex`)
 #'     should be linked to.
 #'
 #' @param x an `MsExperiment`.
 #'
-#' @param ... optional additional parameters. For `filterSpectra`: parameters
+#' @param ... optional additional parameters. For `filterSpectra()`: parameters
 #'     to be passed to the filter function (parameter `filter`).
 #'
 #' @name MsExperiment
@@ -291,6 +313,10 @@
 #' b
 #' sampleData(b)
 #' experimentFiles(b)$mzML_files
+#'
+#' ## The `spectraSampleIndex()` function returns, for each spectrum, the
+#' ## index in the object's `sampleData` to which it is linked/assigned
+#' spectraSampleIndex(mse)
 #'
 #' ## Subsetting with duplication of n:m sample to data relationships
 #' ##

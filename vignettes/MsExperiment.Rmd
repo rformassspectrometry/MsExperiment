@@ -404,7 +404,8 @@ The link was thus established between matching values in
 
 ```{r show_link}
 sampleData(lmse)$raw_file
-head(spectra(lmse)$dataOrigin)
+spectra(lmse)$dataOrigin |>
+                head()
 ```
 
 The figure below illustrates this link. With that last call we have thus
@@ -417,6 +418,18 @@ knitr::include_graphics("imgs/Links_03.png")
 
 ```{r show_exp2}
 lmse
+```
+
+A convenience function to quickly extract the index of a sample a spectrum is
+associated with is `spectraSampleIndex()`. This function returns an `integer`
+vector of length equal to the number of spectra in the object with the row in
+the object's `sampleData` a spectrum is linked to, or `NA_integer_` if a
+spectrum is not linked to any sample.
+
+```{r}
+#' Show the sample assignment for the first few spectra
+spectraSampleIndex(lmse) |>
+    head()
 ```
 
 If we had also quantified *feature* values, we could also link them to the

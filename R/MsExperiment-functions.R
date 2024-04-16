@@ -428,3 +428,64 @@ readMsExperiment <- function(spectraFiles = character(),
     x@sampleDataLinks[["spectra"]] <- sdl
     x
 }
+
+#' @export
+#'
+#' @rdname MsExperiment
+spectraSampleIndex <- function(x, duplicates = c("first", "keep")) {
+    duplicates <- match.arg(duplicates)
+    if (duplicates == "first") {
+        .spectra_sample_index_first(x@sampleDataLinks[["spectra"]],
+                                    length(x@spectra))
+    } else {
+        .spectra_sample_index_all(x@sampleDataLinks[["spectra"]],
+                                  length(x@spectra))
+    }
+}
+
+#' Return an `integer` vector with the sample index for each spectrum. If
+#' a spectrum is assigned to more than one sample, the index of the first
+#' is returned and a warning shown. For spectra without a sample assignment
+#' `NA_integer_` is returned.
+#'
+#' @param x 2 column `matrix`, first column being sample index, second
+#'     spectra index.
+#'
+#' @param nspectra length of the object's `Spectra` object
+#'
+#' @return `integer` of length equal to the number of spectra.
+#'
+#' @noRd
+.spectra_sample_index_first <- function(x, nspectra) {
+    if (length(x)) {
+        if (anyDuplicated(x[, 2L])) {
+            warning("Found at least one spectrum that is assigned to more ",
+                    "than one sample. Will return the first sample for these. ",
+                    "Consider using 'duplicates = \"all\"' to retrieve all ",
+                    "mappings.")
+            res <- x[match(seq_len(nspectra), x[, 2L]), 1L]
+        } else {
+            res <- rep(NA_integer_, nspectra)
+            res[x[, 2L]] <- x[, 1L]
+        }
+    } else res <- rep(NA_integer_, nspectra)
+    res
+}
+
+#' Return an `list` of integer vectors with the sample indices for each
+#' spectrum. For spectra without a sample assignment `integer()` is returned.
+#'
+#' @param x 2 column `matrix`, first column being sample index, second
+#'     spectra index.
+#'
+#' @param nspectra length of the object's `Spectra` object
+#'
+#' @return `list` of length equal to the number of spectra.
+#'
+#' @noRd
+.spectra_sample_index_all <- function(x, nspectra) {
+    if (length(x)) {
+        res <- split(x[, 1L], f = factor(x[, 2L], levels = seq_len(nspectra)))
+    } else res <- replicate(nspectra, integer())
+    unname(res)
+}
