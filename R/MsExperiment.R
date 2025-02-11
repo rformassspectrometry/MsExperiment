@@ -34,8 +34,8 @@
 #'   `@metadata` slot.
 #'
 #' - Mass spectrometry data. Sectra and their metadata are stored as
-#'   an `[Spectra()]` object in the `spectra` slot. Chromatographic data
-#'   is not yet supported but will be stored as a `Chromatograms()`
+#'   an `[Spectra::Spectra()]` object in the `spectra` slot. Chromatographic
+#'   data is not yet supported but will be stored as a `Chromatograms()`
 #'   object in the `@chromatorgrams` slot.
 #'
 #' - Quantification data is stored as `QFeatures` or
@@ -55,7 +55,8 @@
 #' section for filtering and subsetting below for more information.
 #'
 #' `MsExperiment` objects can be created using the `MsExperiment()` function
-#' providing the data with the parameters listed below. If the [Spectra()]
+#' providing the data with the parameters listed below. If the
+#' [Spectra::Spectra()]
 #' object provided with the `spectra` param uses a `MsBackendSql` backend,
 #' sample data could be retrieved from the associated SQL database (see
 #' section *Using `MsExperiment` with `MsBackendSql`* in the vignette for
@@ -81,8 +82,8 @@
 #'   (i.e. a `DataFrame` containing sample descriptions).
 #'
 #' - `spectra()`, `spectra<-`: gets or sets spectra data. `spectra()` returns a
-#'   [Spectra()] object, `spectra<-` takes a `Spectra` data as input and returns
-#'   the updated `MsExperiment`.
+#'   [Spectra::Spectra()] object, `spectra<-` takes a `Spectra` data as input
+#'   and returns the updated `MsExperiment`.
 #'
 #' - `spectraSampleIndex()`: depending on parameter `duplicates` it returns
 #'   either an `integer` (`duplicates = "first"`, the default) or a `list`
@@ -186,25 +187,31 @@
 #' - `filterSpectra()`: subsets the `Spectra` within an `MsExperiment` using a
 #'   provided filter function (parameter `filter`). Parameters for the filter
 #'   function can be passed with parameter `...`. Any of the filter functions
-#'   of a [Spectra()] object can be passed with parameter `filter`. Possibly
-#'   present relationships between samples and spectra (*links*, see also
-#'   `linkSampleData()`) are updated. Filtering affects only the spectra data
-#'   of the object, none of the other slots and data (e.g. `sampleData`) are
-#'   modified.
+#'   of a [Spectra::Spectra()] object can be passed with parameter `filter`.
+#'   Possibly present relationships between samples and spectra (*links*, see
+#'   also `linkSampleData()`) are updated. Filtering affects only the spectra
+#'   data of the object, none of the other slots and data (e.g. `sampleData`)
+#'   are modified.
 #'   The function returns an `MsExperiment` with the filtered `Spectra` object.
 #'
 #' @return See help of the individual functions.
 #'
-#' @param spectra [Spectra()] object with the MS spectra data of the
+#' @param spectra [Spectra::Spectra()] object with the MS spectra data of the
 #'     experiment.
 #'
 #' @param drop for `[`: ignored.
+#'
+#' @param duplicates for `spectraSampleIndex()`: `character(1)` defining the
+#'     type of result returned by `spectraSampleIndex()`. With
+#'     `duplicates = "first"` an `integer` vector is returned with the first
+#'     match while `duplicates = "keep"` returns a `list` of `integer` with
+#'     the index of all matches.
 #'
 #' @param experimentFiles [MsExperimentFiles()] defining (external) files
 #'     to data or annotation.
 #'
 #' @param filter for `filterSpectra()`: any filter function supported by
-#'     [Spectra()] to filter the spectra object (such as `filterRt` or
+#'     [Spectra::Spectra()] to filter the spectra object (such as `filterRt` or
 #'     `filterMsLevel`). Parameters for the filter function can be passed
 #'     through `...`.
 #'

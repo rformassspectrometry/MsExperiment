@@ -22,7 +22,7 @@ test_that("dbWriteSampleData works", {
     ## Empty sampleData
     dbWriteSampleData(m)
     expect_equal(dbListTables(con),
-                 c("msms_spectrum", "msms_spectrum_peak_blob", "sample_data"))
+                 c("msms_spectrum", "msms_spectrum_peak_blob2", "sample_data"))
     expect_true(nrow(dbGetQuery(con, "select * from sample_data")) == 0L)
 
     ## Only sampleData
@@ -39,7 +39,7 @@ test_that("dbWriteSampleData works", {
     res <- dbGetQuery(con, "select * from sample_data")
     expect_equal(res[, colnames(sd)], sd)
     expect_equal(dbListTables(con),
-                 c("msms_spectrum", "msms_spectrum_peak_blob",
+                 c("msms_spectrum", "msms_spectrum_peak_blob2",
                    "sample_data", "sample_to_msms_spectrum"))
     res <- dbGetQuery(con, "select * from sample_to_msms_spectrum")
     res <- unname(as.matrix(res))
@@ -57,7 +57,7 @@ test_that("dbWriteSampleData works", {
     dbWriteSampleData(m)
     con <- dbConnect(SQLite(), dbname = sql_file)
     expect_equal(dbListTables(con),
-                 c("msms_spectrum", "msms_spectrum_peak_blob",
+                 c("msms_spectrum", "msms_spectrum_peak_blob2",
                    "sample_data", "sample_to_msms_spectrum"))
     res <- dbGetQuery(con, "select * from sample_to_msms_spectrum")
     res <- unname(as.matrix(res))

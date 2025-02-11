@@ -8,15 +8,15 @@ readMsExperiment(spectraFiles = character(), sampleData = data.frame(), ...)
 }
 \arguments{
 \item{spectraFiles}{\code{character} with the (absolute) file names of the MS
-data files that should be imported as a \code{\link[=Spectra]{Spectra()}} object.}
+data files that should be imported as a \code{\link[Spectra:Spectra]{Spectra::Spectra()}} object.}
 
 \item{sampleData}{\code{data.frame} or \code{DataFrame} with the sample annotations.
 Each row is expected to contain annotations for one file (sample). The
 order of the data frame's rows is expected to match the order of the
 provided files (with parameter \code{spectraFiles}).}
 
-\item{...}{additional parameters for the \code{\link[=Spectra]{Spectra()}} call to import the
-data.}
+\item{...}{additional parameters for the \code{\link[Spectra:Spectra]{Spectra::Spectra()}} call to
+import the data.}
 }
 \value{
 \code{MsExperiment}.

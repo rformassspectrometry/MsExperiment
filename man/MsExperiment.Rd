@@ -76,6 +76,12 @@ populated.}
 
 \item{x}{an \code{MsExperiment}.}
 
+\item{duplicates}{for \code{spectraSampleIndex()}: \code{character(1)} defining the
+type of result returned by \code{spectraSampleIndex()}. With
+\code{duplicates = "first"} an \code{integer} vector is returned with the first
+match while \code{duplicates = "keep"} returns a \code{list} of \code{integer} with
+the index of all matches.}
+
 \item{experimentFiles}{\code{\link[=MsExperimentFiles]{MsExperimentFiles()}} defining (external) files
 to data or annotation.}
 
@@ -88,7 +94,7 @@ data.}
 \item{sampleData}{\code{DataFrame} (or \code{data.frame}) with information on
 individual samples of the experiment.}
 
-\item{spectra}{\code{\link[=Spectra]{Spectra()}} object with the MS spectra data of the
+\item{spectra}{\code{\link[Spectra:Spectra]{Spectra::Spectra()}} object with the MS spectra data of the
 experiment.}
 
 \item{with}{for \code{linkSampleData()}: \code{character(1)} defining the data to which
@@ -118,7 +124,7 @@ to be passed to the filter function (parameter \code{filter}).}
 \item{drop}{for \code{[}: ignored.}
 
 \item{filter}{for \code{filterSpectra()}: any filter function supported by
-\code{\link[=Spectra]{Spectra()}} to filter the spectra object (such as \code{filterRt} or
+\code{\link[Spectra:Spectra]{Spectra::Spectra()}} to filter the spectra object (such as \code{filterRt} or
 \code{filterMsLevel}). Parameters for the filter function can be passed
 through \code{...}.}
 }
@@ -172,8 +178,8 @@ all relevant information on that sample.
 \item General metadata about the experiment, stored as a \code{list} in the
 \verb{@metadata} slot.
 \item Mass spectrometry data. Sectra and their metadata are stored as
-an \verb{[Spectra()]} object in the \code{spectra} slot. Chromatographic data
-is not yet supported but will be stored as a \code{Chromatograms()}
+an \verb{[Spectra::Spectra()]} object in the \code{spectra} slot. Chromatographic
+data is not yet supported but will be stored as a \code{Chromatograms()}
 object in the \verb{@chromatorgrams} slot.
 \item Quantification data is stored as \code{QFeatures} or
 \code{SummarizedExperiment} objects in the \verb{@qdata} slot and can be accessed or
@@ -192,7 +198,8 @@ object using the \code{[} function which will always subset by samples. See the
 section for filtering and subsetting below for more information.
 
 \code{MsExperiment} objects can be created using the \code{MsExperiment()} function
-providing the data with the parameters listed below. If the \code{\link[=Spectra]{Spectra()}}
+providing the data with the parameters listed below. If the
+\code{\link[Spectra:Spectra]{Spectra::Spectra()}}
 object provided with the \code{spectra} param uses a \code{MsBackendSql} backend,
 sample data could be retrieved from the associated SQL database (see
 section \emph{Using \code{MsExperiment} with \code{MsBackendSql}} in the vignette for
@@ -216,8 +223,8 @@ samples availble in the object's \code{sampleData}.
 \item \code{sampleData()}, \verb{sampleData<-}: gets or sets the object's sample data
 (i.e. a \code{DataFrame} containing sample descriptions).
 \item \code{spectra()}, \verb{spectra<-}: gets or sets spectra data. \code{spectra()} returns a
-\code{\link[=Spectra]{Spectra()}} object, \verb{spectra<-} takes a \code{Spectra} data as input and returns
-the updated \code{MsExperiment}.
+\code{\link[Spectra:Spectra]{Spectra::Spectra()}} object, \verb{spectra<-} takes a \code{Spectra} data as input
+and returns the updated \code{MsExperiment}.
 \item \code{spectraSampleIndex()}: depending on parameter \code{duplicates} it returns
 either an \code{integer} (\code{duplicates = "first"}, the default) or a \code{list}
 (\code{duplicates = "keep"}) of length equal to the number of spectra within
@@ -323,11 +330,11 @@ See the vignette for details and examples.
 \item \code{filterSpectra()}: subsets the \code{Spectra} within an \code{MsExperiment} using a
 provided filter function (parameter \code{filter}). Parameters for the filter
 function can be passed with parameter \code{...}. Any of the filter functions
-of a \code{\link[=Spectra]{Spectra()}} object can be passed with parameter \code{filter}. Possibly
-present relationships between samples and spectra (\emph{links}, see also
-\code{linkSampleData()}) are updated. Filtering affects only the spectra data
-of the object, none of the other slots and data (e.g. \code{sampleData}) are
-modified.
+of a \code{\link[Spectra:Spectra]{Spectra::Spectra()}} object can be passed with parameter \code{filter}.
+Possibly present relationships between samples and spectra (\emph{links}, see
+also \code{linkSampleData()}) are updated. Filtering affects only the spectra
+data of the object, none of the other slots and data (e.g. \code{sampleData})
+are modified.
 The function returns an \code{MsExperiment} with the filtered \code{Spectra} object.
 }
 }

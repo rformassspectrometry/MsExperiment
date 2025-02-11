@@ -344,15 +344,15 @@ qdata <- function(object) {
 #' data frame (if provided).
 #'
 #' @param spectraFiles `character` with the (absolute) file names of the MS
-#'     data files that should be imported as a [Spectra()] object.
+#'     data files that should be imported as a [Spectra::Spectra()] object.
 #'
 #' @param sampleData `data.frame` or `DataFrame` with the sample annotations.
 #'     Each row is expected to contain annotations for one file (sample). The
 #'     order of the data frame's rows is expected to match the order of the
 #'     provided files (with parameter `spectraFiles`).
 #'
-#' @param ... additional parameters for the [Spectra()] call to import the
-#'     data.
+#' @param ... additional parameters for the [Spectra::Spectra()] call to
+#'     import the data.
 #'
 #' @return `MsExperiment`.
 #'

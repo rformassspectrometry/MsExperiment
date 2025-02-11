@@ -1,3 +1,9 @@
+# MsExperiment 1.9
+
+## MsExperiment 1.9.1
+
+- Small fixes and update to *MsBackendSql* version >= 1.7.3.
+
 # MsExperiment 1.5
 
 ## MsExperiment 1.5.5
