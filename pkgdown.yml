@@ -1,10 +1,9 @@
-pandoc: 3.1.1
-pkgdown: 2.0.7.9000
-pkgdown_sha: 548a9493b72ff93d3ed8392d4ad30b77d8b15fa5
+pandoc: 3.6.2
+pkgdown: 2.1.1.9000
+pkgdown_sha: 18cca452d736fea33d47b19b4ef4973db9104a75
 articles:
   MsExperiment: MsExperiment.html
-last_built: 2024-01-26T06:53Z
+last_built: 2025-02-11T08:03Z
 urls:
   reference: https://rformassspectrometry.github.io/MsExperiment/reference
   article: https://rformassspectrometry.github.io/MsExperiment/articles
-
