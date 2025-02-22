@@ -399,6 +399,11 @@ readMsExperiment <- function(spectraFiles = character(),
     sampleData$spectraOrigin <- spectraFiles
     if (!inherits(sampleData, "DataFrame"))
         sampleData <- DataFrame(sampleData)
+    if (!(is.null(rownames(sampleData)) ||
+            all(rownames(sampleData) == basename(spectraFiles)))) {
+        stop("'rownames(sampleData)' must be NULL or equal to ",
+             "'basename(spectraFiles)'.")
+    }
     rownames(sampleData) <- basename(spectraFiles)
     x <- MsExperiment()
     sampleData(x) <- sampleData
