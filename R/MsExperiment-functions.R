@@ -399,6 +399,7 @@ readMsExperiment <- function(spectraFiles = character(),
     sampleData$spectraOrigin <- spectraFiles
     if (!inherits(sampleData, "DataFrame"))
         sampleData <- DataFrame(sampleData)
+    rownames(sampleData) <- basename(spectraFiles)
     x <- MsExperiment()
     sampleData(x) <- sampleData
     spectra(x) <- Spectra(spectraFiles, ...)
