@@ -1,3 +1,10 @@
+# MsExperiment 1.11
+
+## Changed in 1.11.1
+
+- Fix `readMsExperiment()`: if `sampleData` has row names, they have to match
+  the names of the data files.
+
 # MsExperiment 1.9
 
 ## MsExperiment 1.9.1
