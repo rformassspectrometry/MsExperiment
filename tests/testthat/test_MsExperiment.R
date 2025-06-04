@@ -262,3 +262,21 @@ test_that("filterSpectra,MsExperiment,function works", {
     expect_equal(a$scanIndex, ref$scanIndex)
     expect_equal(a$dataOrigin, ref$dataOrigin)
 })
+
+test_that("readMsExperiment checks that sample names match", {
+    df <- data.frame(
+        row.names = c("sample1", "sample2")
+    )
+    # Error: rownames(df) do not match with basename(fls)
+    res <- readMsExperiment(spectraFiles = fls, sampleData = df) |>
+        expect_error()
+    # No error: rownames of sample metadata file match with basename(files)
+    rownames(df) <- basename(fls)
+    res <- readMsExperiment(spectraFiles = fls, sampleData = df) |>
+        expect_no_error()
+    # No error: rownames are not included, the function expects that user takes
+    # care that the order of sample metadata matches with files.
+    rownames(df) <- NULL
+    res <- readMsExperiment(spectraFiles = fls, sampleData = df) |>
+        expect_no_error()
+})

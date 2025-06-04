@@ -23,7 +23,10 @@ Authors@R: c(person(given = "Laurent", family = "Gatto",
              person(given = "Sebastian", family = "Gibb",
                     comment = c(ORCID = "0000-0001-7406-4443"),
                     email = "mail@sebastiangibb.de",
-                    role = "aut"))
+                    role = "aut"),
+             person(given = "Tuomas", family = "Borman",
+                    comment = c(ORCID = "0000-0002-8563-8884"),
+                    role = "ctb"))
 Depends:
     R (>= 4.2),
     ProtGenerics (>= 1.35.2),
