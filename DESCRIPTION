@@ -1,6 +1,6 @@
 Package: MsExperiment
 Title: Infrastructure for Mass Spectrometry Experiments
-Version: 1.10.0
+Version: 1.10.1
 Description: Infrastructure to store and manage all aspects related to
    a complete proteomics or metabolomics mass spectrometry (MS)
    experiment. The MsExperiment package provides light-weight and
@@ -23,7 +23,10 @@ Authors@R: c(person(given = "Laurent", family = "Gatto",
              person(given = "Sebastian", family = "Gibb",
                     comment = c(ORCID = "0000-0001-7406-4443"),
                     email = "mail@sebastiangibb.de",
-                    role = "aut"))
+                    role = "aut"),
+             person(given = "Tuomas", family = "Borman",
+                    comment = c(ORCID = "0000-0002-8563-8884"),
+                    role = "ctb"))
 Depends:
     R (>= 4.2),
     ProtGenerics (>= 1.35.2),
