@@ -30,14 +30,16 @@ data frame (if provided).
 }
 \examples{
 
-## Define the files of the experiment to import
-fls <- c(system.file("microtofq/MM14.mzML", package = "msdata"),
-         system.file("microtofq/MM8.mzML", package = "msdata"))
+## Define the files of the experiment to import. For our example we get
+## the files from the *MsDataHub*
+library(MsDataHub)
+fls <- c(MsDataHub::X20171016_POOL_POS_1_105.134.mzML(),
+         MsDataHub::X20171016_POOL_POS_3_105.134.mzML())
 
 ## Define a data frame with some sample annotations
 ann <- data.frame(
-    injection_index = 1:2,
-    sample_id = c("MM14", "MM8"))
+    injection_index = c(1, 9),
+    sample_id = c("QC_1", "QC_3"))
 
 ## Import the data
 library(MsExperiment)

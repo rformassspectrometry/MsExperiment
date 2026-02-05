@@ -271,8 +271,8 @@ test_that("readMsExperiment works", {
     expect_true(length(a) == 0)
     expect_true(length(spectra(a)) == 0)
     expect_error(a <- readMsExperiment("a"), "not found")
-    fls <- c(system.file("microtofq/MM14.mzML", package = "msdata"),
-             system.file("microtofq/MM8.mzML", package = "msdata"))
+    fls <- c(MsDataHub::X20171016_POOL_POS_1_105.134.mzML(),
+             MsDataHub::X20171016_POOL_POS_3_105.134.mzML())
 
     a <- readMsExperiment(fls)
     expect_s4_class(a, "MsExperiment")

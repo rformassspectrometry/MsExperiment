@@ -125,7 +125,7 @@ test_that("[,LinkedMsExperiment works", {
 
     ## Multiple files/samples.
     sd <- data.frame(sample = c("A", "B", "C"))
-    f <- c(fls, system.file("microtofq", "MM14.mzML", package = "msdata"))
+    f <- c(fls, MsDataHub::PestMix1_DDA.mzML())
     msel <- readMsExperiment(spectraFiles = f, sampleData = sd)
     res <- msel[-2]
     expect_true(length(res) == 2L)

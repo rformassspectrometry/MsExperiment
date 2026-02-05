@@ -36,9 +36,10 @@ library(RSQLite)
 sqlite_db <- tempfile()
 con <- dbConnect(SQLite(), sqlite_db)
 
-## Define the files from which we import the data
-fls <- dir(system.file("sciex", package = "msdata"), pattern = "mzML",
-    full.names = TRUE)
+## Define the files from which we import the data. Test files provided from
+## the *MsDataHub*
+fls <- c(MsDataHub::X20171016_POOL_POS_1_105.134.mzML(),
+    MsDataHub::X20171016_POOL_POS_3_105.134.mzML())
 
 ## Create a MsBackendSql database containing the full MS data
 library(MsBackendSql)

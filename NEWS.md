@@ -1,3 +1,9 @@
+# MsExperiment 1.xx
+
+## Changes in 1.xx.1
+
+- Load test data from *MsDataHub* and remove dependency on the *msdata* package
+
 # MsExperiment 1.11
 
 ## Changed in 1.11.1
