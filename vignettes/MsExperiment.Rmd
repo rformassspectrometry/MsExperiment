@@ -8,7 +8,7 @@ vignette: >
     %\VignetteEngine{knitr::rmarkdown}
     %\VignetteEncoding{UTF-8}
     %\VignettePackage{MsExperiment}
-    %\VignetteDepends{BiocStyle,rpx,Spectra}
+    %\VignetteDepends{BiocStyle,rpx,Spectra,MsDataHub}
 ---
 
 ```{r style, echo = FALSE, results = 'asis', message=FALSE}
@@ -297,13 +297,15 @@ sampleData(lmse) <- sd
 ```
 
 We next add mzML files to the experiment for the sample that was measured. These
-are available within the `msdata` R package. We add also an additional
+are available through Bioconductor's *MsDataHub*. We add also an additional
 *annotation* file `"internal_standards.txt"` to the experiment, which could be
 e.g. a file with m/z and retention times of internal standards added to the
 sample (note that such files don't necessarily have to exist).
 
 ```{r add_fls2}
-fls <- dir(system.file("sciex", package = "msdata"), full.names = TRUE)
+library(MsDataHub)
+fls <- c(MsDataHub::X20171016_POOL_POS_1_105.134.mzML(),
+         MsDataHub::X20171016_POOL_POS_3_105.134.mzML())
 basename(fls)
 
 experimentFiles(lmse) <- MsExperimentFiles(
@@ -324,7 +326,7 @@ lmse
 At this stage we have thus sample annotations and MS data in our object, but no
 explicit relationships between them. Without such linking between files and
 samples any subsetting would only subset the `sampleData` but not any of the
-potentially associated files. We next use the `linkSpectraData` function
+potentially associated files. We next use the `linkSpectraData()` function
 to establish and define such relationships. First we link the experimental files
 to the samples: we want to link the first mzML file in the element called
 `"mzML_file"` in the object's `experimentFiles` to the first row in `sampleData`
@@ -578,11 +580,11 @@ and sample information from an experiment can be stored into a SQL database and
 how that data can then be loaded again as a `MsExperiment`.
 
 Below we first define the raw data files of the experiment. In our example we
-use two small test files provided with the `r Biocpkg("msdata")` package.
+use two test files provided by Bioconductor's *MsDataHub*.
 
 ```{r}
-fls <- c(system.file("microtofq", "MM14.mzML", package = "msdata"),
-         system.file("microtofq", "MM8.mzML", package = "msdata"))
+fls <- c(MsDataHub::X20171016_POOL_POS_1_105.134.mzML(),
+         MsDataHub::X20171016_POOL_POS_3_105.134.mzML())
 ```
 
 We can then use the `createMsBackendSqlDatabase` function from the
@@ -625,8 +627,8 @@ with the MS data and the related sample annotations.
 #' Define sample annotations. Ideally all experiment-relavant information
 #' should be specified.
 sdata <- data.frame(file_name = basename(fls),
-                    sample_name = c("MM14", "MM8"),
-                    sample_group = c("ctrl", "ctrl"))
+                    sample_name = c("QC_POOL_1", "QC_POOL_3"),
+                    sample_group = c("QC", "QC"))
 
 #' To simplify subsequent linking between samples and data files we
 #' define a new spectra variable with the file names of the raw data files.
@@ -765,7 +767,6 @@ dbGetQuery(con, "select * from sample_data")
 #' Close the connection to the database
 dbDisconnect(con)
 ```
-
 
 # Session information
 

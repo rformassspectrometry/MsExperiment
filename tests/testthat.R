@@ -1,11 +1,11 @@
 library("testthat")
 library("MsExperiment")
-library("msdata")
 library("S4Vectors")
 library("Spectra")
+library("MsDataHub")
 
-fls <- dir(system.file("sciex", package = "msdata"), pattern = "mzML",
-           full.names = TRUE)
+fls <- unname(c(MsDataHub::X20171016_POOL_POS_1_105.134.mzML(),
+                MsDataHub::X20171016_POOL_POS_3_105.134.mzML()))
 
 mse <- MsExperiment()
 df <- data.frame(sample = c("QC1", "QC2"),

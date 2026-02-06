@@ -82,11 +82,11 @@ test_that("[,LinkedMsExperiment works", {
     res <- mse2[2]
     expect_equal(
         spectra(res),
-        spectra(mse2)[spectra(mse2)$mzML_file == "20171016_POOL_POS_3_105-134.mzML"])
+        spectra(mse2)[spectra(mse2)$mzML_file == basename(fls)[2L]])
     res <- mse2[1]
     expect_equal(
         spectra(res),
-        spectra(mse2)[spectra(mse2)$mzML_file == "20171016_POOL_POS_1_105-134.mzML"])
+        spectra(mse2)[spectra(mse2)$mzML_file == basename(fls)[1L]])
 
     ## Link experiment files
     mse2 <- linkSampleData(mse2, with = "experimentFiles.mzML_file",
@@ -125,7 +125,7 @@ test_that("[,LinkedMsExperiment works", {
 
     ## Multiple files/samples.
     sd <- data.frame(sample = c("A", "B", "C"))
-    f <- c(fls, system.file("microtofq", "MM14.mzML", package = "msdata"))
+    f <- c(fls, MsDataHub::PestMix1_DDA.mzML())
     msel <- readMsExperiment(spectraFiles = f, sampleData = sd)
     res <- msel[-2]
     expect_true(length(res) == 2L)

@@ -282,7 +282,8 @@
 #'
 #' ## define file names containing spectra data for the samples and
 #' ## add them, along with other arbitrary files to the experiment
-#' fls <- dir(system.file("sciex", package = "msdata"), full.names = TRUE)
+#' fls <- c(MsDataHub::X20171016_POOL_POS_1_105.134.mzML(),
+#'          MsDataHub::X20171016_POOL_POS_3_105.134.mzML())
 #' experimentFiles(mse) <- MsExperimentFiles(
 #'     mzML_files = fls,
 #'     annotations = "internal_standards.txt")
