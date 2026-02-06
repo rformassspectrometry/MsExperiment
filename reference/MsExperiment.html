@@ -23,7 +23,7 @@ https://www.rformassspectrometry.org/"><meta property="og:image" content="https:
 
     <a class="navbar-brand me-2" href="../index.html">MsExperiment</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.11.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.13.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -509,7 +509,12 @@ The function returns an <code>MsExperiment</code> with the filtered <code>Spectr
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## define file names containing spectra data for the samples and</span></span></span>
 <span class="r-in"><span><span class="co">## add them, along with other arbitrary files to the experiment</span></span></span>
-<span class="r-in"><span><span class="va">fls</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">dir</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"sciex"</span>, package <span class="op">=</span> <span class="st">"msdata"</span><span class="op">)</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fls</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu">MsDataHub</span><span class="fu">::</span><span class="fu"><a href="https://rformassspectrometry.github.io/MsDataHub/reference/sciex.html" class="external-link">X20171016_POOL_POS_1_105.134.mzML</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>         <span class="fu">MsDataHub</span><span class="fu">::</span><span class="fu"><a href="https://rformassspectrometry.github.io/MsDataHub/reference/sciex.html" class="external-link">X20171016_POOL_POS_3_105.134.mzML</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> see ?MsDataHub and browseVignettes('MsDataHub') for documentation</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> loading from cache</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> see ?MsDataHub and browseVignettes('MsDataHub') for documentation</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> loading from cache</span>
 <span class="r-in"><span><span class="fu">experimentFiles</span><span class="op">(</span><span class="va">mse</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="MsExperimentFiles.html">MsExperimentFiles</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    mzML_files <span class="op">=</span> <span class="va">fls</span>,</span></span>
 <span class="r-in"><span>    annotations <span class="op">=</span> <span class="st">"internal_standards.txt"</span><span class="op">)</span></span></span>
@@ -572,9 +577,10 @@ The function returns an <code>MsExperiment</code> with the filtered <code>Spectr
 <span class="r-out co"><span class="r-pr">#&gt;</span> DataFrame with 1 row and 4 columns</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     sample_id sample_name injection_idx      raw_file</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;character&gt; &lt;character&gt;     &lt;numeric&gt;   &lt;character&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1         QC2     QC Pool             3 /__w/_temp...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1         QC2     QC Pool             3 /github/ho...</span>
 <span class="r-in"><span><span class="fu">experimentFiles</span><span class="op">(</span><span class="va">b</span><span class="op">)</span><span class="op">$</span><span class="va">mzML_files</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/__w/_temp/Library/msdata/sciex/20171016_POOL_POS_3_105-134.mzML"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                  EH7810 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "/github/home/.cache/R/ExperimentHub/17391674d18a_7860" </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## The `spectraSampleIndex()` function returns, for each spectrum, the</span></span></span>
 <span class="r-in"><span><span class="co">## index in the object's `sampleData` to which it is linked/assigned</span></span></span>
@@ -696,9 +702,9 @@ The function returns an <code>MsExperiment</code> with the filtered <code>Spectr
 <span class="r-out co"><span class="r-pr">#&gt;</span>  ... 34 more variables/columns.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> file(s):</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20171016_POOL_POS_1_105-134.mzML</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 173941d49f52_7859</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Processing:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Filter: select retention time [200..210] on MS level(s)  [Wed Jun  4 06:39:29 2025] </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Filter: select retention time [200..210] on MS level(s)  [Fri Feb  6 13:24:37 2026] </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -710,7 +716,7 @@ The function returns an <code>MsExperiment</code> with the filtered <code>Spectr
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.9000.</p>
 </div>
 
     </footer></div>

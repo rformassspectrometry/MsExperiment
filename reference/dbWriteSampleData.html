@@ -29,7 +29,7 @@ use such SQL databases)."><meta property="og:image" content="https://rformassspe
 
     <a class="navbar-brand me-2" href="../index.html">MsExperiment</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.11.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.13.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -101,16 +101,21 @@ to the database.</p></dd>
 <span class="r-in"><span><span class="va">sqlite_db</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu">dbConnect</span><span class="op">(</span><span class="fu"><a href="https://rsqlite.r-dbi.org/reference/SQLite.html" class="external-link">SQLite</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">sqlite_db</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## Define the files from which we import the data</span></span></span>
-<span class="r-in"><span><span class="va">fls</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">dir</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"sciex"</span>, package <span class="op">=</span> <span class="st">"msdata"</span><span class="op">)</span>, pattern <span class="op">=</span> <span class="st">"mzML"</span>,</span></span>
-<span class="r-in"><span>    full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">## Define the files from which we import the data. Test files provided from</span></span></span>
+<span class="r-in"><span><span class="co">## the *MsDataHub*</span></span></span>
+<span class="r-in"><span><span class="va">fls</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu">MsDataHub</span><span class="fu">::</span><span class="fu"><a href="https://rformassspectrometry.github.io/MsDataHub/reference/sciex.html" class="external-link">X20171016_POOL_POS_1_105.134.mzML</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    <span class="fu">MsDataHub</span><span class="fu">::</span><span class="fu"><a href="https://rformassspectrometry.github.io/MsDataHub/reference/sciex.html" class="external-link">X20171016_POOL_POS_3_105.134.mzML</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> see ?MsDataHub and browseVignettes('MsDataHub') for documentation</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> loading from cache</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> see ?MsDataHub and browseVignettes('MsDataHub') for documentation</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> loading from cache</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Create a MsBackendSql database containing the full MS data</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/RforMassSpectrometry/MsBackendSql" class="external-link">MsBackendSql</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/MsBackendSql/man/MsBackendSql.html" class="external-link">createMsBackendSqlDatabase</a></span><span class="op">(</span><span class="va">con</span>, <span class="va">fls</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Importing data ... </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> [==========================================================] 1/1 (100%) in  2s</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> [==========================================================] 1/1 (100%) in  5s</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Creating indices </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> .</span>
@@ -146,7 +151,7 @@ to the database.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1862         1          NA         1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  ... 35 more variables/columns.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Use  'spectraVariables' to list all of them.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Database: /tmp/RtmphZEqGt/file1385347e960d</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Database: /tmp/RtmpGRl2PS/file1d7c4f82b9e3</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Define sample annotations for the two data files. Adding one column</span></span></span>
 <span class="r-in"><span><span class="co">## `"file"` that contains the file name of the data files.</span></span></span>
@@ -182,9 +187,9 @@ to the database.</p></dd>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Sample data was thus stored to the database.</span></span></span>
 <span class="r-in"><span><span class="fu">dbGetQuery</span><span class="op">(</span><span class="va">con</span>, <span class="st">"select * from sample_data;"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sample                             file sample_id_</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1    QC1 20171016_POOL_POS_1_105-134.mzML          1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2    QC2 20171016_POOL_POS_3_105-134.mzML          2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   sample              file sample_id_</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    QC1 173941d49f52_7859          1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    QC2 17391674d18a_7860          2</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -196,7 +201,7 @@ to the database.</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.9000.</p>
 </div>
 
     </footer></div>
