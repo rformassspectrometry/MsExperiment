@@ -82,11 +82,11 @@ test_that("[,LinkedMsExperiment works", {
     res <- mse2[2]
     expect_equal(
         spectra(res),
-        spectra(mse2)[spectra(mse2)$mzML_file == "20171016_POOL_POS_3_105-134.mzML"])
+        spectra(mse2)[spectra(mse2)$mzML_file == basename(fls)[2L]])
     res <- mse2[1]
     expect_equal(
         spectra(res),
-        spectra(mse2)[spectra(mse2)$mzML_file == "20171016_POOL_POS_1_105-134.mzML"])
+        spectra(mse2)[spectra(mse2)$mzML_file == basename(fls)[1L]])
 
     ## Link experiment files
     mse2 <- linkSampleData(mse2, with = "experimentFiles.mzML_file",
